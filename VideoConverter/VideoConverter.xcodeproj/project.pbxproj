@@ -15,6 +15,7 @@
 		1EC8590927204047005A1F3B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EC8590727204047005A1F3B /* LaunchScreen.storyboard */; };
 		1EC8591427204047005A1F3B /* VideoConverterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC8591327204047005A1F3B /* VideoConverterTests.swift */; };
 		1EC8591F27204047005A1F3B /* VideoConverterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC8591E27204047005A1F3B /* VideoConverterUITests.swift */; };
+		1EC8593027207424005A1F3B /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC8592F27207424005A1F3B /* Audio.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		1EC8591A27204047005A1F3B /* VideoConverterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VideoConverterUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EC8591E27204047005A1F3B /* VideoConverterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoConverterUITests.swift; sourceTree = "<group>"; };
 		1EC8592027204047005A1F3B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1EC8592F27207424005A1F3B /* Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 		1EC858FB27204044005A1F3B /* VideoConverter */ = {
 			isa = PBXGroup;
 			children = (
+				1EC8592E27207419005A1F3B /* Model */,
 				1EC858FC27204044005A1F3B /* AppDelegate.swift */,
 				1EC858FE27204044005A1F3B /* SceneDelegate.swift */,
 				1EC8590027204044005A1F3B /* ViewController.swift */,
@@ -126,6 +129,14 @@
 				1EC8592027204047005A1F3B /* Info.plist */,
 			);
 			path = VideoConverterUITests;
+			sourceTree = "<group>";
+		};
+		1EC8592E27207419005A1F3B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				1EC8592F27207424005A1F3B /* Audio.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -258,6 +269,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1EC8593027207424005A1F3B /* Audio.swift in Sources */,
 				1EC8590127204044005A1F3B /* ViewController.swift in Sources */,
 				1EC858FD27204044005A1F3B /* AppDelegate.swift in Sources */,
 				1EC858FF27204044005A1F3B /* SceneDelegate.swift in Sources */,
