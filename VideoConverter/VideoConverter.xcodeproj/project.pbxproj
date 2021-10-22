@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1EA1EEDD2721B85800C22C2C /* AudioConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA1EEDC2721B85800C22C2C /* AudioConverter.swift */; };
+		1EA1EEE12723095F00C22C2C /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA1EEE02723095F00C22C2C /* FileHelper.swift */; };
 		1EC858FD27204044005A1F3B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC858FC27204044005A1F3B /* AppDelegate.swift */; };
 		1EC858FF27204044005A1F3B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC858FE27204044005A1F3B /* SceneDelegate.swift */; };
 		1EC8590127204044005A1F3B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC8590027204044005A1F3B /* ViewController.swift */; };
@@ -36,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1EA1EEDC2721B85800C22C2C /* AudioConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioConverter.swift; sourceTree = "<group>"; };
+		1EA1EEE02723095F00C22C2C /* FileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
 		1EC858F927204044005A1F3B /* VideoConverter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoConverter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EC858FC27204044005A1F3B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1EC858FE27204044005A1F3B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -81,6 +85,7 @@
 		1EC858F027204043005A1F3B = {
 			isa = PBXGroup;
 			children = (
+				1EA1EEE02723095F00C22C2C /* FileHelper.swift */,
 				1EC858FB27204044005A1F3B /* VideoConverter */,
 				1EC8591227204047005A1F3B /* VideoConverterTests */,
 				1EC8591D27204047005A1F3B /* VideoConverterUITests */,
@@ -109,6 +114,7 @@
 				1EC8590527204047005A1F3B /* Assets.xcassets */,
 				1EC8590727204047005A1F3B /* LaunchScreen.storyboard */,
 				1EC8590A27204047005A1F3B /* Info.plist */,
+				1EA1EEDC2721B85800C22C2C /* AudioConverter.swift */,
 			);
 			path = VideoConverter;
 			sourceTree = "<group>";
@@ -271,8 +277,10 @@
 			files = (
 				1EC8593027207424005A1F3B /* Audio.swift in Sources */,
 				1EC8590127204044005A1F3B /* ViewController.swift in Sources */,
+				1EA1EEDD2721B85800C22C2C /* AudioConverter.swift in Sources */,
 				1EC858FD27204044005A1F3B /* AppDelegate.swift in Sources */,
 				1EC858FF27204044005A1F3B /* SceneDelegate.swift in Sources */,
+				1EA1EEE12723095F00C22C2C /* FileHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
