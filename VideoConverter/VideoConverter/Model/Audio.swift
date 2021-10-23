@@ -58,7 +58,7 @@ enum Channel: UInt32 {
 
 enum BitRate: UInt32 {
     case m320k = 320000
-    case m128k = 192000
+    case m192k = 192000
 }
 
 enum BitPerChannel: UInt32 {
