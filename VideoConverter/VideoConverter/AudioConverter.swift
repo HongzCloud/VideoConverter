@@ -19,17 +19,17 @@ struct AudioConverter {
         self.outputURL = localDocumentsURL
     }
     
-    func convertWAV(sampleRate: SampleRate, bitDepth: BitPerChannel) {
+    func convertWAV(sampleRate: SampleRate, bitDepth: BitPerChannel) -> Bool {
         do {
-            guard let inputFile = inputFile else { return }
+            guard let inputFile = inputFile else { return false }
             guard let format = AVAudioFormat(commonFormat: .pcmFormatFloat32,
                                              sampleRate: inputFile.fileFormat.sampleRate,
                                              channels: inputFile.fileFormat.channelCount,
-                                             interleaved: false) else { return }
-            guard let inputBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(inputFile.length)) else { return }
+                                             interleaved: false) else { return false }
+            guard let inputBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(inputFile.length)) else { return false }
 
             try inputFile.read(into: inputBuffer)
-            guard let floatChannelData = inputBuffer.floatChannelData else { return }
+            guard let floatChannelData = inputBuffer.floatChannelData else { return false }
             let frameLength = Int(inputBuffer.frameLength)
             let outputBuffers = createBuffers(channelData: floatChannelData, frameLength: frameLength, channelNum: Int32(inputFile.fileFormat.channelCount))
             let settings = configSettings(formatID: .wav, sampleRate: sampleRate, bitDepth: bitDepth)
@@ -38,7 +38,10 @@ struct AudioConverter {
           
         } catch {
             assertionFailure("convert fail")
+            return false
         }
+        
+        return true
     }
         
     private func saveWav(_ buf: [[Float]], settings: [String : Any]) {
