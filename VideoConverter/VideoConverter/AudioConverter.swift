@@ -68,6 +68,31 @@ struct AudioConverter {
         
         return true
     }
+    
+    func convertFLAC(sample: SampleRate, bitDepth: BitPerChannel) -> Bool {
+        do {
+            guard let inputFile = inputFile else { return false }
+            guard let format = AVAudioFormat(commonFormat: .pcmFormatFloat32,
+                                             sampleRate: inputFile.fileFormat.sampleRate,
+                                             channels: inputFile.fileFormat.channelCount,
+                                             interleaved: false) else { return false }
+            guard let inputBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(inputFile.length)) else { return false }
+
+            try inputFile.read(into: inputBuffer)
+            guard let floatChannelData = inputBuffer.floatChannelData else { return false }
+            let frameLength = Int(inputBuffer.frameLength)
+            let outputBuffers = createBuffers(channelData: floatChannelData, frameLength: frameLength, channelNum: Int32(inputFile.fileFormat.channelCount))
+            let settings = configSettings(formatID: .flac, sampleRate: sample, bitDepth: bitDepth)
+ 
+            saveFLAC(outputBuffers, settings: settings)
+          
+        } catch {
+            assertionFailure("convert fail")
+            return false
+        }
+        
+        return true
+    }
         
     private func saveWav(_ buf: [[Float]], settings: [String : Any]) {
         guard let inputFile = inputFile else { return }
@@ -106,6 +131,29 @@ struct AudioConverter {
             let fileHelper = FileHelper()
             do {
                 let outputfileName = String(inputFile.url.lastPathComponent.split(separator: ".")[0]) + ".aac"
+                let outputURL = fileHelper.createOutputFileURL(outputfileName)
+                let audioFile = try AVAudioFile(forWriting: outputURL, settings: settings)
+                try audioFile.write(from: pcmBuf!)
+            } catch {
+                assertionFailure("save fail")
+            }
+        }
+    }
+    
+    private func saveFLAC(_ buf: [[Float]], settings: [String : Any]) {
+        guard let inputFile = inputFile else { return }
+        if let format = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 44100, channels: inputFile.fileFormat.channelCount, interleaved: false) {
+            let pcmBuf = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(buf[0].count))
+           
+            for i in 0..<Int(inputFile.fileFormat.channelCount) {
+                memcpy(pcmBuf?.floatChannelData?[i], buf[i], 4 * buf[i].count)
+            }
+            
+            pcmBuf?.frameLength = UInt32(buf[0].count)
+
+            let fileHelper = FileHelper()
+            do {
+                let outputfileName = String(inputFile.url.lastPathComponent.split(separator: ".")[0]) + ".flac"
                 let outputURL = fileHelper.createOutputFileURL(outputfileName)
                 let audioFile = try AVAudioFile(forWriting: outputURL, settings: settings)
                 try audioFile.write(from: pcmBuf!)
