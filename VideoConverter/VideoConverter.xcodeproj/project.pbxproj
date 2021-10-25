@@ -16,7 +16,7 @@
 		1EA1EEE927243C5300C22C2C /* AudioConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA1EEDC2721B85800C22C2C /* AudioConverter.swift */; };
 		1EA1EEEA27245A0700C22C2C /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC8592F27207424005A1F3B /* Audio.swift */; };
 		1EA1EEEB27245CED00C22C2C /* sample.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1EA1EEE52724376600C22C2C /* sample.mp3 */; };
-		1EA1EEED27245D3500C22C2C /* sampleTest.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1EA1EEEC27245D3500C22C2C /* sampleTest.mp3 */; };
+		1EA1EEF02726B74200C22C2C /* sampleTestMP3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1EA1EEEF2726B74200C22C2C /* sampleTestMP3.mp3 */; };
 		1EC858FD27204044005A1F3B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC858FC27204044005A1F3B /* AppDelegate.swift */; };
 		1EC858FF27204044005A1F3B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC858FE27204044005A1F3B /* SceneDelegate.swift */; };
 		1EC8590127204044005A1F3B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC8590027204044005A1F3B /* ViewController.swift */; };
@@ -51,7 +51,8 @@
 		1EA1EEE22723145000C22C2C /* FileHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHelperTests.swift; sourceTree = "<group>"; };
 		1EA1EEE52724376600C22C2C /* sample.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sample.mp3; path = ../../../../Downloads/sample.mp3; sourceTree = "<group>"; };
 		1EA1EEE7272438BE00C22C2C /* AudioConverterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioConverterTests.swift; sourceTree = "<group>"; };
-		1EA1EEEC27245D3500C22C2C /* sampleTest.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sampleTest.mp3; path = ../../../../Downloads/sampleTest.mp3; sourceTree = "<group>"; };
+		1EA1EEEF2726B74200C22C2C /* sampleTestMP3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sampleTestMP3.mp3; path = ../../../../Downloads/sampleTestMP3.mp3; sourceTree = "<group>"; };
+		1EA1EEF12726B75F00C22C2C /* sampleTestAAC.aac */ = {isa = PBXFileReference; lastKnownFileType = file; name = sampleTestAAC.aac; path = ../../../../Downloads/sampleTestAAC.aac; sourceTree = "<group>"; };
 		1EC858F927204044005A1F3B /* VideoConverter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoConverter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EC858FC27204044005A1F3B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1EC858FE27204044005A1F3B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -138,7 +139,8 @@
 				1EC8591327204047005A1F3B /* VideoConverterTests.swift */,
 				1EA1EEE22723145000C22C2C /* FileHelperTests.swift */,
 				1EA1EEE7272438BE00C22C2C /* AudioConverterTests.swift */,
-				1EA1EEEC27245D3500C22C2C /* sampleTest.mp3 */,
+				1EA1EEEF2726B74200C22C2C /* sampleTestMP3.mp3 */,
+				1EA1EEF12726B75F00C22C2C /* sampleTestAAC.aac */,
 				1EC8591527204047005A1F3B /* Info.plist */,
 			);
 			path = VideoConverterTests;
@@ -275,7 +277,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1EA1EEED27245D3500C22C2C /* sampleTest.mp3 in Resources */,
+				1EA1EEF02726B74200C22C2C /* sampleTestMP3.mp3 in Resources */,
 				1EA1EEEB27245CED00C22C2C /* sample.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

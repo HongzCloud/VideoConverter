@@ -11,7 +11,7 @@ class AudioConverterTests: XCTestCase {
     //MARK: - Test convert to wav
     func testConvertWav_SampleRate8000_BitDepth16() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -21,7 +21,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertWav_SampleRate11025_BitDepth16() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -31,7 +31,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertWav_SampleRate22050_BitDepth16() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -41,7 +41,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertWav_SampleRate44100_BitDepth16() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -51,7 +51,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertWav_SampleRate8000_BitDepth24() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -61,7 +61,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertWav_SampleRate11025_BitDepth24() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -71,7 +71,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertWav_SampleRate22050_BitDepth24() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -81,7 +81,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertWav_SampleRate44100_BitDepth24() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -92,7 +92,7 @@ class AudioConverterTests: XCTestCase {
     //MARK: - Test convert to aac
     func testConvertAAC_SampleRate8000_BitRate192k() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -102,7 +102,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertAAC_SampleRate11025_BitRate192k() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -112,7 +112,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertAAC_SampleRate22050_BitRate192k() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -122,7 +122,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertAAC_SampleRate44100_BitRate192k() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -132,7 +132,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertAAC_SampleRate8000_BitRate320k() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -142,7 +142,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertAAC_SampleRate11025_BitRate320k() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -152,7 +152,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertAAC_SampleRate22050_BitRate320k() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -162,7 +162,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertAAC_SampleRate44100_BitRate320k() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -173,7 +173,7 @@ class AudioConverterTests: XCTestCase {
     //MARK: - Test convert to flac
     func testConvertFLAC_SampleRate8000_BitDepth16() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -183,7 +183,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertFLAC_SampleRate11025_BitDepth16() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -193,7 +193,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertFLAC_SampleRate22050_BitDepth16() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -203,7 +203,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertFLAC_SampleRate44100_BitDepth16() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -213,7 +213,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertFLAC_SampleRate8000_BitDepth24() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -223,7 +223,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertFLAC_SampleRate11025_BitDepth24() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -233,7 +233,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertFLAC_SampleRate22050_BitDepth24() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -243,7 +243,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertFLAC_SampleRate44100_BitDepth24() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -254,7 +254,7 @@ class AudioConverterTests: XCTestCase {
     //MARK: - Test convert to caf
     func testConvertCAF_SampleRate8000_BitDepth16() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -264,7 +264,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertCAF_SampleRate11025_BitDepth16() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -274,7 +274,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertCAF_SampleRate22050_BitDepth16() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -284,7 +284,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertCAF_SampleRate44100_BitDepth16() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -294,7 +294,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertCAF_SampleRate8000_BitDepth24() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -304,7 +304,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertCAF_SampleRate11025_BitDepth24() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -314,7 +314,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertCAF_SampleRate22050_BitDepth24() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
@@ -324,7 +324,7 @@ class AudioConverterTests: XCTestCase {
     
     func testConvertCAF_SampleRate44100_BitDepth24() throws {
         let testBundle = Bundle(for: type(of: self))
-        guard let fileURL = testBundle.url(forResource: "sampleTest", withExtension: "mp3") else {
+        guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
