@@ -27,6 +27,9 @@
 		1EC8591427204047005A1F3B /* VideoConverterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC8591327204047005A1F3B /* VideoConverterTests.swift */; };
 		1EC8591F27204047005A1F3B /* VideoConverterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC8591E27204047005A1F3B /* VideoConverterUITests.swift */; };
 		1EC8593027207424005A1F3B /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC8592F27207424005A1F3B /* Audio.swift */; };
+		74E60A7E4C77E22EAC38D4E1 /* Pods_VideoConverterTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9D4D1962B10434AF7076302 /* Pods_VideoConverterTests.framework */; };
+		A58F17A3690AD2F084367573 /* Pods_VideoConverter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B60B64C24CDB733AB125400 /* Pods_VideoConverter.framework */; };
+		D7D2B3F4309063276E68936E /* Pods_VideoConverter_VideoConverterUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CC7118073DE394BBB4A3C3E /* Pods_VideoConverter_VideoConverterUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +73,15 @@
 		1EC8591E27204047005A1F3B /* VideoConverterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoConverterUITests.swift; sourceTree = "<group>"; };
 		1EC8592027204047005A1F3B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1EC8592F27207424005A1F3B /* Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
+		3CC7118073DE394BBB4A3C3E /* Pods_VideoConverter_VideoConverterUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VideoConverter_VideoConverterUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		40F2C999DD65474937798078 /* Pods-VideoConverter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VideoConverter.release.xcconfig"; path = "Target Support Files/Pods-VideoConverter/Pods-VideoConverter.release.xcconfig"; sourceTree = "<group>"; };
+		52B4BADE68F097FF9E4C42C1 /* Pods-VideoConverter-VideoConverterUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VideoConverter-VideoConverterUITests.debug.xcconfig"; path = "Target Support Files/Pods-VideoConverter-VideoConverterUITests/Pods-VideoConverter-VideoConverterUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		6B60B64C24CDB733AB125400 /* Pods_VideoConverter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VideoConverter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A91473968991EB15904F87D6 /* Pods-VideoConverterTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VideoConverterTests.release.xcconfig"; path = "Target Support Files/Pods-VideoConverterTests/Pods-VideoConverterTests.release.xcconfig"; sourceTree = "<group>"; };
+		AC634B3A5ABDBC8A8FBC72BC /* Pods-VideoConverter-VideoConverterUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VideoConverter-VideoConverterUITests.release.xcconfig"; path = "Target Support Files/Pods-VideoConverter-VideoConverterUITests/Pods-VideoConverter-VideoConverterUITests.release.xcconfig"; sourceTree = "<group>"; };
+		D4D087113E2D523987DEAA11 /* Pods-VideoConverterTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VideoConverterTests.debug.xcconfig"; path = "Target Support Files/Pods-VideoConverterTests/Pods-VideoConverterTests.debug.xcconfig"; sourceTree = "<group>"; };
+		D626C3A60FB696E0D458BAC7 /* Pods-VideoConverter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VideoConverter.debug.xcconfig"; path = "Target Support Files/Pods-VideoConverter/Pods-VideoConverter.debug.xcconfig"; sourceTree = "<group>"; };
+		E9D4D1962B10434AF7076302 /* Pods_VideoConverterTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VideoConverterTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A58F17A3690AD2F084367573 /* Pods_VideoConverter.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74E60A7E4C77E22EAC38D4E1 /* Pods_VideoConverterTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,6 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7D2B3F4309063276E68936E /* Pods_VideoConverter_VideoConverterUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -104,6 +119,8 @@
 				1EC8591227204047005A1F3B /* VideoConverterTests */,
 				1EC8591D27204047005A1F3B /* VideoConverterUITests */,
 				1EC858FA27204044005A1F3B /* Products */,
+				884C408719F7B4D21269BEBE /* Pods */,
+				3176E00E75DDCE619B01EB9E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -166,6 +183,30 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		3176E00E75DDCE619B01EB9E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6B60B64C24CDB733AB125400 /* Pods_VideoConverter.framework */,
+				3CC7118073DE394BBB4A3C3E /* Pods_VideoConverter_VideoConverterUITests.framework */,
+				E9D4D1962B10434AF7076302 /* Pods_VideoConverterTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		884C408719F7B4D21269BEBE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D626C3A60FB696E0D458BAC7 /* Pods-VideoConverter.debug.xcconfig */,
+				40F2C999DD65474937798078 /* Pods-VideoConverter.release.xcconfig */,
+				52B4BADE68F097FF9E4C42C1 /* Pods-VideoConverter-VideoConverterUITests.debug.xcconfig */,
+				AC634B3A5ABDBC8A8FBC72BC /* Pods-VideoConverter-VideoConverterUITests.release.xcconfig */,
+				D4D087113E2D523987DEAA11 /* Pods-VideoConverterTests.debug.xcconfig */,
+				A91473968991EB15904F87D6 /* Pods-VideoConverterTests.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -173,6 +214,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1EC8592327204047005A1F3B /* Build configuration list for PBXNativeTarget "VideoConverter" */;
 			buildPhases = (
+				41644E671B796CA319A375FE /* [CP] Check Pods Manifest.lock */,
 				1EC858F527204043005A1F3B /* Sources */,
 				1EC858F627204043005A1F3B /* Frameworks */,
 				1EC858F727204043005A1F3B /* Resources */,
@@ -190,6 +232,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1EC8592627204047005A1F3B /* Build configuration list for PBXNativeTarget "VideoConverterTests" */;
 			buildPhases = (
+				4973A0DDAA96867AE532EA62 /* [CP] Check Pods Manifest.lock */,
 				1EC8590B27204047005A1F3B /* Sources */,
 				1EC8590C27204047005A1F3B /* Frameworks */,
 				1EC8590D27204047005A1F3B /* Resources */,
@@ -208,6 +251,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1EC8592927204047005A1F3B /* Build configuration list for PBXNativeTarget "VideoConverterUITests" */;
 			buildPhases = (
+				814792F7C78CE5E3A642D2E4 /* [CP] Check Pods Manifest.lock */,
 				1EC8591627204047005A1F3B /* Sources */,
 				1EC8591727204047005A1F3B /* Frameworks */,
 				1EC8591827204047005A1F3B /* Resources */,
@@ -294,6 +338,75 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		41644E671B796CA319A375FE /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VideoConverter-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4973A0DDAA96867AE532EA62 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VideoConverterTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		814792F7C78CE5E3A642D2E4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VideoConverter-VideoConverterUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1EC858F527204043005A1F3B /* Sources */ = {
@@ -483,6 +596,7 @@
 		};
 		1EC8592427204047005A1F3B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D626C3A60FB696E0D458BAC7 /* Pods-VideoConverter.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -501,6 +615,7 @@
 		};
 		1EC8592527204047005A1F3B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 40F2C999DD65474937798078 /* Pods-VideoConverter.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -519,6 +634,7 @@
 		};
 		1EC8592727204047005A1F3B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D4D087113E2D523987DEAA11 /* Pods-VideoConverterTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -540,6 +656,7 @@
 		};
 		1EC8592827204047005A1F3B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A91473968991EB15904F87D6 /* Pods-VideoConverterTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -561,6 +678,7 @@
 		};
 		1EC8592A27204047005A1F3B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 52B4BADE68F097FF9E4C42C1 /* Pods-VideoConverter-VideoConverterUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -580,6 +698,7 @@
 		};
 		1EC8592B27204047005A1F3B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AC634B3A5ABDBC8A8FBC72BC /* Pods-VideoConverter-VideoConverterUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;

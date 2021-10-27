@@ -27,7 +27,6 @@ final class FileHelper {
             }
             
         } catch {
-            print(error)
             return false
         }
         
@@ -40,7 +39,7 @@ final class FileHelper {
         var num = 0
         
         func isExistFile(atPath: String) -> Bool {
-            print(outputFileURL.path)
+
             if FileManager.default.fileExists(atPath: outputFileURL.path) {
                 return true
             } else { return false }
@@ -50,8 +49,7 @@ final class FileHelper {
             num += 1
             fileInfo[0] = name.split(separator: ".")[0] + "_\(num)"
             outputFileURL = outputDirectoryURL.appendingPathComponent(fileInfo.joined(separator: "."))
-            
-            print(outputFileURL)
+
         }
         
         return outputDirectoryURL.appendingPathComponent(fileInfo.joined(separator: "."))

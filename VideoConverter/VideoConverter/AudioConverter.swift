@@ -7,6 +7,7 @@
 
 import Foundation
 import AVFoundation
+import lame
 
 struct AudioConverter {
     private var localDocumentsURL: URL
@@ -19,7 +20,7 @@ struct AudioConverter {
         self.outputURL = localDocumentsURL
     }
     
-    func convertWAV(sampleRate: SampleRate, bitDepth: BitPerChannel) -> Bool {
+    func convertWAV(sampleRate: SampleRate, bitDepth: BitPerChannel, output: URL) -> Bool {
         do {
             guard let inputFile = inputFile else { return false }
             guard let format = AVAudioFormat(commonFormat: .pcmFormatFloat32,
@@ -34,7 +35,7 @@ struct AudioConverter {
             let outputBuffers = createBuffers(channelData: floatChannelData, frameLength: frameLength, channelNum: Int32(inputFile.fileFormat.channelCount))
             let settings = configSettings(formatID: .wav, sampleRate: sampleRate, bitDepth: bitDepth)
  
-            saveWav(outputBuffers, settings: settings)
+            saveWav(outputBuffers, settings: settings, output: output)
           
         } catch {
             assertionFailure("convert fail")
@@ -118,8 +119,95 @@ struct AudioConverter {
         
         return true
     }
+    
+    private let encoderQueue = DispatchQueue(label: "com.audio.encoder.queue")
+
+    func convertMP3(
+        output: URL,
+        onProgress: @escaping (Float) -> (Void),
+        onComplete: @escaping () -> (Void)
+    ) -> Bool {
+        guard let inputFile = inputFile else {
+            return false
+        }
+        let pcmFile: UnsafeMutablePointer<FILE>
+        let fileInfo = inputFile.url.lastPathComponent.split(separator: ".")
+        if fileInfo[1] != "wav" {
+            let outputfileName = fileInfo[0] + ".wav"
+            let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(String(outputfileName)
+            )
+            guard convertWAV(sampleRate: .m44k, bitDepth: .m16, output: tempURL) else {
+                return false
+            }
+
+            pcmFile = fopen(tempURL.path, "rb")
+        } else {
+            pcmFile = fopen(inputFile.url.path, "rb")
+        }
         
-    private func saveWav(_ buf: [[Float]], settings: [String : Any]) {
+        encoderQueue.async {
+            
+            let lame = lame_init()
+            
+            lame_set_in_samplerate(lame, 44100)
+            lame_set_out_samplerate(lame, 44100)
+            lame_set_brate(lame, 0)
+            lame_set_quality(lame, 4)
+            lame_set_VBR(lame, vbr_default)
+            lame_init_params(lame)
+            
+            fseek(pcmFile, 0 , SEEK_END)
+            let fileSize = ftell(pcmFile)
+            // Skip file header.
+            let fileHeader = 4 * 1024
+            fseek(pcmFile, fileHeader, SEEK_SET)
+            
+            let mp3File: UnsafeMutablePointer<FILE> = fopen(output.path, "wb")
+            
+            let pcmSize = 1024 * 8
+            let pcmbuffer = UnsafeMutablePointer<Int16>.allocate(capacity: Int(pcmSize * 2))
+            
+            let mp3Size: Int32 = 1024 * 8
+            let mp3buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: Int(mp3Size))
+            
+            var write: Int32 = 0
+            var read = 0
+            
+            repeat {
+                
+                let size = MemoryLayout<Int16>.size * 2
+                read = fread(pcmbuffer, size, pcmSize, pcmFile)
+                // Progress
+                if read != 0 {
+                    let progress = Float(ftell(pcmFile)) / Float(fileSize)
+                    DispatchQueue.main.sync { onProgress(progress) }
+                }
+                
+                if read == 0 {
+                    write = lame_encode_flush(lame, mp3buffer, mp3Size)
+                } else {
+                    write = lame_encode_buffer_interleaved(lame, pcmbuffer, Int32(read), mp3buffer, mp3Size)
+                }
+                
+                fwrite(mp3buffer, Int(write), 1, mp3File)
+                
+            } while read != 0
+            
+            // Clean up
+            lame_close(lame)
+            fclose(mp3File)
+            fclose(pcmFile)
+            
+            pcmbuffer.deallocate()
+            mp3buffer.deallocate()
+            
+            DispatchQueue.main.sync { onComplete() }
+        }
+        
+        return true
+    }
+    
+    private func saveWav(_ buf: [[Float]], settings: [String : Any], output: URL) {
         guard let inputFile = inputFile else { return }
         if let format = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 44100, channels: inputFile.fileFormat.channelCount, interleaved: false) {
             let pcmBuf = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(buf[0].count))
@@ -132,9 +220,7 @@ struct AudioConverter {
 
             let fileHelper = FileHelper()
             do {
-                let outputfileName = String(inputFile.url.lastPathComponent.split(separator: ".")[0]) + ".wav"
-                let outputURL = fileHelper.createOutputFileURL(outputfileName)
-                let audioFile = try AVAudioFile(forWriting: outputURL, settings: settings)
+                let audioFile = try AVAudioFile(forWriting: output, settings: settings)
                 try audioFile.write(from: pcmBuf!)
             } catch {
                 assertionFailure("save fail")
