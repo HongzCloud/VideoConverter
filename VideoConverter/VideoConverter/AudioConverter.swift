@@ -124,8 +124,10 @@ struct AudioConverter {
 
     func convertMP3(
         output: URL,
-        onProgress: @escaping (Float) -> (Void),
-        onComplete: @escaping () -> (Void)
+        sample: SampleRate,
+        bitRate: BitRate,
+        onProgress: ((Float) -> (Void))? = nil,
+        onComplete: (() -> (Void))? = nil
     ) -> Bool {
         guard let inputFile = inputFile else {
             return false
@@ -150,8 +152,8 @@ struct AudioConverter {
             let lame = lame_init()
             
             lame_set_in_samplerate(lame, 44100)
-            lame_set_out_samplerate(lame, 44100)
-            lame_set_brate(lame, 0)
+            lame_set_out_samplerate(lame, Int32(sample.rawValue))
+            lame_set_brate(lame, Int32(bitRate.rawValue))
             lame_set_quality(lame, 4)
             lame_set_VBR(lame, vbr_default)
             lame_init_params(lame)
@@ -180,7 +182,12 @@ struct AudioConverter {
                 // Progress
                 if read != 0 {
                     let progress = Float(ftell(pcmFile)) / Float(fileSize)
-                    DispatchQueue.main.sync { onProgress(progress) }
+                    
+                    DispatchQueue.main.sync {
+                        if let onProgress = onProgress {
+                            onProgress(progress)
+                        }
+                    }
                 }
                 
                 if read == 0 {
@@ -201,7 +208,11 @@ struct AudioConverter {
             pcmbuffer.deallocate()
             mp3buffer.deallocate()
             
-            DispatchQueue.main.sync { onComplete() }
+            DispatchQueue.main.sync {
+                if let onComplete = onComplete {
+                    onComplete()
+                }
+            }
         }
         
         return true

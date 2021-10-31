@@ -19,9 +19,6 @@ class ViewController: UIViewController {
         try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: false, attributes: nil)
         let bbb = aaa.appendingPathComponent("lame_MP3").appendingPathExtension("mp3")
         let testURL = Bundle.main.url(forResource: "sampleMP3", withExtension: "mp3")
-        AudioConverter(inputURL: testURL!).convertMP3(output: bbb, onProgress: { num in
-            print(num)
-        }, onComplete: {print("end")})
-        
+        AudioConverter(inputURL: testURL!).convertMP3(output: testURL!, sample: .m44k, bitRate: .m192k)
     }
 }
