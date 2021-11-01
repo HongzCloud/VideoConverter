@@ -15,14 +15,14 @@ final class FileHelper {
     func createInputOutputDirectory() -> Bool {
        
         do {
-            let isInputDir = (try inputDirectoryURL.resourceValues(forKeys: [.isDirectoryKey])).isDirectory ?? false
-            let isOutputDir = (try outputDirectoryURL.resourceValues(forKeys: [.isDirectoryKey])).isDirectory ?? false
+            let isInputDir = try? inputDirectoryURL.resourceValues(forKeys: [.isDirectoryKey]).isDirectory ?? false
+            let isOutputDir = try? outputDirectoryURL.resourceValues(forKeys: [.isDirectoryKey]).isDirectory ?? false
             
-            if !isInputDir {
+            if isInputDir == nil || !isInputDir! {
                 try FileManager.default.createDirectory(at: inputDirectoryURL, withIntermediateDirectories: false, attributes: nil)
             }
             
-            if !isOutputDir {
+            if isOutputDir == nil || !isOutputDir! {
                 try FileManager.default.createDirectory(at: outputDirectoryURL, withIntermediateDirectories: false, attributes: nil)
             }
             

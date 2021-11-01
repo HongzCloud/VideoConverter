@@ -18,6 +18,8 @@
 		1EA1EEEA27245A0700C22C2C /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC8592F27207424005A1F3B /* Audio.swift */; };
 		1EA1EEEB27245CED00C22C2C /* sampleMP3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1EA1EEE52724376600C22C2C /* sampleMP3.mp3 */; };
 		1EA1EEF02726B74200C22C2C /* sampleTestMP3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1EA1EEEF2726B74200C22C2C /* sampleTestMP3.mp3 */; };
+		1EB2C79D272EF2FE004B1338 /* AVAsset+WriteAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EB2C79C272EF2FE004B1338 /* AVAsset+WriteAudio.swift */; };
+		1EB2C79F272FE590004B1338 /* sampleVideoMP4.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 1EB2C79E272FE49E004B1338 /* sampleVideoMP4.mp4 */; };
 		1EC858FD27204044005A1F3B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC858FC27204044005A1F3B /* AppDelegate.swift */; };
 		1EC858FF27204044005A1F3B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC858FE27204044005A1F3B /* SceneDelegate.swift */; };
 		1EC8590127204044005A1F3B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC8590027204044005A1F3B /* ViewController.swift */; };
@@ -58,6 +60,8 @@
 		1EA1EEE7272438BE00C22C2C /* AudioConverterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioConverterTests.swift; sourceTree = "<group>"; };
 		1EA1EEEF2726B74200C22C2C /* sampleTestMP3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sampleTestMP3.mp3; path = ../../../../Downloads/sampleTestMP3.mp3; sourceTree = "<group>"; };
 		1EA1EEF12726B75F00C22C2C /* sampleTestAAC.aac */ = {isa = PBXFileReference; lastKnownFileType = file; name = sampleTestAAC.aac; path = ../../../../Downloads/sampleTestAAC.aac; sourceTree = "<group>"; };
+		1EB2C79C272EF2FE004B1338 /* AVAsset+WriteAudio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAsset+WriteAudio.swift"; sourceTree = "<group>"; };
+		1EB2C79E272FE49E004B1338 /* sampleVideoMP4.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = sampleVideoMP4.mp4; path = ../../../../Downloads/sampleVideoMP4.mp4; sourceTree = "<group>"; };
 		1EC858F927204044005A1F3B /* VideoConverter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoConverter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EC858FC27204044005A1F3B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1EC858FE27204044005A1F3B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -149,6 +153,8 @@
 				1EA1EEDC2721B85800C22C2C /* AudioConverter.swift */,
 				1EA1EEE52724376600C22C2C /* sampleMP3.mp3 */,
 				1E2B406E2729CE6D006E1FEB /* sampleWAV.wav */,
+				1EB2C79E272FE49E004B1338 /* sampleVideoMP4.mp4 */,
+				1EB2C79C272EF2FE004B1338 /* AVAsset+WriteAudio.swift */,
 			);
 			path = VideoConverter;
 			sourceTree = "<group>";
@@ -203,7 +209,6 @@
 				D4D087113E2D523987DEAA11 /* Pods-VideoConverterTests.debug.xcconfig */,
 				A91473968991EB15904F87D6 /* Pods-VideoConverterTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -314,6 +319,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1EC8590927204047005A1F3B /* LaunchScreen.storyboard in Resources */,
+				1EB2C79F272FE590004B1338 /* sampleVideoMP4.mp4 in Resources */,
 				1E2B406F2729CE6E006E1FEB /* sampleWAV.wav in Resources */,
 				1EC8590627204047005A1F3B /* Assets.xcassets in Resources */,
 				1EA1EEE62724376600C22C2C /* sampleMP3.mp3 in Resources */,
@@ -414,6 +420,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1EC8593027207424005A1F3B /* Audio.swift in Sources */,
+				1EB2C79D272EF2FE004B1338 /* AVAsset+WriteAudio.swift in Sources */,
 				1EC8590127204044005A1F3B /* ViewController.swift in Sources */,
 				1EA1EEDD2721B85800C22C2C /* AudioConverter.swift in Sources */,
 				1EC858FD27204044005A1F3B /* AppDelegate.swift in Sources */,
