@@ -10,10 +10,30 @@ import Photos
 
 extension AVAsset {
 
-    func writeAudio(_ output: URL, completion: @escaping (Bool, Error?) -> ()) {
+    func writeAudio(_ output: URL, sampleRate: SampleRate, bitDepth: BitPerChannel = .m16, bitRate: BitRate = .m192k, format: FileFormat, completion: @escaping (Bool, Error?) -> ()) {
         do {
             let audioAsset = try self.audioAsset()
-            audioAsset.writeToURL(output, completion: completion)
+            audioAsset.writeToURL(output, completion: { _, _ in
+                let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("tempM4A.m4a")
+                let audioConverter = AudioConverter(inputURL: tempURL)
+                switch format {
+                case .aac:
+                    audioConverter.convertAAC(sample: sampleRate, bitRate: bitRate)
+                    completion(true, nil)
+                case .caf:
+                    audioConverter.convertCAF(sample: sampleRate, bitDepth: bitDepth)
+                    completion(true, nil)
+                case .flac:
+                    audioConverter.convertFLAC(sample: sampleRate, bitDepth: bitDepth)
+                    completion(true, nil)
+                case .mp3:
+                    audioConverter.convertMP3(output: output, sample: sampleRate, bitRate: bitRate)
+                    completion(true, nil)
+                case .wav:
+                    audioConverter.convertWAV(sampleRate: .m08k, bitDepth: .m16, output: output)
+                    completion(true, nil)
+                }
+            })
         } catch (let error as NSError){
             completion(false, error)
         }
@@ -25,9 +45,9 @@ extension AVAsset {
             completion(false, nil)
             return
         }
-
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("tempM4A.m4a")
         exportSession.outputFileType = .m4a
-        exportSession.outputURL      = url
+        exportSession.outputURL      = tempURL
 
         exportSession.exportAsynchronously {
             switch exportSession.status {

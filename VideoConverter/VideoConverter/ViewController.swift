@@ -19,7 +19,11 @@ class ViewController: UIViewController {
         let sampleVideoMP4 = Bundle.main.url(forResource: "sampleVideoMP4", withExtension: "mp4")
         let testAVAsset = AVAsset(url: sampleVideoMP4!)
         
-        self.writeAssetToM4A(output: FileHelper().createOutputFileURL("sampleVideoM4A.m4a"), avAsset: testAVAsset)
+        testAVAsset.writeAudio(FileHelper().createOutputFileURL("sampleVideoM4A.aac"), sampleRate: .m44k, format: .aac, completion: { result, error in
+            print(result)
+            print(error)
+        })
+        
     }
     
     func getVideos(completion: @escaping () -> Void ) {
@@ -45,14 +49,6 @@ class ViewController: UIViewController {
             }
         }
         completion()
-    }
-
-    
-    func writeAssetToM4A(output: URL, avAsset: AVAsset) {
-        avAsset.writeAudio(output, completion: { result, error in
-            print(result)
-            print(error)
-        })
     }
 }
 
