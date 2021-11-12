@@ -49,44 +49,44 @@ class AudioConverterTests: XCTestCase {
         XCTAssertTrue(audioConverter.convertWAV(sampleRate: .m44k, bitDepth: .m16, output: output))
     }
     
-    func testConvertWav_SampleRate8000_BitDepth24() throws {
+    func testConvertWav_SampleRate8000_BitDepth32() throws {
         let testBundle = Bundle(for: type(of: self))
         guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
         let output = FileHelper().outputDirectoryURL.appendingPathComponent("testWAV.wav")
         let audioConverter = AudioConverter.init(inputURL: fileURL)
-        XCTAssertTrue(audioConverter.convertWAV(sampleRate: .m08k, bitDepth: .m24, output: output))
+        XCTAssertTrue(audioConverter.convertWAV(sampleRate: .m08k, bitDepth: .m32, output: output))
     }
     
-    func testConvertWav_SampleRate11025_BitDepth24() throws {
+    func testConvertWav_SampleRate11025_BitDepth32() throws {
         let testBundle = Bundle(for: type(of: self))
         guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
         let output = FileHelper().outputDirectoryURL.appendingPathComponent("testWAV.wav")
         let audioConverter = AudioConverter.init(inputURL: fileURL)
-        XCTAssertTrue(audioConverter.convertWAV(sampleRate: .m11k, bitDepth: .m24, output: output))
+        XCTAssertTrue(audioConverter.convertWAV(sampleRate: .m11k, bitDepth: .m32, output: output))
     }
     
-    func testConvertWav_SampleRate22050_BitDepth24() throws {
+    func testConvertWav_SampleRate22050_BitDepth32() throws {
         let testBundle = Bundle(for: type(of: self))
         guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
         let output = FileHelper().outputDirectoryURL.appendingPathComponent("testWAV.wav")
         let audioConverter = AudioConverter.init(inputURL: fileURL)
-        XCTAssertTrue(audioConverter.convertWAV(sampleRate: .m22k, bitDepth: .m24, output: output))
+        XCTAssertTrue(audioConverter.convertWAV(sampleRate: .m22k, bitDepth: .m32, output: output))
     }
     
-    func testConvertWav_SampleRate44100_BitDepth24() throws {
+    func testConvertWav_SampleRate44100_BitDepth32() throws {
         let testBundle = Bundle(for: type(of: self))
         guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
         let output = FileHelper().outputDirectoryURL.appendingPathComponent("testWAV.wav")
         let audioConverter = AudioConverter.init(inputURL: fileURL)
-        XCTAssertTrue(audioConverter.convertWAV(sampleRate: .m44k, bitDepth: .m24, output: output))
+        XCTAssertTrue(audioConverter.convertWAV(sampleRate: .m44k, bitDepth: .m32, output: output))
     }
     
     //MARK: - Test convert to aac
@@ -211,44 +211,44 @@ class AudioConverterTests: XCTestCase {
         XCTAssertTrue(audioConverter.convertFLAC(sample: .m44k, bitDepth: .m16))
     }
     
-    func testConvertFLAC_SampleRate8000_BitDepth24() throws {
+    func testConvertFLAC_SampleRate8000_BitDepth32() throws {
         let testBundle = Bundle(for: type(of: self))
         guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
         let audioConverter = AudioConverter.init(inputURL: fileURL)
-        XCTAssertTrue(audioConverter.convertFLAC(sample: .m08k, bitDepth: .m24))
+        XCTAssertTrue(audioConverter.convertFLAC(sample: .m08k, bitDepth: .m32))
     }
     
-    func testConvertFLAC_SampleRate11025_BitDepth24() throws {
+    func testConvertFLAC_SampleRate11025_BitDepth32() throws {
         let testBundle = Bundle(for: type(of: self))
         guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
         let audioConverter = AudioConverter.init(inputURL: fileURL)
-        XCTAssertTrue(audioConverter.convertFLAC(sample: .m11k, bitDepth: .m24))
+        XCTAssertTrue(audioConverter.convertFLAC(sample: .m11k, bitDepth: .m32))
     }
     
-    func testConvertFLAC_SampleRate22050_BitDepth24() throws {
+    func testConvertFLAC_SampleRate22050_BitDepth32() throws {
         let testBundle = Bundle(for: type(of: self))
         guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
         let audioConverter = AudioConverter.init(inputURL: fileURL)
-        XCTAssertTrue(audioConverter.convertFLAC(sample: .m22k, bitDepth: .m24))
+        XCTAssertTrue(audioConverter.convertFLAC(sample: .m22k, bitDepth: .m32))
     }
     
-    func testConvertFLAC_SampleRate44100_BitDepth24() throws {
+    func testConvertFLAC_SampleRate44100_BitDepth32() throws {
         let testBundle = Bundle(for: type(of: self))
         guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
         let audioConverter = AudioConverter.init(inputURL: fileURL)
-        XCTAssertTrue(audioConverter.convertFLAC(sample: .m44k, bitDepth: .m24))
+        XCTAssertTrue(audioConverter.convertFLAC(sample: .m44k, bitDepth: .m32))
     }
     
     //MARK: - Test convert to caf
@@ -292,44 +292,44 @@ class AudioConverterTests: XCTestCase {
         XCTAssertTrue(audioConverter.convertCAF(sample: .m44k, bitDepth: .m16))
     }
     
-    func testConvertCAF_SampleRate8000_BitDepth24() throws {
+    func testConvertCAF_SampleRate8000_BitDepth32() throws {
         let testBundle = Bundle(for: type(of: self))
         guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
         let audioConverter = AudioConverter.init(inputURL: fileURL)
-        XCTAssertTrue(audioConverter.convertCAF(sample: .m08k, bitDepth: .m24))
+        XCTAssertTrue(audioConverter.convertCAF(sample: .m08k, bitDepth: .m32))
     }
     
-    func testConvertCAF_SampleRate11025_BitDepth24() throws {
+    func testConvertCAF_SampleRate11025_BitDepth32() throws {
         let testBundle = Bundle(for: type(of: self))
         guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
         let audioConverter = AudioConverter.init(inputURL: fileURL)
-        XCTAssertTrue(audioConverter.convertCAF(sample: .m11k, bitDepth: .m24))
+        XCTAssertTrue(audioConverter.convertCAF(sample: .m11k, bitDepth: .m32))
     }
     
-    func testConvertCAF_SampleRate22050_BitDepth24() throws {
+    func testConvertCAF_SampleRate22050_BitDepth32() throws {
         let testBundle = Bundle(for: type(of: self))
         guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
         let audioConverter = AudioConverter.init(inputURL: fileURL)
-        XCTAssertTrue(audioConverter.convertCAF(sample: .m22k, bitDepth: .m24))
+        XCTAssertTrue(audioConverter.convertCAF(sample: .m22k, bitDepth: .m32))
     }
     
-    func testConvertCAF_SampleRate44100_BitDepth24() throws {
+    func testConvertCAF_SampleRate44100_BitDepth32() throws {
         let testBundle = Bundle(for: type(of: self))
         guard let fileURL = testBundle.url(forResource: "sampleTestMP3", withExtension: "mp3") else {
             fatalError()
         }
 
         let audioConverter = AudioConverter.init(inputURL: fileURL)
-        XCTAssertTrue(audioConverter.convertCAF(sample: .m44k, bitDepth: .m24))
+        XCTAssertTrue(audioConverter.convertCAF(sample: .m44k, bitDepth: .m32))
     }
     
     //MARK: - Test convert to mp3

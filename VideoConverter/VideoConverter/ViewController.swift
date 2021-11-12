@@ -18,12 +18,9 @@ class ViewController: UIViewController {
  
         let sampleVideoMP4 = Bundle.main.url(forResource: "sampleVideoMP4", withExtension: "mp4")
         let testAVAsset = AVAsset(url: sampleVideoMP4!)
-        
-        testAVAsset.writeAudio(FileHelper().createOutputFileURL("sampleVideoM4A.aac"), sampleRate: .m44k, format: .aac, completion: { result, error in
-            print(result)
-            print(error)
-        })
-        
+        let sampleWAV = Bundle.main.url(forResource: "sampleWAV", withExtension: "wav")
+        let outputURL = FileHelper().outputDirectoryURL.appendingPathComponent("output2.wav")
+        AudioConverter(inputURL: sampleWAV!).convertWAV(sampleRate: .m44k, bitDepth: .m16, output: outputURL)
     }
     
     func getVideos(completion: @escaping () -> Void ) {

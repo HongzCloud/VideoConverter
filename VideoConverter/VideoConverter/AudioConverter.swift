@@ -10,39 +10,76 @@ import AVFoundation
 import lame
 
 struct AudioConverter {
-    private var localDocumentsURL: URL
     private var inputFile: AVAudioFile?
-    private let outputURL: URL
-    
+
     init(inputURL: URL) {
         self.inputFile = try? AVAudioFile(forReading: inputURL)
-        self.localDocumentsURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-        self.outputURL = localDocumentsURL
     }
     
     func convertWAV(sampleRate: SampleRate, bitDepth: BitPerChannel, output: URL) -> Bool {
         do {
+            //input's info
             guard let inputFile = inputFile else { return false }
-            guard let format = AVAudioFormat(commonFormat: .pcmFormatFloat32,
-                                             sampleRate: inputFile.fileFormat.sampleRate,
-                                             channels: inputFile.fileFormat.channelCount,
-                                             interleaved: false) else { return false }
-            guard let inputBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(inputFile.length)) else { return false }
-
-            try inputFile.read(into: inputBuffer)
-            guard let floatChannelData = inputBuffer.floatChannelData else { return false }
-            let frameLength = Int(inputBuffer.frameLength)
-            let outputBuffers = createBuffers(channelData: floatChannelData, frameLength: frameLength, channelNum: Int32(inputFile.fileFormat.channelCount))
+            let inputFormat = inputFile.processingFormat
+            guard let inputBuffer = AVAudioPCMBuffer(pcmFormat: inputFormat,
+                                                     frameCapacity: AVAudioFrameCount(inputFile.length))
+            else { return false }
+            guard (try? inputFile.read(into: inputBuffer)) != nil else { return false }
+            
+            //output's info
             let settings = configSettings(formatID: .wav, sampleRate: sampleRate, bitDepth: bitDepth)
- 
-            saveWav(outputBuffers, settings: settings, output: output)
-          
+            guard let outputFile = createOutputFile(url: output, bitDepth: bitDepth, settings: settings) else { return false }
+            guard let outputFormat = createAVAudioFormat(sampleRate: sampleRate, bitDepth: bitDepth, channels: inputFormat.channelCount) else { return false }
+            
+            //format converting(inputBuffer -> outputBuffer)
+            guard let outputBuffer = convertBuffer(inputBuffer, from: inputFormat, to: outputFormat) else { return false }
+            
+            //write file
+            try outputFile.write(from: outputBuffer)
+            print("convert success")
         } catch {
-            assertionFailure("convert fail")
+            assertionFailure("convert Fail")
             return false
+    }
+        return true
+    }
+    
+    private func createAVAudioFormat(sampleRate: SampleRate, bitDepth: BitPerChannel, channels: AVAudioChannelCount) -> AVAudioFormat? {
+        let commonFormat: AVAudioCommonFormat = bitDepth == .m16 ? .pcmFormatInt16 : .pcmFormatFloat32
+        return AVAudioFormat(commonFormat: commonFormat, sampleRate: Double(sampleRate.rawValue), channels: channels, interleaved: false)
+    }
+  
+    private func convertBuffer(_ pcmBuffer: AVAudioPCMBuffer, from inputFormat: AVAudioFormat, to outputFormat: AVAudioFormat) -> AVAudioPCMBuffer? {
+        let avConverter = AVAudioConverter(from: inputFormat, to: outputFormat)
+        var myError: NSError? = nil
+        
+        var newBufferAvailable = true
+        let inputBlock: AVAudioConverterInputBlock = { inNumPackets, outStatus in
+            if newBufferAvailable {
+                outStatus.pointee = .haveData
+                newBufferAvailable = false
+                return pcmBuffer
+            } else {
+                outStatus.pointee = .noDataNow
+                return nil
+            }
         }
         
-        return true
+        let convertedBufferFrameCapacity = Int(AVAudioFrameCount(outputFormat.sampleRate)) * Int(pcmBuffer.frameLength) / Int(AVAudioFrameCount(pcmBuffer.format.sampleRate))
+        
+        let convertedBuffer = AVAudioPCMBuffer(pcmFormat: outputFormat, frameCapacity: AVAudioFrameCount(convertedBufferFrameCapacity) )!
+        
+        avConverter?.convert(to: convertedBuffer, error: &myError, withInputFrom: inputBlock)
+        
+        return convertedBuffer
+    }
+    
+    private func createOutputFile(url: URL, bitDepth: BitPerChannel, settings: [String :Any]) -> AVAudioFile? {
+        if bitDepth == .m16 {
+            return try? AVAudioFile(forWriting: url, settings: settings, commonFormat: .pcmFormatInt16, interleaved: false)
+        } else {
+            return  try? AVAudioFile(forWriting: url, settings: settings)
+        }
     }
     
     func convertAAC(sample: SampleRate, bitRate: BitRate) -> Bool {
@@ -216,27 +253,6 @@ struct AudioConverter {
         }
         
         return true
-    }
-    
-    private func saveWav(_ buf: [[Float]], settings: [String : Any], output: URL) {
-        guard let inputFile = inputFile else { return }
-        if let format = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 44100, channels: inputFile.fileFormat.channelCount, interleaved: false) {
-            let pcmBuf = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(buf[0].count))
-           
-            for i in 0..<Int(inputFile.fileFormat.channelCount) {
-                memcpy(pcmBuf?.floatChannelData?[i], buf[i], 4 * buf[i].count)
-            }
-            
-            pcmBuf?.frameLength = UInt32(buf[0].count)
-
-            let fileHelper = FileHelper()
-            do {
-                let audioFile = try AVAudioFile(forWriting: output, settings: settings)
-                try audioFile.write(from: pcmBuf!)
-            } catch {
-                assertionFailure("save fail")
-            }
-        }
     }
     
     private func saveAAC(_ buf: [[Float]], settings: [String : Any]) {

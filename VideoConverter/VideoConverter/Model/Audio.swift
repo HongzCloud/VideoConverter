@@ -63,5 +63,5 @@ enum BitRate: UInt32 {
 
 enum BitPerChannel: UInt32 {
     case m16 = 16
-    case m24 = 24
+    case m32 = 32
 }

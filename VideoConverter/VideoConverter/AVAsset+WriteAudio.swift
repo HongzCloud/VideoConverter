@@ -18,20 +18,15 @@ extension AVAsset {
                 let audioConverter = AudioConverter(inputURL: tempURL)
                 switch format {
                 case .aac:
-                    audioConverter.convertAAC(sample: sampleRate, bitRate: bitRate)
-                    completion(true, nil)
+                    completion(audioConverter.convertAAC(sample: sampleRate, bitRate: bitRate), nil)
                 case .caf:
-                    audioConverter.convertCAF(sample: sampleRate, bitDepth: bitDepth)
-                    completion(true, nil)
+                    completion(audioConverter.convertCAF(sample: sampleRate, bitDepth: bitDepth), nil)
                 case .flac:
-                    audioConverter.convertFLAC(sample: sampleRate, bitDepth: bitDepth)
-                    completion(true, nil)
+                    completion(audioConverter.convertFLAC(sample: sampleRate, bitDepth: bitDepth), nil)
                 case .mp3:
-                    audioConverter.convertMP3(output: output, sample: sampleRate, bitRate: bitRate)
-                    completion(true, nil)
+                    completion(audioConverter.convertMP3(output: output, sample: sampleRate, bitRate: bitRate), nil)
                 case .wav:
-                    audioConverter.convertWAV(sampleRate: .m08k, bitDepth: .m16, output: output)
-                    completion(true, nil)
+                    completion(audioConverter.convertWAV(sampleRate: .m08k, bitDepth: .m16, output: output), nil)
                 }
             })
         } catch (let error as NSError){
@@ -54,6 +49,8 @@ extension AVAsset {
             case .completed:
                 completion(true, nil)
             case .unknown, .waiting, .exporting, .failed, .cancelled:
+                completion(false, nil)
+            default:
                 completion(false, nil)
             }
         }
