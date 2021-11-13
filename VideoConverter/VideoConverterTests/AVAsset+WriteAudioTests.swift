@@ -118,26 +118,20 @@ extension AVAsset {
         do {
             let audioAsset = try self.audioAsset()
             audioAsset.writeToURL(output, completion: { _, _ in
-                let tempURL = FileHelper().outputDirectoryURL.appendingPathComponent("temp4M4A.m4a")
+                let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("tempM4A.m4a")
                 let audioConverter = AudioConverter(inputURL: tempURL)
                 switch format {
                 case .aac:
-                    audioConverter.convertAAC(sample: sampleRate, bitRate: bitRate)
-                    completion(true, nil)
+                    completion(audioConverter.convertAAC(sampleRate: sampleRate, bitRate: bitRate, output: output), nil)
                 case .caf:
-                    audioConverter.convertCAF(sampleRate: sampleRate, bitDepth: bitDepth, output: output)
-                    completion(true, nil)
+                    completion(audioConverter.convertCAF(sampleRate: sampleRate, bitDepth: bitDepth, output: output), nil)
                 case .flac:
-                    audioConverter.convertFLAC(sampleRate: sampleRate, bitDepth: bitDepth, output: output)
-                    completion(true, nil)
+                    completion(audioConverter.convertFLAC(sampleRate: sampleRate, bitDepth: bitDepth, output: output), nil)
                 case .mp3:
-                    audioConverter.convertMP3(output: output, sample: sampleRate, bitRate: bitRate)
-                    completion(true, nil)
+                    completion(audioConverter.convertMP3(output: output, sample: sampleRate, bitRate: bitRate), nil)
                 case .wav:
-                    audioConverter.convertWAV(sampleRate: .m08k, bitDepth: .m16, output: output)
-                    completion(true, nil)
+                    completion(audioConverter.convertWAV(sampleRate: .m08k, bitDepth: .m16, output: output), nil)
                 }
-                semafo.signal()
             })
             semafo.wait()
         } catch (let error as NSError){

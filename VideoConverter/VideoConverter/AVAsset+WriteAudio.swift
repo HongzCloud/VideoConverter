@@ -18,7 +18,7 @@ extension AVAsset {
                 let audioConverter = AudioConverter(inputURL: tempURL)
                 switch format {
                 case .aac:
-                    completion(audioConverter.convertAAC(sample: sampleRate, bitRate: bitRate), nil)
+                    completion(audioConverter.convertAAC(sampleRate: sampleRate, bitRate: bitRate, output: output), nil)
                 case .caf:
                     completion(audioConverter.convertCAF(sampleRate: sampleRate, bitDepth: bitDepth, output: output), nil)
                 case .flac:
