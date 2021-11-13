@@ -125,7 +125,7 @@ extension AVAsset {
                     audioConverter.convertAAC(sample: sampleRate, bitRate: bitRate)
                     completion(true, nil)
                 case .caf:
-                    audioConverter.convertCAF(sample: sampleRate, bitDepth: bitDepth)
+                    audioConverter.convertCAF(sampleRate: sampleRate, bitDepth: bitDepth, output: output)
                     completion(true, nil)
                 case .flac:
                     audioConverter.convertFLAC(sampleRate: sampleRate, bitDepth: bitDepth, output: output)

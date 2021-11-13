@@ -20,7 +20,7 @@ extension AVAsset {
                 case .aac:
                     completion(audioConverter.convertAAC(sample: sampleRate, bitRate: bitRate), nil)
                 case .caf:
-                    completion(audioConverter.convertCAF(sample: sampleRate, bitDepth: bitDepth), nil)
+                    completion(audioConverter.convertCAF(sampleRate: sampleRate, bitDepth: bitDepth, output: output), nil)
                 case .flac:
                     completion(audioConverter.convertFLAC(sampleRate: sampleRate, bitDepth: bitDepth, output: output), nil)
                 case .mp3:
