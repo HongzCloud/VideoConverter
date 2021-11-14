@@ -51,7 +51,18 @@ final class FileHelper {
             outputFileURL = outputDirectoryURL.appendingPathComponent(fileInfo.joined(separator: "."))
 
         }
-        
         return outputDirectoryURL.appendingPathComponent(fileInfo.joined(separator: "."))
     }
+    
+   
+    func urls(for directory: Directory, skipsHiddenFiles: Bool = true ) -> [URL]? {
+        let documentsURL = directory == .willConvert ? self.inputDirectoryURL : self.outputDirectoryURL
+        let fileURLs = try? FileManager.default.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil, options: skipsHiddenFiles ? .skipsHiddenFiles : [] )
+        return fileURLs
+    }
+}
+
+enum Directory: String {
+    case willConvert
+    case didConverted
 }

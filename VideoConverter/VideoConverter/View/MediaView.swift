@@ -16,37 +16,37 @@ class MediaView: UIView {
      // Drawing code
      }
      */
-    let mediaImageView: UIImageView = {
+    private let mediaImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
-    let mediaNameLabel: UILabel = {
+    private let mediaNameLabel: UILabel = {
         let mediaNameLabel = UILabel()
         mediaNameLabel.translatesAutoresizingMaskIntoConstraints = false
         return mediaNameLabel
     }()
     
-    let mediaDurationLabel: UILabel = {
+    private let mediaDurationLabel: UILabel = {
         let mediaDurationLabel = UILabel()
         mediaDurationLabel.translatesAutoresizingMaskIntoConstraints = false
         return mediaDurationLabel
     }()
     
-    let mediaPlayButton: UIButton = {
+    private let mediaPlayButton: UIButton = {
         let mediaPlayButton = UIButton()
         mediaPlayButton.translatesAutoresizingMaskIntoConstraints = false
         return mediaPlayButton
     }()
     
-    let mediaShareButton: UIButton = {
+    private let mediaShareButton: UIButton = {
         let mediaShareButton = UIButton()
         mediaShareButton.translatesAutoresizingMaskIntoConstraints = false
         return mediaShareButton
     }()
     
-    var constant: CGFloat = 5
+    private var constant: CGFloat = 5
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -81,7 +81,6 @@ class MediaView: UIView {
     }
     
     private func setMediaNameLabelConstraints() {
-        mediaNameLabel.text = "sampleMP3.wav"
         self.addSubview(mediaNameLabel)
         NSLayoutConstraint.activate([
             mediaNameLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor),
@@ -92,6 +91,7 @@ class MediaView: UIView {
     
     private func setMediaPlayButtonConstraints() {
         mediaPlayButton.backgroundColor = .green
+        mediaPlayButton.tintColor = .black
         mediaPlayButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
         
         self.addSubview(mediaPlayButton)
@@ -105,6 +105,7 @@ class MediaView: UIView {
     
     private func setMediaShareButtonConstraints() {
         mediaShareButton.backgroundColor = .yellow
+        mediaShareButton.tintColor = .black
         mediaShareButton.setImage(UIImage(systemName: "arrowshape.turn.up.right.fill"), for: .normal)
         
         self.addSubview(mediaShareButton)
@@ -117,7 +118,6 @@ class MediaView: UIView {
     }
     
     private func setMediaDurationLabelConstraints() {
-        mediaDurationLabel.text = "00:00"
         mediaDurationLabel.font = UIFont.systemFont(ofSize: 12)
         
         self.addSubview(mediaDurationLabel)
@@ -126,5 +126,17 @@ class MediaView: UIView {
             mediaDurationLabel.leadingAnchor.constraint(equalTo: mediaImageView.trailingAnchor, constant: constant*2),
             mediaDurationLabel.trailingAnchor.constraint(equalTo: self.mediaPlayButton.leadingAnchor, constant: -5)
         ])
+    }
+    
+    func configure(image: UIImage?, name: String, duration: String) {
+        if image != nil {
+            //set image
+        } else {
+            mediaImageView.image = UIImage(systemName: "music.note")
+            mediaImageView.tintColor = .black
+            mediaImageView.contentMode = .center
+        }
+        self.mediaNameLabel.text = name
+        self.mediaDurationLabel.text = duration
     }
 }

@@ -9,7 +9,7 @@ import UIKit
 
 class WillConvertTableViewCell: UITableViewCell {
     
-    let mediaView: MediaView = {
+    private let mediaView: MediaView = {
         let mediaView = MediaView()
         mediaView.translatesAutoresizingMaskIntoConstraints = false
         return mediaView
@@ -36,11 +36,11 @@ class WillConvertTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func setUIObject() {
+    private func setUIObject() {
         setMediaViewContraints()
     }
     
-    func setMediaViewContraints() {
+    private func setMediaViewContraints() {
         self.addSubview(mediaView)
         NSLayoutConstraint.activate([
             mediaView.topAnchor.constraint(equalTo: self.topAnchor),
@@ -48,5 +48,9 @@ class WillConvertTableViewCell: UITableViewCell {
             mediaView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             mediaView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
+    }
+    
+    func configure(image: UIImage?, name: String, duration: String) {
+        self.mediaView.configure(image: image, name: name, duration: duration)
     }
 }

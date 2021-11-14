@@ -8,9 +8,11 @@
 import UIKit
 import AVFoundation
 import Photos
+
 class WillConvertViewController: UIViewController {
 
     var allVideo = [AVAsset]()
+    var willConvertMedia = [AVAsset]()
     @IBOutlet weak var willConvertTableView: UITableView!
     
     override func viewDidLoad() {
@@ -18,6 +20,21 @@ class WillConvertViewController: UIViewController {
         self.willConvertTableView.delegate = self
         self.willConvertTableView.dataSource = self
         self.willConvertTableView.register(WillConvertTableViewCell.self, forCellReuseIdentifier: "WillConvertTableViewCell")
+        
+        if let files = getFiles(.didConverted) {
+            willConvertMedia = files
+        }
+    }
+    
+    func getFiles(_ directory: Directory) -> [AVAsset]? {
+        guard let urls = FileHelper().urls(for: directory) else { return nil }
+        var avAssests = [AVAsset]()
+        
+        for url in urls {
+            avAssests.append(AVAsset(url: url))
+        }
+        
+        return avAssests
     }
     
     func getVideos(completion: @escaping () -> Void ) {
@@ -46,22 +63,20 @@ class WillConvertViewController: UIViewController {
     }
 }
 
-extension UIViewController: UITableViewDataSource {
+extension WillConvertViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return willConvertMedia.count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "WillConvertTableViewCell") as? WillConvertTableViewCell else { return UITableViewCell() }
+        let file = willConvertMedia[indexPath.row] as! AVURLAsset
+        cell.configure(image: nil, name: file.url.lastPathComponent, duration: file.duration.durationText)
         return cell
     }
 }
 
-extension UIViewController: UITableViewDelegate {
-    public func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath)->CGFloat {
-       return 80
-    }
-
+extension WillConvertViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath)->CGFloat {
         return tableView.frame.height / 10
     }
