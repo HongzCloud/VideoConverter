@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1E022E95273EB599006B51DF /* sampleVideoMOV.MOV in Resources */ = {isa = PBXBuildFile; fileRef = 1E022E94273EB599006B51DF /* sampleVideoMOV.MOV */; };
+		1E022E9D273FD62F006B51DF /* WillConvertTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E022E9B273FD62F006B51DF /* WillConvertTableViewCell.swift */; };
+		1E022EA0273FE18E006B51DF /* MediaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E022E9F273FE18E006B51DF /* MediaView.swift */; };
 		1E2B406F2729CE6E006E1FEB /* sampleWAV.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1E2B406E2729CE6D006E1FEB /* sampleWAV.wav */; };
 		1EA1EEDD2721B85800C22C2C /* AudioConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA1EEDC2721B85800C22C2C /* AudioConverter.swift */; };
 		1EA1EEE12723095F00C22C2C /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA1EEE02723095F00C22C2C /* FileHelper.swift */; };
@@ -24,7 +26,7 @@
 		1EB2C7AA27312B5F004B1338 /* AVAsset+WriteAudioTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EB2C7A927312B5F004B1338 /* AVAsset+WriteAudioTests.swift */; };
 		1EC858FD27204044005A1F3B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC858FC27204044005A1F3B /* AppDelegate.swift */; };
 		1EC858FF27204044005A1F3B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC858FE27204044005A1F3B /* SceneDelegate.swift */; };
-		1EC8590127204044005A1F3B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC8590027204044005A1F3B /* ViewController.swift */; };
+		1EC8590127204044005A1F3B /* WillConvertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC8590027204044005A1F3B /* WillConvertViewController.swift */; };
 		1EC8590427204044005A1F3B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EC8590227204044005A1F3B /* Main.storyboard */; };
 		1EC8590627204047005A1F3B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1EC8590527204047005A1F3B /* Assets.xcassets */; };
 		1EC8590927204047005A1F3B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EC8590727204047005A1F3B /* LaunchScreen.storyboard */; };
@@ -55,6 +57,8 @@
 
 /* Begin PBXFileReference section */
 		1E022E94273EB599006B51DF /* sampleVideoMOV.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; name = sampleVideoMOV.MOV; path = ../../../../Downloads/sampleVideoMOV.MOV; sourceTree = "<group>"; };
+		1E022E9B273FD62F006B51DF /* WillConvertTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WillConvertTableViewCell.swift; sourceTree = "<group>"; };
+		1E022E9F273FE18E006B51DF /* MediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaView.swift; sourceTree = "<group>"; };
 		1E2B406E2729CE6D006E1FEB /* sampleWAV.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = sampleWAV.wav; path = ../../../../Downloads/sampleWAV.wav; sourceTree = "<group>"; };
 		1EA1EEDC2721B85800C22C2C /* AudioConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioConverter.swift; sourceTree = "<group>"; };
 		1EA1EEE02723095F00C22C2C /* FileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
@@ -69,7 +73,7 @@
 		1EC858F927204044005A1F3B /* VideoConverter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoConverter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EC858FC27204044005A1F3B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1EC858FE27204044005A1F3B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		1EC8590027204044005A1F3B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		1EC8590027204044005A1F3B /* WillConvertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WillConvertViewController.swift; sourceTree = "<group>"; };
 		1EC8590327204044005A1F3B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1EC8590527204047005A1F3B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1EC8590827204047005A1F3B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -120,6 +124,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1E022E98273FD45D006B51DF /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1E022E9B273FD62F006B51DF /* WillConvertTableViewCell.swift */,
+				1E022E9F273FE18E006B51DF /* MediaView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		1EC858F027204043005A1F3B = {
 			isa = PBXGroup;
 			children = (
@@ -145,10 +158,11 @@
 		1EC858FB27204044005A1F3B /* VideoConverter */ = {
 			isa = PBXGroup;
 			children = (
+				1E022E98273FD45D006B51DF /* View */,
 				1EC8592E27207419005A1F3B /* Model */,
 				1EC858FC27204044005A1F3B /* AppDelegate.swift */,
 				1EC858FE27204044005A1F3B /* SceneDelegate.swift */,
-				1EC8590027204044005A1F3B /* ViewController.swift */,
+				1EC8590027204044005A1F3B /* WillConvertViewController.swift */,
 				1EC8590227204044005A1F3B /* Main.storyboard */,
 				1EC8590527204047005A1F3B /* Assets.xcassets */,
 				1EC8590727204047005A1F3B /* LaunchScreen.storyboard */,
@@ -428,11 +442,13 @@
 			files = (
 				1EC8593027207424005A1F3B /* Audio.swift in Sources */,
 				1EB2C79D272EF2FE004B1338 /* AVAsset+WriteAudio.swift in Sources */,
-				1EC8590127204044005A1F3B /* ViewController.swift in Sources */,
+				1EC8590127204044005A1F3B /* WillConvertViewController.swift in Sources */,
 				1EA1EEDD2721B85800C22C2C /* AudioConverter.swift in Sources */,
 				1EC858FD27204044005A1F3B /* AppDelegate.swift in Sources */,
+				1E022E9D273FD62F006B51DF /* WillConvertTableViewCell.swift in Sources */,
 				1EC858FF27204044005A1F3B /* SceneDelegate.swift in Sources */,
 				1EA1EEE12723095F00C22C2C /* FileHelper.swift in Sources */,
+				1E022EA0273FE18E006B51DF /* MediaView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
