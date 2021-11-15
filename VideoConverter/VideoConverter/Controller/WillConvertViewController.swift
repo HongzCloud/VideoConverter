@@ -21,7 +21,7 @@ class WillConvertViewController: UIViewController {
         self.willConvertTableView.dataSource = self
         self.willConvertTableView.register(WillConvertTableViewCell.self, forCellReuseIdentifier: "WillConvertTableViewCell")
         
-        if let files = getFiles(.didConverted) {
+        if let files = getFiles(.willConvert) {
             willConvertMedia = files
         }
     }
