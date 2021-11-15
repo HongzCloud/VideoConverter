@@ -15,6 +15,7 @@ class WillConvertViewController: UIViewController {
     var willConvertMedia = [AVAsset]()
     @IBOutlet weak var willConvertTableView: UITableView!
     let convertView = ConvertView()
+    let pickerViewData = ["wav", "caf", "flac", "aac", "mp3"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,13 +25,17 @@ class WillConvertViewController: UIViewController {
         
         if let files = getFiles(.willConvert) {
             willConvertMedia = files
+            setConvertView()
         }
-        setConvertView()
     }
     
     func setConvertView() {
         convertView.translatesAutoresizingMaskIntoConstraints = false
         convertView.backgroundColor = .lightGray
+        convertView.didConvertedExtensionNamePickerView.delegate = self
+        convertView.didConvertedExtensionNamePickerView.dataSource = self
+        convertView.isHidden = true
+        
         self.view.addSubview(convertView)
         NSLayoutConstraint.activate([
             self.convertView.bottomAnchor.constraint(equalTo: self.willConvertTableView.bottomAnchor),
@@ -97,6 +102,25 @@ extension WillConvertViewController: UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let file = willConvertMedia[indexPath.row] as! AVURLAsset
+        convertView.isHidden = false
         convertView.configure(currentFormat: file.url.pathExtension)
+    }
+}
+
+extension WillConvertViewController : UIPickerViewDelegate, UIPickerViewDataSource{
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return pickerViewData.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return pickerViewData[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        print("select=\(row)")
     }
 }

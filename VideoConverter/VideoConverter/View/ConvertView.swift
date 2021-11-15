@@ -25,7 +25,7 @@ class ConvertView: UIView {
         return button
     }()
     
-    private let didConvertedExtensionNamePickerView: UIPickerView = {
+    private(set) var didConvertedExtensionNamePickerView: UIPickerView = {
         let pickerView = UIPickerView()
         pickerView.translatesAutoresizingMaskIntoConstraints = false
         return pickerView
