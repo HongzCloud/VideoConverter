@@ -8,7 +8,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Item 2-->
+        <!--After-->
         <scene sceneID="R8M-hM-1os">
             <objects>
                 <viewController id="ZXJ-9k-7EW" customClass="DidConvertedTableViewController" customModule="VideoConverter" customModuleProvider="target" sceneMemberID="viewController">
@@ -39,7 +39,7 @@
                             <constraint firstItem="MAc-2N-1Hk" firstAttribute="trailing" secondItem="nzR-rz-8cE" secondAttribute="trailing" id="Uuh-Pc-hgs"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item 2" id="YEL-3u-2Uf"/>
+                    <tabBarItem key="tabBarItem" title="After" image="music.note.list" catalog="system" id="YEL-3u-2Uf"/>
                     <connections>
                         <outlet property="didConvertedTableView" destination="MAc-2N-1Hk" id="wXb-35-J7c"/>
                     </connections>
@@ -48,7 +48,7 @@
             </objects>
             <point key="canvasLocation" x="1675.3846153846152" y="348.34123222748815"/>
         </scene>
-        <!--Item 1-->
+        <!--Before-->
         <scene sceneID="ZeZ-I5-xse">
             <objects>
                 <viewController id="Znd-R0-tKS" customClass="WillConvertViewController" customModule="VideoConverter" customModuleProvider="target" sceneMemberID="viewController">
@@ -79,7 +79,7 @@
                             <constraint firstItem="O3c-k1-AD8" firstAttribute="bottom" secondItem="5is-SB-h2Q" secondAttribute="bottom" id="k2u-G5-aVe"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item 1" id="UvN-Dh-I5i"/>
+                    <tabBarItem key="tabBarItem" title="Before" image="list.and.film" catalog="system" id="UvN-Dh-I5i"/>
                     <connections>
                         <outlet property="willConvertTableView" destination="O3c-k1-AD8" id="k6s-Js-26J"/>
                     </connections>
@@ -96,6 +96,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="selectedImageTintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </tabBar>
                     <connections>
                         <segue destination="Znd-R0-tKS" kind="relationship" relationship="viewControllers" id="yN2-6x-EVJ"/>
@@ -108,6 +109,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="list.and.film" catalog="system" width="128" height="86"/>
+        <image name="music.note.list" catalog="system" width="128" height="115"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

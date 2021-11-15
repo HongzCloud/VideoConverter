@@ -14,6 +14,7 @@ class WillConvertViewController: UIViewController {
     var allVideo = [AVAsset]()
     var willConvertMedia = [AVAsset]()
     @IBOutlet weak var willConvertTableView: UITableView!
+    let convertView = ConvertView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +25,19 @@ class WillConvertViewController: UIViewController {
         if let files = getFiles(.willConvert) {
             willConvertMedia = files
         }
+        setConvertView()
+    }
+    
+    func setConvertView() {
+        convertView.translatesAutoresizingMaskIntoConstraints = false
+        convertView.backgroundColor = .lightGray
+        self.view.addSubview(convertView)
+        NSLayoutConstraint.activate([
+            self.convertView.bottomAnchor.constraint(equalTo: self.willConvertTableView.bottomAnchor),
+            self.convertView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            self.convertView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            self.convertView.heightAnchor.constraint(equalTo: self.willConvertTableView.heightAnchor, multiplier: 1/8)
+        ])
     }
     
     func getFiles(_ directory: Directory) -> [AVAsset]? {
@@ -79,5 +93,10 @@ extension WillConvertViewController: UITableViewDataSource {
 extension WillConvertViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath)->CGFloat {
         return tableView.frame.height / 10
+    }
+    
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let file = willConvertMedia[indexPath.row] as! AVURLAsset
+        convertView.configure(currentFormat: file.url.pathExtension)
     }
 }
