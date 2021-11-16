@@ -15,7 +15,7 @@ class WillConvertViewController: UIViewController {
     var willConvertMedia = [AVAsset]()
     @IBOutlet weak var willConvertTableView: UITableView!
     let convertView = ConvertView()
-    let pickerViewData = ["wav", "caf", "flac", "aac", "mp3"]
+    let pickerViewData = FileFormat.allCases.map{ $0.text }
     
     override func viewDidLoad() {
         super.viewDidLoad()

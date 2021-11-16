@@ -13,6 +13,7 @@ class ConvertView: UIView {
         let label = UILabel()
         label.text = "TEST.mp3"
         label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 22)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

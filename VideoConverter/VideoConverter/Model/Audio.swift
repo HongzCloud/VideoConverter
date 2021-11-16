@@ -21,7 +21,7 @@ struct Audio {
     }
 }
 
-enum FileFormat {
+enum FileFormat: CaseIterable {
     case wav
     case mp3
     case aac
@@ -40,6 +40,21 @@ enum FileFormat {
             return kAudioFormatFLAC
         case .caf:
             return kAudioFormatLinearPCM
+        }
+    }
+    
+    var text: String {
+        switch self {
+        case .aac:
+            return "aac"
+        case .caf:
+            return "caf"
+        case .flac:
+            return "flac"
+        case .mp3:
+            return "mp3"
+        case .wav:
+            return "wav"
         }
     }
 }
