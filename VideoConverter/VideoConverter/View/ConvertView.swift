@@ -20,8 +20,13 @@ class ConvertView: UIView {
     
     private let convertButton: UIButton = {
         let button = UIButton()
-        button.layer.cornerRadius = 30
+        button.layer.cornerRadius = 5
         button.clipsToBounds = true
+        button.backgroundColor = .darkGray
+        button.tintColor = .black
+        button.setImage(UIImage(systemName: "gobackward"), for: .normal)
+        let symbolSize = UIImage.SymbolConfiguration.init(pointSize: 20)
+        button.setPreferredSymbolConfiguration(symbolSize, forImageIn: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -45,7 +50,7 @@ class ConvertView: UIView {
     private func setUIObject() {
         setConvertButton()
         setCurrentExtensionNameLabelConstraints()
-        setDidConvertedExtensionNamePickerView()
+        setDidConvertedExtensionNamePickerViewConstraints()
     }
     
     private func setCurrentExtensionNameLabelConstraints() {
@@ -60,13 +65,6 @@ class ConvertView: UIView {
     }
     
     private func setConvertButton() {
-        self.convertButton.backgroundColor = .darkGray
-        self.convertButton.tintColor = .black
-        self.convertButton.setImage(UIImage(systemName: "gobackward"), for: .normal)
-        let symbolSize = UIImage.SymbolConfiguration.init(pointSize: 30)
-        self.convertButton.setPreferredSymbolConfiguration(symbolSize, forImageIn: .normal)
-        
-        
         self.addSubview(convertButton)
         NSLayoutConstraint.activate([
             self.convertButton.centerYAnchor.constraint(equalTo: self.centerYAnchor),
@@ -76,7 +74,7 @@ class ConvertView: UIView {
         ])
     }
     
-    private func setDidConvertedExtensionNamePickerView() {
+    private func setDidConvertedExtensionNamePickerViewConstraints() {
         self.didConvertedExtensionNamePickerView.backgroundColor = .lightGray
         
         self.addSubview(didConvertedExtensionNamePickerView)

@@ -15,34 +15,81 @@ class WillConvertViewController: UIViewController {
     var willConvertMedia = [AVAsset]()
     @IBOutlet weak var willConvertTableView: UITableView!
     let convertView = ConvertView()
+    let headerView = WillConvertTableHeaderView()
     let pickerViewData = FileFormat.allCases.map{ $0.text }
+    var tableViewConstraints: [NSLayoutConstraint]? = nil
     
+    @IBOutlet weak var topContraint: NSLayoutConstraint!
     override func viewDidLoad() {
         super.viewDidLoad()
         self.willConvertTableView.delegate = self
         self.willConvertTableView.dataSource = self
         self.willConvertTableView.register(WillConvertTableViewCell.self, forCellReuseIdentifier: "WillConvertTableViewCell")
-        
+
         if let files = getFiles(.willConvert) {
             willConvertMedia = files
-            setConvertView()
+            setHeaderViewConstraints()
+            setConvertViewConstraints()
+            setTableViewConstraints()
         }
     }
     
-    func setConvertView() {
-        convertView.translatesAutoresizingMaskIntoConstraints = false
-        convertView.backgroundColor = .lightGray
-        convertView.didConvertedExtensionNamePickerView.delegate = self
-        convertView.didConvertedExtensionNamePickerView.dataSource = self
-        convertView.isHidden = true
+    private func newTableViewConstraints() -> [NSLayoutConstraint] {
+        let safeArea = self.view.safeAreaLayoutGuide
+        self.willConvertTableView.translatesAutoresizingMaskIntoConstraints = false
+        let constrains = [
+            self.willConvertTableView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor),
+            self.willConvertTableView.bottomAnchor.constraint(equalTo: self.convertView.topAnchor),
+            self.willConvertTableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+            self.willConvertTableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
+        ]
+        return constrains
+    }
+    
+    func setHeaderViewConstraints() {
+        self.headerView.translatesAutoresizingMaskIntoConstraints = false
+        self.headerView.backgroundColor = .lightGray
+        self.headerView.configure(title: "Viedo List", photoLibraryIsHidden: false)
+        
+        self.view.addSubview(headerView)
+        let safeArea = self.view.safeAreaLayoutGuide
+        NSLayoutConstraint.activate([
+            self.headerView.topAnchor.constraint(equalTo: safeArea.topAnchor),
+            self.headerView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+            self.headerView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+            self.headerView.heightAnchor.constraint(equalTo: safeArea.heightAnchor, multiplier: 1/14)
+        ])
+    }
+    
+    func setConvertViewConstraints() {
+        self.convertView.translatesAutoresizingMaskIntoConstraints = false
+        self.convertView.backgroundColor = .lightGray
+        self.convertView.didConvertedExtensionNamePickerView.delegate = self
+        self.convertView.didConvertedExtensionNamePickerView.dataSource = self
+        self.convertView.isHidden = true
+        let safeArea = self.view.safeAreaLayoutGuide
         
         self.view.addSubview(convertView)
         NSLayoutConstraint.activate([
-            self.convertView.bottomAnchor.constraint(equalTo: self.willConvertTableView.bottomAnchor),
-            self.convertView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            self.convertView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            self.convertView.heightAnchor.constraint(equalTo: self.willConvertTableView.heightAnchor, multiplier: 1/8)
+            self.convertView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
+            self.convertView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+            self.convertView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+            self.convertView.heightAnchor.constraint(equalTo: safeArea.heightAnchor, multiplier: 1/10)
         ])
+    }
+    
+    func setTableViewConstraints() {
+        let safeArea = self.view.safeAreaLayoutGuide
+        self.willConvertTableView.translatesAutoresizingMaskIntoConstraints = false
+        let constraints = [
+            self.willConvertTableView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor),
+            self.willConvertTableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
+            self.willConvertTableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+            self.willConvertTableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
+        ]
+        NSLayoutConstraint.activate(constraints)
+        
+        self.tableViewConstraints = constraints
     }
     
     func getFiles(_ directory: Directory) -> [AVAsset]? {
@@ -104,6 +151,10 @@ extension WillConvertViewController: UITableViewDelegate {
         let file = willConvertMedia[indexPath.row] as! AVURLAsset
         convertView.isHidden = false
         convertView.configure(currentFormat: file.url.pathExtension)
+        if (self.tableViewConstraints != nil) && self.headerView.isHidden == false {
+            NSLayoutConstraint.deactivate(self.tableViewConstraints!)
+            NSLayoutConstraint.activate(newTableViewConstraints())
+        }
     }
 }
 
