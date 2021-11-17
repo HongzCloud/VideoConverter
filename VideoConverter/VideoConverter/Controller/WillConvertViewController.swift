@@ -46,7 +46,7 @@ class WillConvertViewController: UIViewController {
         return constrains
     }
     
-    func setHeaderViewConstraints() {
+    private func setHeaderViewConstraints() {
         self.headerView.translatesAutoresizingMaskIntoConstraints = false
         self.headerView.backgroundColor = .lightGray
         self.headerView.configure(title: "Viedo List", photoLibraryIsHidden: false)
@@ -61,7 +61,7 @@ class WillConvertViewController: UIViewController {
         ])
     }
     
-    func setConvertViewConstraints() {
+    private func setConvertViewConstraints() {
         self.convertView.translatesAutoresizingMaskIntoConstraints = false
         self.convertView.backgroundColor = .lightGray
         self.convertView.didConvertedExtensionNamePickerView.delegate = self
@@ -78,7 +78,7 @@ class WillConvertViewController: UIViewController {
         ])
     }
     
-    func setTableViewConstraints() {
+    private func setTableViewConstraints() {
         let safeArea = self.view.safeAreaLayoutGuide
         self.willConvertTableView.translatesAutoresizingMaskIntoConstraints = false
         let constraints = [
@@ -92,7 +92,7 @@ class WillConvertViewController: UIViewController {
         self.tableViewConstraints = constraints
     }
     
-    func getFiles(_ directory: Directory) -> [AVAsset]? {
+    private func getFiles(_ directory: Directory) -> [AVAsset]? {
         guard let urls = FileHelper().urls(for: directory) else { return nil }
         var avAssests = [AVAsset]()
         
@@ -103,7 +103,7 @@ class WillConvertViewController: UIViewController {
         return avAssests
     }
     
-    func getVideos(completion: @escaping () -> Void ) {
+    private func getVideos(completion: @escaping () -> Void ) {
         var phAssets = [PHAsset]()
         var avAssets = [AVAsset]()
         let fetchOption = PHFetchOptions()

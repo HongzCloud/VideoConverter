@@ -16,14 +16,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="MAc-2N-1Hk">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="MAc-2N-1Hk">
                                 <rect key="frame" x="0.0" y="44" width="390" height="717"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="107" id="p4F-OA-fEs">
-                                        <rect key="frame" x="20" y="49" width="350" height="107"/>
+                                        <rect key="frame" x="0.0" y="24.333333969116211" width="390" height="107"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="p4F-OA-fEs" id="dBe-bc-a5S">
-                                            <rect key="frame" x="0.0" y="0.0" width="350" height="107"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="390" height="107"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -32,12 +33,6 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="nzR-rz-8cE"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="MAc-2N-1Hk" firstAttribute="leading" secondItem="nzR-rz-8cE" secondAttribute="leading" id="9Al-7F-5nO"/>
-                            <constraint firstItem="MAc-2N-1Hk" firstAttribute="bottom" secondItem="nzR-rz-8cE" secondAttribute="bottom" id="Oup-Zp-z4f"/>
-                            <constraint firstItem="MAc-2N-1Hk" firstAttribute="top" secondItem="nzR-rz-8cE" secondAttribute="top" id="SAD-2s-iQi"/>
-                            <constraint firstItem="MAc-2N-1Hk" firstAttribute="trailing" secondItem="nzR-rz-8cE" secondAttribute="trailing" id="Uuh-Pc-hgs"/>
-                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="After" image="music.note.list" catalog="system" id="YEL-3u-2Uf"/>
                     <connections>

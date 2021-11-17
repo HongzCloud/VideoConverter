@@ -11,6 +11,7 @@ class DidConvertedTableViewController: UIViewController {
 
     var didConvertMedia = [AVAsset]()
     @IBOutlet weak var didConvertedTableView: UITableView!
+    private var headerView = WillConvertTableHeaderView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,10 +21,38 @@ class DidConvertedTableViewController: UIViewController {
         
         if let files = getFiles(.didConverted) {
             didConvertMedia = files
+            setHeaderView()
+            setTableViewConstraints()
         }
     }
     
-    func getFiles(_ directory: Directory) -> [AVAsset]? {
+    private func setHeaderView() {
+        self.headerView.translatesAutoresizingMaskIntoConstraints = false
+        self.headerView.backgroundColor = .lightGray
+        self.headerView.configure(title: "Audio List", photoLibraryIsHidden: false)
+        
+        self.view.addSubview(headerView)
+        let safeArea = self.view.safeAreaLayoutGuide
+        NSLayoutConstraint.activate([
+            self.headerView.topAnchor.constraint(equalTo: safeArea.topAnchor),
+            self.headerView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+            self.headerView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+            self.headerView.heightAnchor.constraint(equalTo: safeArea.heightAnchor, multiplier: 1/14)
+        ])
+    }
+    
+    private func setTableViewConstraints() {
+        let safeArea = self.view.safeAreaLayoutGuide
+        self.didConvertedTableView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.didConvertedTableView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor),
+            self.didConvertedTableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
+            self.didConvertedTableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+            self.didConvertedTableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
+        ])
+    }
+    
+    private func getFiles(_ directory: Directory) -> [AVAsset]? {
         guard let urls = FileHelper().urls(for: directory) else { return nil }
         var avAssests = [AVAsset]()
         
