@@ -18,13 +18,14 @@ class WillConvertViewController: UIViewController {
     let headerView = WillConvertTableHeaderView()
     let pickerViewData = FileFormat.allCases.map{ $0.text }
     var tableViewConstraints: [NSLayoutConstraint]? = nil
-    
+
     @IBOutlet weak var topContraint: NSLayoutConstraint!
     override func viewDidLoad() {
         super.viewDidLoad()
         self.willConvertTableView.delegate = self
         self.willConvertTableView.dataSource = self
         self.willConvertTableView.register(WillConvertTableViewCell.self, forCellReuseIdentifier: "WillConvertTableViewCell")
+        self.headerView.delegate = self
 
         if let files = getFiles(.willConvert) {
             willConvertMedia = files
@@ -91,7 +92,7 @@ class WillConvertViewController: UIViewController {
         
         self.tableViewConstraints = constraints
     }
-    
+
     private func getFiles(_ directory: Directory) -> [AVAsset]? {
         guard let urls = FileHelper().urls(for: directory) else { return nil }
         var avAssests = [AVAsset]()
@@ -173,5 +174,16 @@ extension WillConvertViewController : UIPickerViewDelegate, UIPickerViewDataSour
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         print("select=\(row)")
+    }
+}
+
+extension WillConvertViewController: CustomHeaderViewDelegate {
+    func buttonTouched() {
+        guard let svc = self.storyboard?.instantiateViewController(withIdentifier: "VideoListViewController") else {
+            return
+        }
+        svc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+
+        self.present(svc, animated: true)
     }
 }

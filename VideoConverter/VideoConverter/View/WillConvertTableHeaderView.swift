@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol CustomHeaderViewDelegate: AnyObject {
+    func buttonTouched()
+}
+
 class WillConvertTableHeaderView: UIView {
 
     private let titleLabel: UILabel = {
@@ -17,16 +21,19 @@ class WillConvertTableHeaderView: UIView {
         return label
     }()
     
-    private let photoLibraryButton: UIButton = {
+    private(set) var photoLibraryButton: UIButton = {
         let button = UIButton()
-        button.tintColor = .black
+        button.tintColor = .blue
         button.setImage(UIImage(systemName: "plus"), for: .normal)
         let symbolSize = UIImage.SymbolConfiguration.init(pointSize: 20)
         button.setPreferredSymbolConfiguration(symbolSize, forImageIn: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(didTabButton(_:)), for: .touchUpInside)
         return button
     }()
 
+    weak var delegate: CustomHeaderViewDelegate?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUIObject()
@@ -61,9 +68,12 @@ class WillConvertTableHeaderView: UIView {
         ])
     }
     
+    @objc func didTabButton(_ sender: UIButton!) {
+        delegate?.buttonTouched()
+    }
+    
     func configure(title: String, photoLibraryIsHidden: Bool) {
         self.titleLabel.text = title
         self.photoLibraryButton.isHidden = photoLibraryIsHidden
     }
-
 }
