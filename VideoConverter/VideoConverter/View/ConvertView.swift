@@ -54,8 +54,6 @@ class ConvertView: UIView {
     }
     
     private func setCurrentExtensionNameLabelConstraints() {
-        //self.currentExtensionNameLabel.backgroundColor =
-        
         self.addSubview(currentExtensionNameLabel)
         NSLayoutConstraint.activate([
             self.currentExtensionNameLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor),

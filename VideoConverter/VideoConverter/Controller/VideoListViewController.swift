@@ -9,14 +9,45 @@ import UIKit
 
 class VideoListViewController: UIViewController {
 
-    @IBOutlet weak var VideoListColletcionView: UICollectionView!
-    let sectionInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+    @IBOutlet weak var videoListColletcionView: UICollectionView!
+    private let header = WillConvertTableHeaderView()
+    private let sectionInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        VideoListColletcionView.dataSource = self
-        VideoListColletcionView.delegate = self
-        VideoListColletcionView.register(VideoListCollectionViewCell.self, forCellWithReuseIdentifier: "VideoListCollectionViewCell")
+        videoListColletcionView.dataSource = self
+        videoListColletcionView.delegate = self
+        videoListColletcionView.register(VideoListCollectionViewCell.self, forCellWithReuseIdentifier: "VideoListCollectionViewCell")
+        setUIObject()
+    }
+    
+    private func setUIObject() {
+        setHeaderConstraints()
+        setVideoListCollectionView()
+    }
+    
+    private func setHeaderConstraints() {
+        self.header.configure(title: "비디오 목록", photoLibraryIsHidden: true)
+        self.header.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(header)
+        let safeArea = self.view.safeAreaLayoutGuide
+        NSLayoutConstraint.activate([
+            self.header.topAnchor.constraint(equalTo: safeArea.topAnchor),
+            self.header.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 1/14),
+            self.header.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+            self.header.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
+        ])
+    }
+    
+    private func setVideoListCollectionView() {
+        self.videoListColletcionView.translatesAutoresizingMaskIntoConstraints = false
+        let safeArea = self.view.safeAreaLayoutGuide
+        NSLayoutConstraint.activate([
+            self.videoListColletcionView.topAnchor.constraint(equalTo: self.header.bottomAnchor),
+            self.videoListColletcionView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
+            self.videoListColletcionView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+            self.videoListColletcionView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
+        ])
     }
 }
 

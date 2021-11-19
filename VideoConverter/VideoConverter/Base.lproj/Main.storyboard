@@ -103,7 +103,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <connections>
-                        <outlet property="VideoListColletcionView" destination="rev-5N-jpq" id="QTs-tT-pjf"/>
+                        <outlet property="videoListColletcionView" destination="rev-5N-jpq" id="QTs-tT-pjf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a7f-0t-m4m" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
