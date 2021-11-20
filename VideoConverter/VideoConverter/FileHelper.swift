@@ -33,25 +33,24 @@ final class FileHelper {
         return true
     }
     
-     func createOutputFileURL(_ name: String) -> URL {
+    func createFileURL(_ name: String, in directoryType: Directory) -> URL {
         var fileInfo = name.split(separator: ".")
-        var outputFileURL = outputDirectoryURL.appendingPathComponent(fileInfo.joined(separator: "."))
+        let directoryURL = directoryType == .didConverted ? outputDirectoryURL : inputDirectoryURL
         var num = 0
         
         func isExistFile(atPath: String) -> Bool {
 
-            if FileManager.default.fileExists(atPath: outputFileURL.path) {
+            if FileManager.default.fileExists(atPath: atPath) {
                 return true
             } else { return false }
         }
-        
-        while isExistFile(atPath: outputFileURL.path) {
+
+        while isExistFile(atPath: directoryURL.appendingPathComponent(fileInfo[0] + "." + fileInfo.last!).path) {
             num += 1
             fileInfo[0] = name.split(separator: ".")[0] + "_\(num)"
-            outputFileURL = outputDirectoryURL.appendingPathComponent(fileInfo.joined(separator: "."))
-
         }
-        return outputDirectoryURL.appendingPathComponent(fileInfo.joined(separator: "."))
+        
+        return directoryURL.appendingPathComponent(fileInfo[0] + "." + fileInfo.last!)
     }
     
    

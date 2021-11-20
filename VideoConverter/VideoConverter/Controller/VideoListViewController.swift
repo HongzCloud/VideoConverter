@@ -99,6 +99,7 @@ extension VideoListViewController: UICollectionViewDelegate, UICollectionViewDel
         let cellHeight = (height - heightPadding) / itemsPerColumn
         
         return CGSize(width: cellWidth, height: cellHeight)
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -117,6 +118,28 @@ extension VideoListViewController: UICollectionViewDelegate, UICollectionViewDel
 extension VideoListViewController: CustomHeaderViewDelegate {
     func didTappedSaveButton() {
         guard let indexPath = self.selectedCellIndex else { return }
+        
+        PHImageManager.default().requestAVAsset(forVideo: self.videos[indexPath.row], options: PHVideoRequestOptions(), resultHandler: { (asset, audioMix, info) -> Void in
+            if let asset = asset as? AVURLAsset {
+                let videoData = NSData(contentsOf: asset.url)
+                
+                // optionally, write the video to the temp directory
+                let videoPath = FileHelper().createFileURL(asset.url.lastPathComponent, in: .willConvert).path
+                print(videoPath)
+                let videoURL = NSURL(fileURLWithPath: videoPath)
+                let writeResult = videoData?.write(to: videoURL as URL, atomically: true)
+                
+                if let writeResult = writeResult, writeResult {
+                    print("success")
+                    DispatchQueue.main.sync {
+                        self.didTappedExitButton()
+                    }
+                }
+                else {
+                    print("failure")
+                }
+            }
+        })
     }
     
     func didTappedExitButton() {

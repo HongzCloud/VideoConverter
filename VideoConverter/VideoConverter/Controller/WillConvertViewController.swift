@@ -17,8 +17,7 @@ class WillConvertViewController: UIViewController {
     let headerView = HeaderView()
     let pickerViewData = FileFormat.allCases.map{ $0.text }
     var tableViewConstraints: [NSLayoutConstraint]? = nil
-
-    @IBOutlet weak var topContraint: NSLayoutConstraint!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.willConvertTableView.delegate = self
@@ -26,14 +25,20 @@ class WillConvertViewController: UIViewController {
         self.willConvertTableView.register(WillConvertTableViewCell.self, forCellReuseIdentifier: "WillConvertTableViewCell")
         self.headerView.delegate = self
 
+        setHeaderViewConstraints()
+        setConvertViewConstraints()
+        setTableViewConstraints()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        willConvertMedia.removeAll()
         if let files = getFiles(.willConvert) {
             willConvertMedia = files
-            setHeaderViewConstraints()
-            setConvertViewConstraints()
-            setTableViewConstraints()
+            self.willConvertTableView.reloadData()
         }
     }
-    
+
     private func newTableViewConstraints() -> [NSLayoutConstraint] {
         let safeArea = self.view.safeAreaLayoutGuide
         self.willConvertTableView.translatesAutoresizingMaskIntoConstraints = false
@@ -157,8 +162,8 @@ extension WillConvertViewController: CustomHeaderViewDelegate {
         guard let svc = self.storyboard?.instantiateViewController(withIdentifier: "VideoListViewController") else {
             return
         }
-        svc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
-
+      //  svc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+        svc.modalPresentationStyle = .fullScreen
         self.present(svc, animated: true)
     }
 }
