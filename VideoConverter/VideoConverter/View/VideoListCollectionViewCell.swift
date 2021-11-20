@@ -62,4 +62,9 @@ class VideoListCollectionViewCell: UICollectionViewCell {
             self.durationLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -5)
         ])
     }
+    
+    func configure(image: UIImage?, duration: String) {
+        self.thumbnail.image = image
+        self.durationLabel.text = duration
+    }
 }

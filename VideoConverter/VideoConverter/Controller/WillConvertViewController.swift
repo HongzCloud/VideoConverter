@@ -11,7 +11,6 @@ import Photos
 
 class WillConvertViewController: UIViewController {
 
-    var allVideo = [AVAsset]()
     var willConvertMedia = [AVAsset]()
     @IBOutlet weak var willConvertTableView: UITableView!
     let convertView = ConvertView()
@@ -102,31 +101,6 @@ class WillConvertViewController: UIViewController {
         }
         
         return avAssests
-    }
-    
-    private func getVideos(completion: @escaping () -> Void ) {
-        var phAssets = [PHAsset]()
-        var avAssets = [AVAsset]()
-        let fetchOption = PHFetchOptions()
-        fetchOption.includeAssetSourceTypes = [.typeUserLibrary]
-        let allVideos = PHAsset.fetchAssets(with: .video, options: fetchOption)
-        
-        allVideos.enumerateObjects({ phAsset, pointer,_  in
-            phAssets.append(phAsset)
-            
-        })
-        
-        let options = PHVideoRequestOptions()
-        options.isNetworkAccessAllowed = true
-        
-        for video in phAssets {
-            PHCachingImageManager().requestAVAsset(forVideo: video, options: options) { (avAsset, _, _ ) in
-                if let asset = avAsset {
-                    self.allVideo.append(avAsset!)
-                }
-            }
-        }
-        completion()
     }
 }
 

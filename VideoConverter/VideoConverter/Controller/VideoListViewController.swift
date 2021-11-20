@@ -6,12 +6,15 @@
 //
 
 import UIKit
+import Photos
 
 class VideoListViewController: UIViewController {
 
     @IBOutlet weak var videoListColletcionView: UICollectionView!
     private let header = WillConvertTableHeaderView()
     private let sectionInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+    private var allVideo = [AVAsset]()
+    private var videos = [PHAsset]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,6 +22,9 @@ class VideoListViewController: UIViewController {
         videoListColletcionView.delegate = self
         videoListColletcionView.register(VideoListCollectionViewCell.self, forCellWithReuseIdentifier: "VideoListCollectionViewCell")
         setUIObject()
+        getVideos { [self] in
+            self.videoListColletcionView.reloadData()
+        }
     }
     
     private func setUIObject() {
@@ -49,17 +55,33 @@ class VideoListViewController: UIViewController {
             self.videoListColletcionView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
         ])
     }
+    
+    private func getVideos(completion: () -> Void) {
+        var phAssets = [PHAsset]()
+        var avAssets = [AVAsset]()
+        let fetchOption = PHFetchOptions()
+        fetchOption.includeAssetSourceTypes = [.typeUserLibrary]
+        let allVideo = PHAsset.fetchAssets(with: .video, options: fetchOption)
+        
+        allVideo.enumerateObjects({ phAsset, pointer,_  in
+            phAssets.append(phAsset)
+            self.videos.append(phAsset)
+        })
+        completion()
+    }
 }
 
 extension VideoListViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 20
+        return videos.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoListCollectionViewCell", for: indexPath) as? VideoListCollectionViewCell
         else { return UICollectionViewCell() }
         
+        cell.configure(image: videos[indexPath.row].thumbnailImage, duration: videos[indexPath.row].duration.durationText)
+            
         return cell
     }
 }
