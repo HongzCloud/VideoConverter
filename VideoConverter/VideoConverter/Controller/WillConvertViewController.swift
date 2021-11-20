@@ -152,7 +152,8 @@ extension WillConvertViewController : UIPickerViewDelegate, UIPickerViewDataSour
 }
 
 extension WillConvertViewController: CustomHeaderViewDelegate {
-    func buttonTouched() {
+
+    func didTappedPhotoLibraryButton() {
         guard let svc = self.storyboard?.instantiateViewController(withIdentifier: "VideoListViewController") else {
             return
         }

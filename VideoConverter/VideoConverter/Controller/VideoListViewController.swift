@@ -13,7 +13,6 @@ class VideoListViewController: UIViewController {
     @IBOutlet weak var videoListColletcionView: UICollectionView!
     private let header = HeaderView()
     private let sectionInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-    private var allVideo = [AVAsset]()
     private var videos = [PHAsset]()
     
     override func viewDidLoad() {
@@ -21,6 +20,7 @@ class VideoListViewController: UIViewController {
         videoListColletcionView.dataSource = self
         videoListColletcionView.delegate = self
         videoListColletcionView.register(VideoListCollectionViewCell.self, forCellWithReuseIdentifier: "VideoListCollectionViewCell")
+        self.header.delegate = self
         setUIObject()
         getVideos { [self] in
             self.videoListColletcionView.reloadData()
@@ -107,5 +107,15 @@ extension VideoListViewController: UICollectionViewDelegate, UICollectionViewDel
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return sectionInsets.left
+    }
+}
+
+extension VideoListViewController: CustomHeaderViewDelegate {
+    func didTappedSaveButton() {
+        print("didTappedSaveButton")
+    }
+    
+    func didTappedExitButton() {
+        self.dismiss(animated: true, completion: nil)
     }
 }

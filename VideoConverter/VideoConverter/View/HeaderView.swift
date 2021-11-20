@@ -8,7 +8,9 @@
 import UIKit
 
 protocol CustomHeaderViewDelegate: AnyObject {
-    func buttonTouched()
+    func didTappedPhotoLibraryButton()
+    func didTappedExitButton()
+    func didTappedSaveButton()
 }
 
 class HeaderView: UIView {
@@ -28,7 +30,7 @@ class HeaderView: UIView {
         let symbolSize = UIImage.SymbolConfiguration.init(pointSize: 20)
         button.setPreferredSymbolConfiguration(symbolSize, forImageIn: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(didTabButton(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didTappedPhotoLibraryButton(_:)), for: .touchUpInside)
         return button
     }()
     
@@ -37,7 +39,7 @@ class HeaderView: UIView {
         button.setTitle("저장", for: .normal)
         button.setTitleColor(.blue, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(didTabButton(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didTappedSaveButton(_:)), for: .touchUpInside)
         return button
     }()
     
@@ -48,6 +50,7 @@ class HeaderView: UIView {
         let symbolSize = UIImage.SymbolConfiguration.init(pointSize: 20)
         button.setPreferredSymbolConfiguration(symbolSize, forImageIn: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(didTappedExitButton(_:)), for: .touchUpInside)
         return button
     }()
     
@@ -109,8 +112,16 @@ class HeaderView: UIView {
         ])
     }
     
-    @objc func didTabButton(_ sender: UIButton!) {
-        delegate?.buttonTouched()
+    @objc func didTappedPhotoLibraryButton(_ sender: UIButton!) {
+        delegate?.didTappedPhotoLibraryButton()
+    }
+    
+    @objc func didTappedExitButton(_ sender: UIButton!) {
+        delegate?.didTappedExitButton()
+    }
+    
+    @objc func didTappedSaveButton(_ sender: UIButton!) {
+        delegate?.didTappedSaveButton()
     }
     
     func configure(title: String, photoLibraryButtonIsHidden: Bool = true, exitButtonIsHidden: Bool = true, saveButtonIsHidden: Bool = true) {
@@ -121,3 +132,8 @@ class HeaderView: UIView {
     }
 }
 
+extension CustomHeaderViewDelegate {
+    func didTappedPhotoLibraryButton(){}
+    func didTappedExitButton(){}
+    func didTappedSaveButton(){}
+}
