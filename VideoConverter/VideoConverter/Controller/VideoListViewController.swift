@@ -14,6 +14,7 @@ class VideoListViewController: UIViewController {
     private let header = HeaderView()
     private let sectionInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
     private var videos = [PHAsset]()
+    private var selectedCellIndex: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,7 +99,6 @@ extension VideoListViewController: UICollectionViewDelegate, UICollectionViewDel
         let cellHeight = (height - heightPadding) / itemsPerColumn
         
         return CGSize(width: cellWidth, height: cellHeight)
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -108,11 +108,15 @@ extension VideoListViewController: UICollectionViewDelegate, UICollectionViewDel
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return sectionInsets.left
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.selectedCellIndex = indexPath
+    }
 }
 
 extension VideoListViewController: CustomHeaderViewDelegate {
     func didTappedSaveButton() {
-        print("didTappedSaveButton")
+        guard let indexPath = self.selectedCellIndex else { return }
     }
     
     func didTappedExitButton() {
