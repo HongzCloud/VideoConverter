@@ -14,7 +14,7 @@ class WillConvertViewController: UIViewController {
     var willConvertMedia = [AVAsset]()
     @IBOutlet weak var willConvertTableView: UITableView!
     let convertView = ConvertView()
-    let headerView = WillConvertTableHeaderView()
+    let headerView = HeaderView()
     let pickerViewData = FileFormat.allCases.map{ $0.text }
     var tableViewConstraints: [NSLayoutConstraint]? = nil
 
@@ -49,7 +49,7 @@ class WillConvertViewController: UIViewController {
     private func setHeaderViewConstraints() {
         self.headerView.translatesAutoresizingMaskIntoConstraints = false
         self.headerView.backgroundColor = .lightGray
-        self.headerView.configure(title: "Viedo List", photoLibraryIsHidden: false)
+        self.headerView.configure(title: "Viedo List", photoLibraryButtonIsHidden: false)
         
         self.view.addSubview(headerView)
         let safeArea = self.view.safeAreaLayoutGuide

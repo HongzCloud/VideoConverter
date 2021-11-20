@@ -98,6 +98,11 @@
                                 </collectionViewFlowLayout>
                                 <cells/>
                             </collectionView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hSl-33-ora">
+                                <rect key="frame" x="176" y="327" width="165" height="148"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button" image="multiply" catalog="system"/>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="d2g-fJ-YLf"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -132,6 +137,7 @@
     </scenes>
     <resources>
         <image name="list.and.film" catalog="system" width="128" height="86"/>
+        <image name="multiply" catalog="system" width="128" height="111"/>
         <image name="music.note.list" catalog="system" width="128" height="115"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

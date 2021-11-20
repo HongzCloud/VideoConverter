@@ -11,7 +11,7 @@ import Photos
 class VideoListViewController: UIViewController {
 
     @IBOutlet weak var videoListColletcionView: UICollectionView!
-    private let header = WillConvertTableHeaderView()
+    private let header = HeaderView()
     private let sectionInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
     private var allVideo = [AVAsset]()
     private var videos = [PHAsset]()
@@ -33,7 +33,7 @@ class VideoListViewController: UIViewController {
     }
     
     private func setHeaderConstraints() {
-        self.header.configure(title: "비디오 목록", photoLibraryIsHidden: true)
+        self.header.configure(title: "비디오 목록",exitButtonIsHidden: false, saveButtonIsHidden: false)
         self.header.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(header)
         let safeArea = self.view.safeAreaLayoutGuide

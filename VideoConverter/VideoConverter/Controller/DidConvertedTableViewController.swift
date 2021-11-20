@@ -11,7 +11,7 @@ class DidConvertedTableViewController: UIViewController {
 
     var didConvertMedia = [AVAsset]()
     @IBOutlet weak var didConvertedTableView: UITableView!
-    private var headerView = WillConvertTableHeaderView()
+    private var headerView = HeaderView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +29,7 @@ class DidConvertedTableViewController: UIViewController {
     private func setHeaderView() {
         self.headerView.translatesAutoresizingMaskIntoConstraints = false
         self.headerView.backgroundColor = .lightGray
-        self.headerView.configure(title: "Audio List", photoLibraryIsHidden: false)
+        self.headerView.configure(title: "Audio List")
         
         self.view.addSubview(headerView)
         let safeArea = self.view.safeAreaLayoutGuide
