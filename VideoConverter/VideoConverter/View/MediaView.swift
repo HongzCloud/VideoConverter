@@ -7,15 +7,13 @@
 
 import UIKit
 
+protocol MediaViewDelegate: AnyObject {
+    func didTappedPlayButton(index: Int)
+}
+
 class MediaView: UIView {
     
-    /*
-     // Only override draw() if you perform custom drawing.
-     // An empty implementation adversely affects performance during animation.
-     override func draw(_ rect: CGRect) {
-     // Drawing code
-     }
-     */
+    private var index: Int = 0
     private let mediaImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -36,6 +34,7 @@ class MediaView: UIView {
     
     private let mediaPlayButton: UIButton = {
         let mediaPlayButton = UIButton()
+        mediaPlayButton.addTarget(self, action: #selector(didTappedMediaPlayButton(_:)), for: .touchUpInside)
         mediaPlayButton.translatesAutoresizingMaskIntoConstraints = false
         return mediaPlayButton
     }()
@@ -46,6 +45,7 @@ class MediaView: UIView {
         return mediaShareButton
     }()
     
+    weak var delegate: MediaViewDelegate?
     private var constant: CGFloat = 5
     
     override init(frame: CGRect) {
@@ -55,6 +55,7 @@ class MediaView: UIView {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        setUIObject() 
     }
     
     private func setUIObject() {
@@ -128,6 +129,11 @@ class MediaView: UIView {
         ])
     }
     
+    @objc
+    func didTappedMediaPlayButton(_ sender: UIButton!) {
+        self.delegate?.didTappedPlayButton(index: index)
+    }
+    
     func configure(image: UIImage?, name: String, duration: String) {
         if image != nil {
             //set image
@@ -138,5 +144,9 @@ class MediaView: UIView {
         }
         self.mediaNameLabel.text = name
         self.mediaDurationLabel.text = duration
+    }
+    
+    func setIndex(_ index: Int) {
+        self.index = index
     }
 }

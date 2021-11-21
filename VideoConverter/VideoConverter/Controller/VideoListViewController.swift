@@ -58,14 +58,11 @@ class VideoListViewController: UIViewController {
     }
     
     private func getVideos(completion: () -> Void) {
-        var phAssets = [PHAsset]()
-        var avAssets = [AVAsset]()
         let fetchOption = PHFetchOptions()
         fetchOption.includeAssetSourceTypes = [.typeUserLibrary]
-        let allVideo = PHAsset.fetchAssets(with: .video, options: fetchOption)
+        let allVideos = PHAsset.fetchAssets(with: .video, options: fetchOption)
         
-        allVideo.enumerateObjects({ phAsset, pointer,_  in
-            phAssets.append(phAsset)
+        allVideos.enumerateObjects({ phAsset, pointer,_  in
             self.videos.append(phAsset)
         })
         completion()

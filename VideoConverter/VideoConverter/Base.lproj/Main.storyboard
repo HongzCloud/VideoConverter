@@ -108,7 +108,22 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a7f-0t-m4m" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2524.6153846153848" y="-259.478672985782"/>
+            <point key="canvasLocation" x="2545" y="-749"/>
+        </scene>
+        <!--Player View Controller-->
+        <scene sceneID="qg7-mZ-cb4">
+            <objects>
+                <viewController storyboardIdentifier="PlayerViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="dfC-tU-rS8" customClass="PlayerViewController" customModule="VideoConverter" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="yLX-ss-fdm">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="Luh-M0-swY"/>
+                        <color key="backgroundColor" systemColor="labelColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wD2-4a-FFg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2544.6153846153848" y="-57.582938388625593"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="rwz-KC-W0L">

@@ -41,7 +41,7 @@ class WillConvertTableViewCell: UITableViewCell {
     }
     
     private func setMediaViewContraints() {
-        self.addSubview(mediaView)
+        self.contentView.addSubview(mediaView)
         NSLayoutConstraint.activate([
             mediaView.topAnchor.constraint(equalTo: self.topAnchor),
             mediaView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
@@ -52,5 +52,13 @@ class WillConvertTableViewCell: UITableViewCell {
     
     func configure(image: UIImage?, name: String, duration: String) {
         self.mediaView.configure(image: image, name: name, duration: duration)
+    }
+    
+    func setPlayButtonDelegate(_ delegate: MediaViewDelegate) {
+        self.mediaView.delegate = delegate
+    }
+    
+    func setMediaViewIndex(_ index: Int) {
+        self.mediaView.setIndex(index)
     }
 }

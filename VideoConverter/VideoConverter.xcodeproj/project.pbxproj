@@ -15,6 +15,8 @@
 		1E022EAA27422DB3006B51DF /* ConvertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E022EA927422DB3006B51DF /* ConvertView.swift */; };
 		1E17D3EF2748E8BE00027A82 /* TimeInterval+ToString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E17D3EE2748E8BE00027A82 /* TimeInterval+ToString.swift */; };
 		1E17D3F12748EF8000027A82 /* PHAsset+Thumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E17D3F02748EF8000027A82 /* PHAsset+Thumbnail.swift */; };
+		1E17D3F5274A237200027A82 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E17D3F4274A237200027A82 /* PlayerViewController.swift */; };
+		1E17D3F7274A295B00027A82 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E17D3F6274A295B00027A82 /* PlayerView.swift */; };
 		1E2B406F2729CE6E006E1FEB /* sampleWAV.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1E2B406E2729CE6D006E1FEB /* sampleWAV.wav */; };
 		1E9B0C252743982200150ABD /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9B0C242743982200150ABD /* HeaderView.swift */; };
 		1E9B0C292745150600150ABD /* VideoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9B0C282745150600150ABD /* VideoListViewController.swift */; };
@@ -72,6 +74,8 @@
 		1E022EA927422DB3006B51DF /* ConvertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertView.swift; sourceTree = "<group>"; };
 		1E17D3EE2748E8BE00027A82 /* TimeInterval+ToString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+ToString.swift"; sourceTree = "<group>"; };
 		1E17D3F02748EF8000027A82 /* PHAsset+Thumbnail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PHAsset+Thumbnail.swift"; sourceTree = "<group>"; };
+		1E17D3F4274A237200027A82 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
+		1E17D3F6274A295B00027A82 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		1E2B406E2729CE6D006E1FEB /* sampleWAV.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = sampleWAV.wav; path = ../../../../Downloads/sampleWAV.wav; sourceTree = "<group>"; };
 		1E9B0C242743982200150ABD /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		1E9B0C282745150600150ABD /* VideoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListViewController.swift; sourceTree = "<group>"; };
@@ -148,6 +152,7 @@
 				1E022EA927422DB3006B51DF /* ConvertView.swift */,
 				1E9B0C242743982200150ABD /* HeaderView.swift */,
 				1E9B0C2A274757B700150ABD /* VideoListCollectionViewCell.swift */,
+				1E17D3F6274A295B00027A82 /* PlayerView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -169,6 +174,7 @@
 				1EC8590027204044005A1F3B /* WillConvertViewController.swift */,
 				1E022EA727422522006B51DF /* DidConvertedTableViewController.swift */,
 				1E9B0C282745150600150ABD /* VideoListViewController.swift */,
+				1E17D3F4274A237200027A82 /* PlayerViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -485,6 +491,7 @@
 				1EB2C79D272EF2FE004B1338 /* AVAsset+WriteAudio.swift in Sources */,
 				1EC8590127204044005A1F3B /* WillConvertViewController.swift in Sources */,
 				1EA1EEDD2721B85800C22C2C /* AudioConverter.swift in Sources */,
+				1E17D3F5274A237200027A82 /* PlayerViewController.swift in Sources */,
 				1E9B0C2B274757B700150ABD /* VideoListCollectionViewCell.swift in Sources */,
 				1E17D3F12748EF8000027A82 /* PHAsset+Thumbnail.swift in Sources */,
 				1E022EA827422522006B51DF /* DidConvertedTableViewController.swift in Sources */,
@@ -496,6 +503,7 @@
 				1EA1EEE12723095F00C22C2C /* FileHelper.swift in Sources */,
 				1E9B0C252743982200150ABD /* HeaderView.swift in Sources */,
 				1E022EA0273FE18E006B51DF /* MediaView.swift in Sources */,
+				1E17D3F7274A295B00027A82 /* PlayerView.swift in Sources */,
 				1E17D3EF2748E8BE00027A82 /* TimeInterval+ToString.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

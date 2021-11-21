@@ -68,6 +68,7 @@ class VideoListCollectionViewCell: UICollectionViewCell {
         self.durationLabel.text = duration
     }
 }
+
 extension VideoListCollectionViewCell {
     override var isSelected: Bool {
         didSet{

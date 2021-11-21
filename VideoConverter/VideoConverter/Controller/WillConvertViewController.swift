@@ -17,6 +17,7 @@ class WillConvertViewController: UIViewController {
     let headerView = HeaderView()
     let pickerViewData = FileFormat.allCases.map{ $0.text }
     var tableViewConstraints: [NSLayoutConstraint]? = nil
+    private var selectedCellIndex: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -118,6 +119,8 @@ extension WillConvertViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "WillConvertTableViewCell") as? WillConvertTableViewCell else { return UITableViewCell() }
         let file = willConvertMedia[indexPath.row] as! AVURLAsset
         cell.configure(image: nil, name: file.url.lastPathComponent, duration: file.duration.durationText)
+        cell.setPlayButtonDelegate(self)
+        cell.setMediaViewIndex(indexPath.row)
         return cell
     }
 }
@@ -129,6 +132,7 @@ extension WillConvertViewController: UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let file = willConvertMedia[indexPath.row] as! AVURLAsset
+        self.selectedCellIndex = indexPath
         convertView.isHidden = false
         convertView.configure(currentFormat: file.url.pathExtension)
         if (self.tableViewConstraints != nil) && self.headerView.isHidden == false {
@@ -162,7 +166,20 @@ extension WillConvertViewController: CustomHeaderViewDelegate {
         guard let svc = self.storyboard?.instantiateViewController(withIdentifier: "VideoListViewController") else {
             return
         }
-      //  svc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+      
+        svc.modalPresentationStyle = .fullScreen
+        self.present(svc, animated: true)
+    }
+}
+
+extension WillConvertViewController: MediaViewDelegate {
+    func didTappedPlayButton(index: Int) {
+        guard let svc = self.storyboard?.instantiateViewController(withIdentifier: "PlayerViewController") as? PlayerViewController else {
+            print("gogo")
+            return
+        }
+        let asset = willConvertMedia[index] as! AVURLAsset
+        svc.setPlayer(url: asset.url)
         svc.modalPresentationStyle = .fullScreen
         self.present(svc, animated: true)
     }
