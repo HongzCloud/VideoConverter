@@ -175,7 +175,6 @@ extension WillConvertViewController: CustomHeaderViewDelegate {
 extension WillConvertViewController: MediaViewDelegate {
     func didTappedPlayButton(index: Int) {
         guard let svc = self.storyboard?.instantiateViewController(withIdentifier: "PlayerViewController") as? PlayerViewController else {
-            print("gogo")
             return
         }
         let asset = willConvertMedia[index] as! AVURLAsset

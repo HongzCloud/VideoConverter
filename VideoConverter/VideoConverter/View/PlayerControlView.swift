@@ -11,6 +11,7 @@ protocol PlayerControlViewDelegate: AnyObject {
     func didTappedPlayButton(_ button: UIButton)
     func didTappedBackwardButton()
     func didTappedForwardButton()
+    func sliderValueChanged(_ slider: UISlider)
 }
 
 class PlayerControlView: UIView {
@@ -52,6 +53,7 @@ class PlayerControlView: UIView {
     
     private let durationSlider: UISlider = {
         let slider = UISlider()
+        slider.addTarget(self, action: #selector(sliderValueChanged(_:)), for: .valueChanged)
         slider.translatesAutoresizingMaskIntoConstraints = false
         return slider
     }()
@@ -127,5 +129,15 @@ class PlayerControlView: UIView {
     
     @objc func didTappedForwardButton(_ sender: UIButton!) {
         self.delegate?.didTappedForwardButton()
+    }
+    
+    @objc func sliderValueChanged(_ sender: UISlider!) {
+        self.delegate?.sliderValueChanged(durationSlider)
+    }
+    
+    func configureSlider(maxValue: Float, minValue: Float, value: Float) {
+        self.durationSlider.maximumValue = maxValue
+        self.durationSlider.minimumValue = minValue
+        self.durationSlider.value = value
     }
 }

@@ -27,6 +27,7 @@ class PlayerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUIObject()
+        addTimeObserver()
         self.playerControlView.delegate = self
     }
         
@@ -84,6 +85,18 @@ class PlayerViewController: UIViewController {
         ])
     }
     
+    private func addTimeObserver() {
+        let interval = CMTime(seconds: 0.6, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        let mainQueue = DispatchQueue.main
+        _ = player.addPeriodicTimeObserver(forInterval: interval, queue: mainQueue, using: {
+            [weak self] time in
+            guard let currentItem = self?.player.currentItem else { return }
+            self?.playerControlView.configureSlider(maxValue: Float(currentItem.duration.seconds),
+                                                    minValue: 0,
+                                                    value: Float(currentItem.currentTime().seconds))
+        })
+    }
+
     @objc func exitVC(_ sender: UIButton!) {
         self.dismiss(animated: true, completion: nil)
     }
@@ -99,12 +112,13 @@ class PlayerViewController: UIViewController {
 }
 
 extension PlayerViewController: PlayerControlViewDelegate {
+
     func didTappedPlayButton(_ button: UIButton) {
         if isPlaying {
-            button.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+            button.setImage(UIImage(systemName: "play.fill"), for: .normal)
             player.pause()
         } else {
-            button.setImage(UIImage(systemName: "play.fill"), for: .normal)
+            button.setImage(UIImage(systemName: "pause.fill"), for: .normal)
             player.play()
         }
         
@@ -135,6 +149,9 @@ extension PlayerViewController: PlayerControlViewDelegate {
         let time = CMTimeMake(value: Int64(newTime * 1000), timescale: 1000)
         player.seek(to: time)
     }
-    
-    
+
+    func sliderValueChanged(_ slider: UISlider) {
+        let time = CMTimeMake(value: Int64(slider.value * 1000) , timescale: 1000)
+        player.seek(to: time)
+    }
 }
