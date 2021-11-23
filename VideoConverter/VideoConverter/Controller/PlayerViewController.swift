@@ -29,11 +29,13 @@ class PlayerViewController: UIViewController {
         setUIObject()
         addTimeObserver()
         self.playerControlView.delegate = self
-    }
         
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
- 
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTappedPlayerView(_:)))
+        self.playerView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func didTappedPlayerView(_ sender: UITapGestureRecognizer) {
+        playerControlView.isHidden = !playerControlView.isHidden
     }
     
     override func viewDidLayoutSubviews() {
@@ -72,7 +74,6 @@ class PlayerViewController: UIViewController {
             self.playerControlView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
             self.playerControlView.heightAnchor.constraint(equalTo: safeArea.heightAnchor, multiplier: 0.15)
         ])
-       
     }
     
     private func setTempButtonConstraints() {
