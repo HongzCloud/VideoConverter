@@ -15,19 +15,13 @@ class PlayerViewController: UIViewController {
     private var player: AVPlayer!
     private var playerLayer: AVPlayerLayer!
     private var isPlaying = false
-    private var tempButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "multiply"), for: .normal)
-        button.tintColor = .white
-        button.addTarget(self, action: #selector(exitVC), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    private var headerView = HeaderView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUIObject()
         addTimeObserver()
+        self.headerView.delegate = self
         self.playerControlView.delegate = self
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTappedPlayerView(_:)))
@@ -36,6 +30,7 @@ class PlayerViewController: UIViewController {
     
     @objc func didTappedPlayerView(_ sender: UITapGestureRecognizer) {
         playerControlView.isHidden = !playerControlView.isHidden
+        headerView.isHidden = !headerView.isHidden
     }
     
     override func viewDidLayoutSubviews() {
@@ -44,9 +39,27 @@ class PlayerViewController: UIViewController {
     }
     
     private func setUIObject() {
+        setHeaderViewConstraints()
         setPlayerViewConstraints()
-        setTempButtonConstraints()
         setPlayerControlViewConstraints()
+    }
+    
+    private func setHeaderViewConstraints() {
+        self.headerView.alpha = 0.4
+        self.headerView.translatesAutoresizingMaskIntoConstraints = false
+        self.headerView.backgroundColor = .lightGray
+        if let title = player.currentItem?.asset as? AVURLAsset {
+            self.headerView.configure(title: title.url.lastPathComponent, exitButtonIsHidden: false)
+        }
+        
+        self.view.addSubview(headerView)
+        let safeArea = self.view.safeAreaLayoutGuide
+        NSLayoutConstraint.activate([
+            self.headerView.topAnchor.constraint(equalTo: safeArea.topAnchor),
+            self.headerView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+            self.headerView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+            self.headerView.heightAnchor.constraint(equalTo: safeArea.heightAnchor, multiplier: 1/14)
+        ])
     }
     
     private func setPlayerViewConstraints() {
@@ -76,22 +89,13 @@ class PlayerViewController: UIViewController {
         ])
     }
     
-    private func setTempButtonConstraints() {
-        self.view.addSubview(tempButton)
-        
-        let safeArea = self.view.safeAreaLayoutGuide
-        NSLayoutConstraint.activate([
-            self.tempButton.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 20),
-            self.tempButton.topAnchor.constraint(equalTo: safeArea.topAnchor)
-        ])
-    }
-    
     private func addTimeObserver() {
-        let interval = CMTime(seconds: 0.6, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
         let mainQueue = DispatchQueue.main
         _ = player.addPeriodicTimeObserver(forInterval: interval, queue: mainQueue, using: {
             [weak self] time in
             guard let currentItem = self?.player.currentItem else { return }
+            guard currentItem.status.rawValue == AVPlayerItem.Status.readyToPlay.rawValue else {return}
             self?.playerControlView.configureSlider(maxValue: Float(currentItem.duration.seconds),
                                                     minValue: 0,
                                                     value: Float(currentItem.currentTime().seconds))
@@ -154,5 +158,11 @@ extension PlayerViewController: PlayerControlViewDelegate {
     func sliderValueChanged(_ slider: UISlider) {
         let time = CMTimeMake(value: Int64(slider.value * 1000) , timescale: 1000)
         player.seek(to: time)
+    }
+}
+
+extension PlayerViewController: CustomHeaderViewDelegate {
+    func didTappedExitButton() {
+        self.dismiss(animated: true, completion: nil)
     }
 }

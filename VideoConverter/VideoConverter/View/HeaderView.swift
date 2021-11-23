@@ -67,9 +67,9 @@ class HeaderView: UIView {
     }
     
     private func setUIObject() {
-        setTitleLabelConstraints()
         setPhotoLibraryButtonConstraints()
         setExitButton()
+        setTitleLabelConstraints()
         setSaveButtonConstraints()
     }
     
@@ -77,6 +77,7 @@ class HeaderView: UIView {
         self.addSubview(titleLabel)
         
         NSLayoutConstraint.activate([
+            self.titleLabel.leadingAnchor.constraint(equalTo: self.exitButton.trailingAnchor),
             self.titleLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             self.titleLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor)
         ])
@@ -108,7 +109,8 @@ class HeaderView: UIView {
         NSLayoutConstraint.activate([
             self.exitButton.topAnchor.constraint(equalTo: self.topAnchor),
             self.exitButton.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            self.exitButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 15)
+            self.exitButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
+            self.exitButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 1/6)
         ])
     }
     
