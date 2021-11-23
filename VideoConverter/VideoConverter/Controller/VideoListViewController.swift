@@ -5,6 +5,7 @@
 //  Created by 오킹 on 2021/11/17.
 //
 
+import Toast_Swift
 import UIKit
 import Photos
 
@@ -113,32 +114,30 @@ extension VideoListViewController: UICollectionViewDelegate, UICollectionViewDel
 }
 
 extension VideoListViewController: CustomHeaderViewDelegate {
+    
     func didTappedSaveButton() {
         guard let indexPath = self.selectedCellIndex else { return }
-        
-        PHImageManager.default().requestAVAsset(forVideo: self.videos[indexPath.row], options: PHVideoRequestOptions(), resultHandler: { (asset, audioMix, info) -> Void in
-            if let asset = asset as? AVURLAsset {
-                let videoData = NSData(contentsOf: asset.url)
-                
-                // optionally, write the video to the temp directory
-                let videoPath = FileHelper().createFileURL(asset.url.lastPathComponent, in: .willConvert).path
-                print(videoPath)
-                let videoURL = NSURL(fileURLWithPath: videoPath)
-                let writeResult = videoData?.write(to: videoURL as URL, atomically: true)
-                
-                print(videoData)
-                print(writeResult)
-                if let writeResult = writeResult {
-                    print("success")
-                    DispatchQueue.main.sync {
-                        self.didTappedExitButton()
-                    }
-                }
-                else {
-                    print("failure")
-                }
+        let options = PHVideoRequestOptions()
+        options.isNetworkAccessAllowed = true
+        PHImageManager.default().requestExportSession(forVideo: self.videos[indexPath.row], options: options, exportPreset: AVAssetExportPresetPassthrough) { (exportSession, info) in
+            guard let session = exportSession, let asset = session.asset as? AVURLAsset else { return }
+            session.outputURL = FileHelper().createFileURL(asset.url.lastPathComponent, in: .willConvert)
+            session.outputFileType = AVFileType.mp4
+    
+            var style = ToastStyle()
+            style.messageColor = .white
+            let toast = try? self.view.toastViewForMessage("비디오 가져오는 중", title: nil, image: nil, style: style)
+            if let toast = toast {
+                self.view.showToast(toast)
             }
-        })
+            
+            session.exportAsynchronously {
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true, completion: nil)
+                }
+                
+            }
+        }
     }
     
     func didTappedExitButton() {

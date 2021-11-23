@@ -8,6 +8,7 @@
 import UIKit
 import AVFoundation
 import Photos
+import Toast_Swift
 
 class WillConvertViewController: UIViewController {
 
@@ -196,10 +197,10 @@ extension WillConvertViewController: MediaViewDelegate {
             (activityType: UIActivity.ActivityType?, completed: Bool,
              arrayReturnedItems: [Any]?, error: Error?) in
             if completed {
-                print("공유 완료")
+                self.view.makeToast("공유 성공")
             } else {
                 if error != nil {
-                    print("공유 실패")
+                    self.view.makeToast("공유 실패")
                 }
             }
             if let shareError = error { print(shareError)} }
