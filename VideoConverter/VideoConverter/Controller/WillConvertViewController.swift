@@ -173,6 +173,7 @@ extension WillConvertViewController: CustomHeaderViewDelegate {
 }
 
 extension WillConvertViewController: MediaViewDelegate {
+
     func didTappedPlayButton(index: Int) {
         guard let svc = self.storyboard?.instantiateViewController(withIdentifier: "PlayerViewController") as? PlayerViewController else {
             return
@@ -182,4 +183,30 @@ extension WillConvertViewController: MediaViewDelegate {
         svc.modalPresentationStyle = .fullScreen
         self.present(svc, animated: true)
     }
+    
+    func didTappedMediaShareButton() {
+        let shareText: String = "share text test!"
+        
+        var shareObject = [Any]()
+        shareObject.append(willConvertMedia[0])
+        let activityViewController = UIActivityViewController(activityItems : shareObject, applicationActivities: nil)
+        activityViewController.popoverPresentationController?.sourceView = self.view //activityViewController.excludedActivityTypes = [UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook,UIActivity.ActivityType.postToTwitter,UIActivity.ActivityType.mail
+        self.present(activityViewController, animated: true, completion: nil)
+        activityViewController.completionWithItemsHandler = {
+            (activityType: UIActivity.ActivityType?, completed: Bool,
+             arrayReturnedItems: [Any]?, error: Error?) in
+            if completed {
+                print("성공")
+                
+            } else {
+                if error == nil {
+                    print("hi")
+                }
+                print("실패")
+                
+            }
+            if let shareError = error { print(shareError)} }
+
+    }
+    
 }

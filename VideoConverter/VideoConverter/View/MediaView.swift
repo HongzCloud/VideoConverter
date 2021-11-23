@@ -9,6 +9,7 @@ import UIKit
 
 protocol MediaViewDelegate: AnyObject {
     func didTappedPlayButton(index: Int)
+    func didTappedMediaShareButton()
 }
 
 class MediaView: UIView {
@@ -41,6 +42,7 @@ class MediaView: UIView {
     
     private let mediaShareButton: UIButton = {
         let mediaShareButton = UIButton()
+        mediaShareButton.addTarget(self, action: #selector(didTappedMediaShareButton(_:)), for: .touchUpInside)
         mediaShareButton.translatesAutoresizingMaskIntoConstraints = false
         return mediaShareButton
     }()
@@ -132,6 +134,11 @@ class MediaView: UIView {
     @objc
     func didTappedMediaPlayButton(_ sender: UIButton!) {
         self.delegate?.didTappedPlayButton(index: index)
+    }
+    
+    @objc
+    func didTappedMediaShareButton(_ sender: UIButton!) {
+        self.delegate?.didTappedMediaShareButton()
     }
     
     func configure(image: UIImage?, name: String, duration: String) {
