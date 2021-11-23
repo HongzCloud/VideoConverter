@@ -1,16 +1,20 @@
 PODS:
   - lame (1.0.0)
+  - Toast-Swift (5.0.1)
 
 DEPENDENCIES:
   - lame
+  - Toast-Swift (~> 5.0.1)
 
 SPEC REPOS:
   trunk:
     - lame
+    - Toast-Swift
 
 SPEC CHECKSUMS:
   lame: 1edb6e24a4e2056b9d1fd90c9fddc10c9aff875d
+  Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
 
-PODFILE CHECKSUM: 1f93f0f7be2cd59019c8c0fea2a0430db670d269
+PODFILE CHECKSUM: f4eeac00d7161929996118ce1f1e779d20e4b224
 
 COCOAPODS: 1.10.1

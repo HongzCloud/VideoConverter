@@ -126,7 +126,9 @@ extension VideoListViewController: CustomHeaderViewDelegate {
                 let videoURL = NSURL(fileURLWithPath: videoPath)
                 let writeResult = videoData?.write(to: videoURL as URL, atomically: true)
                 
-                if let writeResult = writeResult, writeResult {
+                print(videoData)
+                print(writeResult)
+                if let writeResult = writeResult {
                     print("success")
                     DispatchQueue.main.sync {
                         self.didTappedExitButton()

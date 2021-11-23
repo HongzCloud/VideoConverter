@@ -5,6 +5,7 @@ target 'VideoConverter' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
   pod 'lame'
+  pod 'Toast-Swift', '~> 5.0.1'
   # Pods for VideoConverter
 
   target 'VideoConverterTests' do

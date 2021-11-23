@@ -185,25 +185,22 @@ extension WillConvertViewController: MediaViewDelegate {
     }
     
     func didTappedMediaShareButton() {
-        let shareText: String = "share text test!"
+        let asset = willConvertMedia[0] as! AVURLAsset
         
         var shareObject = [Any]()
-        shareObject.append(willConvertMedia[0])
+        shareObject.append(asset.url)
         let activityViewController = UIActivityViewController(activityItems : shareObject, applicationActivities: nil)
-        activityViewController.popoverPresentationController?.sourceView = self.view //activityViewController.excludedActivityTypes = [UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook,UIActivity.ActivityType.postToTwitter,UIActivity.ActivityType.mail
+        activityViewController.popoverPresentationController?.sourceView = self.view
         self.present(activityViewController, animated: true, completion: nil)
         activityViewController.completionWithItemsHandler = {
             (activityType: UIActivity.ActivityType?, completed: Bool,
              arrayReturnedItems: [Any]?, error: Error?) in
             if completed {
-                print("성공")
-                
+                print("공유 완료")
             } else {
-                if error == nil {
-                    print("hi")
+                if error != nil {
+                    print("공유 실패")
                 }
-                print("실패")
-                
             }
             if let shareError = error { print(shareError)} }
 
