@@ -26,10 +26,13 @@ class WillConvertViewController: UIViewController {
         self.willConvertTableView.dataSource = self
         self.willConvertTableView.register(WillConvertTableViewCell.self, forCellReuseIdentifier: "WillConvertTableViewCell")
         self.headerView.delegate = self
+        self.convertView.delegate = self
 
         setHeaderViewConstraints()
         setConvertViewConstraints()
         setTableViewConstraints()
+        
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -135,7 +138,7 @@ extension WillConvertViewController: UITableViewDelegate {
         let file = willConvertMedia[indexPath.row] as! AVURLAsset
         self.selectedCellIndex = indexPath
         convertView.isHidden = false
-        convertView.configure(currentFormat: file.url.pathExtension)
+        convertView.configure(currentFormat: file.url.pathExtension, index: indexPath.row)
         if (self.tableViewConstraints != nil) && self.headerView.isHidden == false {
             NSLayoutConstraint.deactivate(self.tableViewConstraints!)
             NSLayoutConstraint.activate(newTableViewConstraints())
@@ -204,7 +207,53 @@ extension WillConvertViewController: MediaViewDelegate {
                 }
             }
             if let shareError = error { print(shareError)} }
+    }
+}
 
+extension WillConvertViewController: ConvertViewDelegate {
+    func didTappedConvertButton(_ convertView: ConvertView) {
+        let asset = willConvertMedia[convertView.index] as! AVURLAsset
+        let pathExtensionIndex = self.convertView.didConvertedExtensionNamePickerView.selectedRow(inComponent: 0)
+        let pathExtension = pickerViewData[pathExtensionIndex]
+        let inputName = asset.url.deletingPathExtension().lastPathComponent
+        let outputStr = inputName + "." + pathExtension
+        let output = FileHelper().createFileURL(outputStr, in: .didConverted)
+        let fileFormats = FileFormat.allCases
+        
+        convert(asset: asset, output: output, fileFormat: fileFormats[pathExtensionIndex])
     }
     
+    func convert(asset: AVAsset, output: URL, fileFormat: FileFormat) {
+        switch fileFormat {
+        case .wav:
+            asset.writeAudio(output: output,
+                             format: fileFormat,
+                             sampleRate: .m44k,
+                             bitRate: nil,
+                             bitDepth: .m32,
+                             completion: self.willConvertTableView.reloadData)
+        case .mp3:
+            asset.writeAudio(output: output,
+                             format: fileFormat,
+                             sampleRate: .m44k,
+                             bitRate: .m192k,
+                             bitDepth: nil,
+                             completion: self.willConvertTableView.reloadData)
+        case .m4a:
+            asset.writeAudio(output: output,
+                             format: fileFormat,
+                             sampleRate: .m44k,
+                             bitRate: .m192k,
+                             bitDepth: nil,
+                             completion: self.willConvertTableView.reloadData)
+        case .caf:
+            asset.writeAudio(output: output,
+                             format: fileFormat,
+                             sampleRate: .m44k,
+                             bitRate: .m192k,
+                             bitDepth: nil,
+                             completion: self.willConvertTableView.reloadData)
+        }
+      
+    }
 }

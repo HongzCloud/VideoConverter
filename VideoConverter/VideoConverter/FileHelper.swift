@@ -9,8 +9,9 @@ import Foundation
 
 final class FileHelper {
     
-    let outputDirectoryURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("didConverted")
-    let inputDirectoryURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("willConvert")
+    let outputDirectoryURL = Directory.didConverted.rawValue
+    let inputDirectoryURL = Directory.willConvert.rawValue
+    var tempURL = Directory.temporary.rawValue
     
     func createInputOutputDirectory() -> Bool {
        
@@ -34,6 +35,10 @@ final class FileHelper {
     }
     
     func createFileURL(_ name: String, in directoryType: Directory) -> URL {
+        if directoryType == .temporary {
+            self.tempURL.removeAllCachedResourceValues()
+        }
+        
         var fileInfo = name.split(separator: ".")
         let directoryURL = directoryType == .didConverted ? outputDirectoryURL : inputDirectoryURL
         var num = 0
@@ -61,7 +66,19 @@ final class FileHelper {
     }
 }
 
-enum Directory: String {
+enum Directory {
     case willConvert
     case didConverted
+    case temporary
+    
+    var rawValue: URL {
+    switch self {
+    case .willConvert:
+        return try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("willConvert")
+    case .didConverted:
+        return try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("didConverted")
+    case .temporary:
+        return FileManager.default.temporaryDirectory
+    }
+    }
 }

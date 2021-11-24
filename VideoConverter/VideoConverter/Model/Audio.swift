@@ -24,20 +24,18 @@ struct Audio {
 enum FileFormat: CaseIterable {
     case wav
     case mp3
-    case aac
-    case flac
+    case m4a
     case caf
     
     var rawValue: AudioFormatID {
         switch self {
-        case .aac:
+        case .m4a:
             return kAudioFormatMPEG4AAC
         case .mp3:
-            return kAudioFormatMPEGLayer3
+            //video -> wav(pcm) -> mp3
+            return kAudioFormatLinearPCM
         case .wav:
             return kAudioFormatLinearPCM
-        case .flac:
-            return kAudioFormatFLAC
         case .caf:
             return kAudioFormatLinearPCM
         }
@@ -45,12 +43,10 @@ enum FileFormat: CaseIterable {
     
     var text: String {
         switch self {
-        case .aac:
-            return "aac"
+        case .m4a:
+            return "m4a"
         case .caf:
             return "caf"
-        case .flac:
-            return "flac"
         case .mp3:
             return "mp3"
         case .wav:

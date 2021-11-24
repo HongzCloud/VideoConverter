@@ -7,8 +7,15 @@
 
 import UIKit
 
+protocol ConvertViewDelegate: AnyObject {
+    func didTappedConvertButton(_ convertView: ConvertView)
+}
+
 class ConvertView: UIView {
 
+    weak var delegate: ConvertViewDelegate?
+    private(set) var index: Int!
+    
     private let currentExtensionNameLabel: UILabel = {
         let label = UILabel()
         label.text = "TEST.mp3"
@@ -27,6 +34,7 @@ class ConvertView: UIView {
         button.setImage(UIImage(systemName: "gobackward"), for: .normal)
         let symbolSize = UIImage.SymbolConfiguration.init(pointSize: 20)
         button.setPreferredSymbolConfiguration(symbolSize, forImageIn: .normal)
+        button.addTarget(self, action: #selector(didTappedConvertButton(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -86,16 +94,13 @@ class ConvertView: UIView {
         ])
     }
     
-    func configure(currentFormat: String) {
-        self.currentExtensionNameLabel.text = currentFormat
+    @objc
+    func didTappedConvertButton(_ sender: UIButton!) {
+        self.delegate?.didTappedConvertButton(self)
     }
     
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
+    func configure(currentFormat: String, index: Int) {
+        self.currentExtensionNameLabel.text = currentFormat
+        self.index = index
     }
-    */
-
 }

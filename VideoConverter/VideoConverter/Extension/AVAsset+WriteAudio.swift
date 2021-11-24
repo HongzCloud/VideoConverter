@@ -9,64 +9,38 @@ import Foundation
 import Photos
 
 extension AVAsset {
-
-    func writeAudio(_ output: URL, sampleRate: SampleRate, bitDepth: BitPerChannel = .m16, bitRate: BitRate = .m192k, format: FileFormat, completion: @escaping (Bool, Error?) -> ()) {
-        do {
-            let audioAsset = try self.audioAsset()
-            audioAsset.writeToURL(output, completion: { _, _ in
-                let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("tempM4A.m4a")
-                let audioConverter = AudioConverter(inputURL: tempURL)
-                switch format {
-                case .aac:
-                    completion(audioConverter.convertAAC(sampleRate: sampleRate, bitRate: bitRate, output: output), nil)
-                case .caf:
-                    completion(audioConverter.convertCAF(sampleRate: sampleRate, bitDepth: bitDepth, output: output), nil)
-                case .flac:
-                    completion(audioConverter.convertFLAC(sampleRate: sampleRate, bitDepth: bitDepth, output: output), nil)
-                case .mp3:
-                    completion(audioConverter.convertMP3(output: output, sample: sampleRate, bitRate: bitRate), nil)
-                case .wav:
-                    completion(audioConverter.convertWAV(sampleRate: .m08k, bitDepth: .m16, output: output), nil)
-                }
+    func writeAudio(output: URL, format: FileFormat, sampleRate: SampleRate, bitRate: BitRate?, bitDepth: BitPerChannel?, completion: @escaping () -> Void) {
+ 
+        let assetConverter = AudioConverter(asset: self)
+        switch format {
+        case .mp3:
+            //lame encoder needs wav file
+            let tempOutput = FileHelper().createFileURL("temp.wav", in: .temporary)
+            let tempSetting = assetConverter.outputSetting(format: .wav,
+                                                           sampleRate: .m44k,
+                                                           bitRate: nil,
+                                                           bitDepth: .m16)
+            let outputType = assetConverter.fileFormatToFileType(fileFormat: .mp3)
+            assetConverter.convert(output: tempOutput,
+                                   outputType: outputType,
+                                   outputSettins: tempSetting,
+                                   completion: {
+                //wav -> mp3
+                let asset = AVAsset(url: tempOutput)
+                AudioConverter(asset: asset).convertMP3(output: output,
+                                                        sample: sampleRate,
+                                                        bitRate: bitRate!,
+                                                        onProgress: nil,
+                                                        onComplete: completion)
             })
-        } catch (let error as NSError){
-            completion(false, error)
+        default:
+            //wav, caf, m4a
+            let settings = assetConverter.outputSetting(format: format,
+                                         sampleRate: sampleRate,
+                                         bitRate: bitRate,
+                                         bitDepth: bitDepth)
+            let outputType = assetConverter.fileFormatToFileType(fileFormat: format)
+            assetConverter.convert(output: output, outputType: outputType, outputSettins: settings, completion: nil)
         }
-    }
-
-    private func writeToURL(_ url: URL, completion: @escaping (Bool, Error?) -> ()) {
-
-        guard let exportSession = AVAssetExportSession(asset: self, presetName: AVAssetExportPresetAppleM4A) else {
-            completion(false, nil)
-            return
-        }
-        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("tempM4A.m4a")
-        exportSession.outputFileType = .m4a
-        exportSession.outputURL      = tempURL
-
-        exportSession.exportAsynchronously {
-            switch exportSession.status {
-            case .completed:
-                completion(true, nil)
-            case .unknown, .waiting, .exporting, .failed, .cancelled:
-                completion(false, nil)
-            default:
-                completion(false, nil)
-            }
-        }
-    }
-
-    func audioAsset() throws -> AVAsset {
-
-        let composition = AVMutableComposition()
-        let audioTracks = tracks(withMediaType: .audio)
-
-        for track in audioTracks {
-
-            let compositionTrack = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid)
-            try compositionTrack?.insertTimeRange(track.timeRange, of: track, at: track.timeRange.start)
-            compositionTrack?.preferredTransform = track.preferredTransform
-        }
-        return composition
     }
 }

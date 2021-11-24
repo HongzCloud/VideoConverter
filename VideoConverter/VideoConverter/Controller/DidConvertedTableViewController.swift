@@ -19,11 +19,17 @@ class DidConvertedTableViewController: UIViewController {
         didConvertedTableView.delegate = self
         didConvertedTableView.register(WillConvertTableViewCell.self, forCellReuseIdentifier: "WillConvertTableViewCell")
         
+        setHeaderView()
+        setTableViewConstraints()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        self.didConvertMedia.removeAll()
         if let files = getFiles(.didConverted) {
             didConvertMedia = files
-            setHeaderView()
-            setTableViewConstraints()
         }
+        self.didConvertedTableView.reloadData()
     }
     
     private func setHeaderView() {

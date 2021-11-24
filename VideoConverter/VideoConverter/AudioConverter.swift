@@ -9,165 +9,51 @@ import Foundation
 import AVFoundation
 import lame
 
-struct AudioConverter {
-    private var inputFile: AVAudioFile?
+final class AudioConverter {
+    private var asset: AVAsset
+    private var assetReader: AVAssetReader!
+    private var assetWriter: AVAssetWriter!
+    private var assetReaderAudioOutput: AVAssetReaderTrackOutput!
+    private var assetWriterAudioInput: AVAssetWriterInput!
+    private var assetAudioTrack:AVAssetTrack? = nil
+    
+    init(asset: AVAsset) {
+        self.asset = asset
+    }
+    
+    //video -> wav, caf, m4a
+    func convert(output: URL, outputType: AVFileType,  outputSettins: [String : Any], completion: (() -> Void)?) {
+        let convertAudioQueueLabel = "convertAudioQueue"
+        let convertAudioQueue = DispatchQueue(label: convertAudioQueueLabel)
+        
+        //load asset data
+        asset.loadValuesAsynchronously(forKeys: ["tracks"], completionHandler: { [self] in
+            var success = true
+            var localError:NSError?
+            success = (asset.statusOfValue(forKey: "tracks", error: &localError) == AVKeyValueStatus.loaded)
+            
 
-    init(inputURL: URL) {
-        self.inputFile = try? AVAudioFile(forReading: inputURL)
-    }
-    
-    func convertWAV(sampleRate: SampleRate, bitDepth: BitPerChannel, output: URL) -> Bool {
-        do {
-            //input's info
-            guard let inputFile = inputFile else { return false }
-            let inputFormat = inputFile.processingFormat
-            guard let inputBuffer = AVAudioPCMBuffer(pcmFormat: inputFormat,
-                                                     frameCapacity: AVAudioFrameCount(inputFile.length))
-            else { return false }
-            guard (try? inputFile.read(into: inputBuffer)) != nil else { return false }
-            
-            //output's info
-            let settings = configSettings(formatID: .wav, sampleRate: sampleRate, bitDepth: bitDepth)
-            guard let outputFile = createOutputFile(url: output, bitDepth: bitDepth, settings: settings) else { return false }
-            guard let outputFormat = createAVAudioFormat(sampleRate: sampleRate, bitDepth: bitDepth, channels: inputFormat.channelCount) else { return false }
-            
-            //format converting(inputBuffer -> outputBuffer)
-            guard let outputBuffer = convertBuffer(inputBuffer, from: inputFormat, to: outputFormat) else { return false }
-            
-            //write file
-            try outputFile.write(from: outputBuffer)
-            print("convert success")
-        } catch {
-            assertionFailure("convert Fail")
-            return false
-    }
-        return true
-    }
-    
-    private func createAVAudioFormat(sampleRate: SampleRate, bitDepth: BitPerChannel, channels: AVAudioChannelCount) -> AVAudioFormat? {
-        let commonFormat: AVAudioCommonFormat = bitDepth == .m16 ? .pcmFormatInt16 : .pcmFormatFloat32
-        return AVAudioFormat(commonFormat: commonFormat, sampleRate: Double(sampleRate.rawValue), channels: channels, interleaved: false)
-    }
-  
-    private func convertBuffer(_ pcmBuffer: AVAudioPCMBuffer, from inputFormat: AVAudioFormat, to outputFormat: AVAudioFormat) -> AVAudioPCMBuffer? {
-        let avConverter = AVAudioConverter(from: inputFormat, to: outputFormat)
-        var myError: NSError? = nil
-        
-        var newBufferAvailable = true
-        let inputBlock: AVAudioConverterInputBlock = { inNumPackets, outStatus in
-            if newBufferAvailable {
-                outStatus.pointee = .haveData
-                newBufferAvailable = false
-                return pcmBuffer
+            if (success) {
+                success = setupAssetReaderAndWriter(output: output,
+                                                    outputSettings: outputSettins,
+                                                    fileType: outputType,
+                                                    dispatchQueue: convertAudioQueue)
             } else {
-                outStatus.pointee = .noDataNow
-                return nil
+                print("Failed setting up Asset Reader and Writer")
             }
-        }
-        
-        let convertedBufferFrameCapacity = Int(AVAudioFrameCount(outputFormat.sampleRate)) * Int(pcmBuffer.frameLength) / Int(AVAudioFrameCount(pcmBuffer.format.sampleRate))
-        
-        let convertedBuffer = AVAudioPCMBuffer(pcmFormat: outputFormat, frameCapacity: AVAudioFrameCount(convertedBufferFrameCapacity) )!
-        
-        avConverter?.convert(to: convertedBuffer, error: &myError, withInputFrom: inputBlock)
-        
-        return convertedBuffer
-    }
-    
-    private func createOutputFile(url: URL, bitDepth: BitPerChannel, settings: [String :Any]) -> AVAudioFile? {
-        if bitDepth == .m16 {
-            return try? AVAudioFile(forWriting: url, settings: settings, commonFormat: .pcmFormatInt16, interleaved: false)
-        } else {
-            return  try? AVAudioFile(forWriting: url, settings: settings)
-        }
-    }
-    
-    func convertAAC(sampleRate: SampleRate, bitRate: BitRate, output: URL) -> Bool {
-        do {
-            //input's info
-            guard let inputFile = inputFile else { return false }
-            let inputFormat = inputFile.processingFormat
-            guard let inputBuffer = AVAudioPCMBuffer(pcmFormat: inputFormat,
-                                                     frameCapacity: AVAudioFrameCount(inputFile.length))
-            else { return false }
-            guard (try? inputFile.read(into: inputBuffer)) != nil else { return false }
+            if (success) {
+                success = self.startAssetReaderAndWriter(dispatchQueue: convertAudioQueue, completion: completion)
+                return
+            } else {
+                print("Failed to start Asset Reader and Writer")
+            }
             
-            //output's info
-            let settings = configSettings(formatID: .aac, sampleRate: sampleRate, bitDepth: .m16, bitRate: bitRate)
-            guard let outputFile = createOutputFile(url: output, bitDepth: .m16, settings: settings) else { return false }
-            guard let outputFormat = createAVAudioFormat(sampleRate: sampleRate, bitDepth: .m16, channels: inputFormat.channelCount) else { return false }
-            
-            //format converting(inputBuffer -> outputBuffer)
-            guard let outputBuffer = convertBuffer(inputBuffer, from: inputFormat, to: outputFormat) else { return false }
-            
-            //write file
-            try outputFile.write(from: outputBuffer)
-            print("convert success")
-        } catch {
-            assertionFailure("convert Fail")
-            return false
-    }
-        return true
-    }
-    
-    func convertFLAC(sampleRate: SampleRate, bitDepth: BitPerChannel, output: URL) -> Bool {
-        do {
-            //input's info
-            guard let inputFile = inputFile else { return false }
-            let inputFormat = inputFile.processingFormat
-            guard let inputBuffer = AVAudioPCMBuffer(pcmFormat: inputFormat,
-                                                     frameCapacity: AVAudioFrameCount(inputFile.length))
-            else { return false }
-            guard (try? inputFile.read(into: inputBuffer)) != nil else { return false }
-            
-            //output's info
-            let settings = configSettings(formatID: .flac, sampleRate: sampleRate, bitDepth: bitDepth)
-            guard let outputFile = createOutputFile(url: output, bitDepth: bitDepth, settings: settings) else { return false }
-            guard let outputFormat = createAVAudioFormat(sampleRate: sampleRate, bitDepth: bitDepth, channels: inputFormat.channelCount) else { return false }
-            
-            //format converting(inputBuffer -> outputBuffer)
-            guard let outputBuffer = convertBuffer(inputBuffer, from: inputFormat, to: outputFormat) else { return false }
-            
-            //write file
-            try outputFile.write(from: outputBuffer)
-            print("convert success")
-        } catch {
-            assertionFailure("convert Fail")
-            return false
-    }
-        return true
-    }
-    
-    func convertCAF(sampleRate: SampleRate, bitDepth: BitPerChannel, output: URL) -> Bool {
-        do {
-            //input's info
-            guard let inputFile = inputFile else { return false }
-            let inputFormat = inputFile.processingFormat
-            guard let inputBuffer = AVAudioPCMBuffer(pcmFormat: inputFormat,
-                                                     frameCapacity: AVAudioFrameCount(inputFile.length))
-            else { return false }
-            guard (try? inputFile.read(into: inputBuffer)) != nil else { return false }
-            
-            //output's info
-            let settings = configSettings(formatID: .caf, sampleRate: sampleRate, bitDepth: bitDepth)
-            guard let outputFile = createOutputFile(url: output, bitDepth: bitDepth, settings: settings) else { return false }
-            guard let outputFormat = createAVAudioFormat(sampleRate: sampleRate, bitDepth: bitDepth, channels: inputFormat.channelCount) else { return false }
-            
-            //format converting(inputBuffer -> outputBuffer)
-            guard let outputBuffer = convertBuffer(inputBuffer, from: inputFormat, to: outputFormat) else { return false }
-            
-            //write file
-            try outputFile.write(from: outputBuffer)
-            print("convert success")
-        } catch {
-            assertionFailure("convert Fail")
-            return false
-    }
-        return true
+        })
     }
     
     private let encoderQueue = DispatchQueue(label: "com.audio.encoder.queue")
 
+    //must be inputFile: .wav, sampleRate: 44100, bitDepth: 16
     func convertMP3(
         output: URL,
         sample: SampleRate,
@@ -175,24 +61,11 @@ struct AudioConverter {
         onProgress: ((Float) -> (Void))? = nil,
         onComplete: (() -> (Void))? = nil
     ) -> Bool {
-        guard let inputFile = inputFile else {
-            return false
-        }
+        let avUrlAsset = asset as! AVURLAsset
         let pcmFile: UnsafeMutablePointer<FILE>
-        let fileInfo = inputFile.url.lastPathComponent.split(separator: ".")
-        if fileInfo[1] != "wav" {
-            let outputfileName = fileInfo[0] + ".wav"
-            let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(String(outputfileName)
-            )
-            guard convertWAV(sampleRate: .m44k, bitDepth: .m16, output: tempURL) else {
-                return false
-            }
-
-            pcmFile = fopen(tempURL.path, "rb")
-        } else {
-            pcmFile = fopen(inputFile.url.path, "rb")
-        }
         
+        pcmFile = fopen(avUrlAsset.url.path, "rb")
+
         encoderQueue.async {
             
             let lame = lame_init()
@@ -264,24 +137,98 @@ struct AudioConverter {
         return true
     }
     
-    private func createBuffers(channelData: UnsafePointer<UnsafeMutablePointer<Float>>, frameLength: Int, channelNum: Int32) -> [[Float]] {
-        var buffers = [[Float]]()
-        for i in 0..<channelNum {
-            buffers.append(Array(UnsafeBufferPointer(start: channelData[Int(i)], count: frameLength)))
+    func fileFormatToFileType(fileFormat: FileFormat) -> AVFileType {
+        switch fileFormat {
+        case .caf:
+            return AVFileType.caf
+        case .wav:
+            return AVFileType.wav
+        case .m4a:
+            return AVFileType.m4a
+        case .mp3:
+            //video -> wav -> lame(encoder) mp3
+            return AVFileType.wav
+        default:
+            return AVFileType.m4a
         }
-        return buffers
     }
-
-    private func configSettings(formatID: FileFormat, sampleRate: SampleRate, bitDepth: BitPerChannel, bitRate: BitRate = .m192k) -> [String : Any] {
-        guard let inputFile = inputFile else { return [String:Any]() }
+    
+    //압축 오디오파일: bitrate만 설정, 무압축 오디오파일: bitDepth만 설정
+    func outputSetting(format: FileFormat, sampleRate: SampleRate, bitRate: BitRate?, bitDepth: BitPerChannel?) -> [String : Any] {
+        var channelLayout = AudioChannelLayout()
+        memset(&channelLayout, 0, MemoryLayout<AudioChannelLayout>.size);
+        channelLayout.mChannelLayoutTag = kAudioChannelLayoutTag_Stereo;
         
-        var settings: [String : Any] = [String : Any]()
-        settings.updateValue(formatID.rawValue, forKey: AVFormatIDKey)
-        settings.updateValue(sampleRate.rawValue, forKey: AVSampleRateKey)
-        settings.updateValue(bitDepth.rawValue, forKey: AVLinearPCMBitDepthKey)
-        settings.updateValue(bitRate.rawValue, forKey: AVEncoderBitRateKey)
-        settings.updateValue(inputFile.fileFormat.channelCount, forKey: AVNumberOfChannelsKey)
-
-        return settings
+        var outputSettings = [String : Any]()
+        outputSettings[AVFormatIDKey] = format.rawValue
+        outputSettings[AVSampleRateKey] = sampleRate.rawValue
+        outputSettings[AVNumberOfChannelsKey] = 2
+        outputSettings[AVChannelLayoutKey] = NSData(bytes:&channelLayout, length:MemoryLayout<AudioChannelLayout>.size)
+        if let bitDepth = bitDepth {
+            outputSettings[AVLinearPCMIsBigEndianKey] = false
+            outputSettings[AVLinearPCMIsFloatKey] = false
+            outputSettings[AVLinearPCMIsNonInterleaved] = false
+            outputSettings[AVLinearPCMBitDepthKey] = bitDepth.rawValue
+        }
+        if let bitRate = bitRate {
+            outputSettings[AVEncoderBitRateKey] = bitRate.rawValue
+        }
+        
+        return outputSettings
+    }
+    
+    private func setupAssetReaderAndWriter(output: URL, outputSettings: [String : Any], fileType: AVFileType, dispatchQueue: DispatchQueue) -> Bool {
+        let audioTracks = asset.tracks(withMediaType: AVMediaType.audio)
+        
+        if (audioTracks.count > 0) {
+            self.assetAudioTrack = audioTracks[0]
+        }
+        
+        guard let assetAudioTrack = assetAudioTrack else { return false }
+        
+        let decompressionAudioSettings:[String : Any] = [
+            AVFormatIDKey:Int(kAudioFormatLinearPCM)
+        ]
+   
+        do {
+            self.assetReader = try AVAssetReader(asset: asset)
+            self.assetWriter = try AVAssetWriter(outputURL: output, fileType: fileType)
+            self.assetReaderAudioOutput = AVAssetReaderTrackOutput(track: assetAudioTrack, outputSettings: decompressionAudioSettings)
+            self.assetWriterAudioInput = AVAssetWriterInput(mediaType: AVMediaType.audio, outputSettings: outputSettings)
+            
+            self.assetReader.add(assetReaderAudioOutput)
+            self.assetWriter.add(assetWriterAudioInput)
+        } catch {
+            print("Fail setup AVAssetReader, AVAssetWriter")
+        }
+        
+        return true
+    }
+    
+    private func startAssetReaderAndWriter(dispatchQueue: DispatchQueue, completion: (() -> Void)?) -> Bool {
+        print("Writing Asset...")
+        assetWriter.startWriting()
+        assetReader.startReading()
+        assetWriter.startSession(atSourceTime: CMTime.zero)
+        
+        assetWriterAudioInput.requestMediaDataWhenReady(on: dispatchQueue, using: {
+            
+            while(self.assetWriterAudioInput.isReadyForMoreMediaData ) {
+                var sampleBuffer = self.assetReaderAudioOutput.copyNextSampleBuffer()
+                if(sampleBuffer != nil) {
+                    self.assetWriterAudioInput.append(sampleBuffer!)
+                    sampleBuffer = nil
+                } else {
+                    self.assetWriterAudioInput.markAsFinished()
+                    self.assetReader.cancelReading()
+                    self.assetWriter.finishWriting {
+                        completion?()
+                        print("Complete Writing Asset")
+                    }
+                    break
+                }
+            }
+        })
+        return true
     }
 }
