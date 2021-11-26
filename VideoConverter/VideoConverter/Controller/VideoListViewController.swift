@@ -9,6 +9,12 @@ import Toast_Swift
 import UIKit
 import Photos
 
+
+protocol VideoSaveCompletionDelegate: AnyObject {
+    func startSave()
+    func endSave()
+}
+
 class VideoListViewController: UIViewController {
 
     @IBOutlet weak var videoListColletcionView: UICollectionView!
@@ -16,6 +22,8 @@ class VideoListViewController: UIViewController {
     private let sectionInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
     private var videos = [PHAsset]()
     private var selectedCellIndex: IndexPath?
+    
+    weak var delegate: VideoSaveCompletionDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -118,26 +126,24 @@ extension VideoListViewController: CustomHeaderViewDelegate {
     func didTappedSaveButton() {
         guard let indexPath = self.selectedCellIndex else { return }
         let options = PHVideoRequestOptions()
+        options.deliveryMode = .automatic
+        options.version = .original
         options.isNetworkAccessAllowed = true
         PHImageManager.default().requestExportSession(forVideo: self.videos[indexPath.row], options: options, exportPreset: AVAssetExportPresetPassthrough) { (exportSession, info) in
             guard let session = exportSession, let asset = session.asset as? AVURLAsset else { return }
             session.outputURL = FileHelper().createFileURL(asset.url.lastPathComponent, in: .willConvert)
             session.outputFileType = AVFileType.mp4
-    
-            var style = ToastStyle()
-            style.messageColor = .white
-            let toast = try? self.view.toastViewForMessage("비디오 가져오는 중", title: nil, image: nil, style: style)
-            if let toast = toast {
-                self.view.showToast(toast)
-            }
+                
+            self.delegate?.startSave()
             
             session.exportAsynchronously {
                 DispatchQueue.main.async {
-                    self.dismiss(animated: true, completion: nil)
+                    self.delegate?.endSave()
                 }
                 
             }
         }
+        self.dismiss(animated: true, completion: nil)
     }
     
     func didTappedExitButton() {

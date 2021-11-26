@@ -19,6 +19,7 @@ class WillConvertViewController: UIViewController {
     let pickerViewData = FileFormat.allCases.map{ $0.text }
     var tableViewConstraints: [NSLayoutConstraint]? = nil
     private var selectedCellIndex: IndexPath?
+    var videoSaveToast: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -167,9 +168,11 @@ extension WillConvertViewController : UIPickerViewDelegate, UIPickerViewDataSour
 extension WillConvertViewController: CustomHeaderViewDelegate {
 
     func didTappedPhotoLibraryButton() {
-        guard let svc = self.storyboard?.instantiateViewController(withIdentifier: "VideoListViewController") else {
+        guard let svc = self.storyboard?.instantiateViewController(withIdentifier: "VideoListViewController") as? VideoListViewController else {
             return
         }
+        
+        svc.delegate = self
       
         svc.modalPresentationStyle = .fullScreen
         self.present(svc, animated: true)
@@ -254,6 +257,26 @@ extension WillConvertViewController: ConvertViewDelegate {
                              bitDepth: nil,
                              completion: self.willConvertTableView.reloadData)
         }
-      
+    }
+}
+
+extension WillConvertViewController: VideoSaveCompletionDelegate {
+    func startSave() {
+        var style = ToastStyle()
+        style.messageColor = .white
+       
+        self.videoSaveToast = try? self.view.toastViewForMessage("비디오 가져오는 중", title: nil, image: nil, style: style)
+        
+        if let toast = self.videoSaveToast {
+            self.view.showToast(toast, point: CGPoint(x: self.view.center.x, y: self.view.center.y/3))
+        }
+    }
+    
+    func endSave() {
+        self.view.hideToast(self.videoSaveToast)
+        if let files = getFiles(.willConvert) {
+            willConvertMedia = files
+            self.willConvertTableView.reloadData()
+        }
     }
 }
