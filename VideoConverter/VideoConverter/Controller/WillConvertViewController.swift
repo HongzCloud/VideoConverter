@@ -71,7 +71,6 @@ class WillConvertViewController: UIViewController {
     
     private func setConvertViewConstraints() {
         self.convertView.translatesAutoresizingMaskIntoConstraints = false
-        self.convertView.backgroundColor = .lightGray
         self.convertView.didConvertedExtensionNamePickerView.delegate = self
         self.convertView.didConvertedExtensionNamePickerView.dataSource = self
         self.convertView.isHidden = true
@@ -260,7 +259,7 @@ extension WillConvertViewController: ConvertViewDelegate {
 extension WillConvertViewController: VideoSaveCompletionDelegate {
     func startSave() {
         var style = ToastStyle()
-        style.messageColor = .white
+        style.messageColor = .mint!
        
         self.videoSaveToast = try? self.view.toastViewForMessage("비디오 가져오는 중", title: nil, image: nil, style: style)
         

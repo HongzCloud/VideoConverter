@@ -23,6 +23,8 @@
 		1E9B0C292745150600150ABD /* VideoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9B0C282745150600150ABD /* VideoListViewController.swift */; };
 		1E9B0C2B274757B700150ABD /* VideoListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9B0C2A274757B700150ABD /* VideoListCollectionViewCell.swift */; };
 		1E9F2E4A274CE879006E4FB0 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1E9F2E49274CE879006E4FB0 /* Settings.bundle */; };
+		1E9F2E5F27525C47006E4FB0 /* UIColor+AssetsColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9F2E5E27525C47006E4FB0 /* UIColor+AssetsColor.swift */; };
+		1E9F2E61275267EE006E4FB0 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9F2E60275267EE006E4FB0 /* CustomTabBarController.swift */; };
 		1EA1EEDD2721B85800C22C2C /* AudioConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA1EEDC2721B85800C22C2C /* AudioConverter.swift */; };
 		1EA1EEE12723095F00C22C2C /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA1EEE02723095F00C22C2C /* FileHelper.swift */; };
 		1EA1EEE32723145000C22C2C /* FileHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA1EEE22723145000C22C2C /* FileHelperTests.swift */; };
@@ -84,6 +86,8 @@
 		1E9B0C282745150600150ABD /* VideoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListViewController.swift; sourceTree = "<group>"; };
 		1E9B0C2A274757B700150ABD /* VideoListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListCollectionViewCell.swift; sourceTree = "<group>"; };
 		1E9F2E49274CE879006E4FB0 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		1E9F2E5E27525C47006E4FB0 /* UIColor+AssetsColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+AssetsColor.swift"; sourceTree = "<group>"; };
+		1E9F2E60275267EE006E4FB0 /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 		1EA1EEDC2721B85800C22C2C /* AudioConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioConverter.swift; sourceTree = "<group>"; };
 		1EA1EEE02723095F00C22C2C /* FileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
 		1EA1EEE22723145000C22C2C /* FileHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHelperTests.swift; sourceTree = "<group>"; };
@@ -169,6 +173,7 @@
 				1E022EA22741838B006B51DF /* CMTime+TimeToString.swift */,
 				1E17D3EE2748E8BE00027A82 /* TimeInterval+ToString.swift */,
 				1E17D3F02748EF8000027A82 /* PHAsset+Thumbnail.swift */,
+				1E9F2E5E27525C47006E4FB0 /* UIColor+AssetsColor.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -180,6 +185,7 @@
 				1E022EA727422522006B51DF /* DidConvertedTableViewController.swift */,
 				1E9B0C282745150600150ABD /* VideoListViewController.swift */,
 				1E17D3F4274A237200027A82 /* PlayerViewController.swift */,
+				1E9F2E60275267EE006E4FB0 /* CustomTabBarController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -545,9 +551,11 @@
 				1E022EAA27422DB3006B51DF /* ConvertView.swift in Sources */,
 				1EC858FF27204044005A1F3B /* SceneDelegate.swift in Sources */,
 				1EA1EEE12723095F00C22C2C /* FileHelper.swift in Sources */,
+				1E9F2E61275267EE006E4FB0 /* CustomTabBarController.swift in Sources */,
 				1E9B0C252743982200150ABD /* HeaderView.swift in Sources */,
 				1E022EA0273FE18E006B51DF /* MediaView.swift in Sources */,
 				1E17D3F7274A295B00027A82 /* PlayerView.swift in Sources */,
+				1E9F2E5F27525C47006E4FB0 /* UIColor+AssetsColor.swift in Sources */,
 				1E17D3EF2748E8BE00027A82 /* TimeInterval+ToString.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

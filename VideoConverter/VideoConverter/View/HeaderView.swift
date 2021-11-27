@@ -27,7 +27,7 @@ class HeaderView: UIView {
     
     private let photoLibraryButton: UIButton = {
         let button = UIButton()
-        button.tintColor = .blue
+        button.tintColor = .mint
         button.setImage(UIImage(systemName: "plus"), for: .normal)
         let symbolSize = UIImage.SymbolConfiguration.init(pointSize: 20)
         button.setPreferredSymbolConfiguration(symbolSize, forImageIn: .normal)
@@ -39,7 +39,7 @@ class HeaderView: UIView {
     private let saveButton: UIButton = {
         let button = UIButton()
         button.setTitle("저장", for: .normal)
-        button.setTitleColor(.blue, for: .normal)
+        button.setTitleColor(.label, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(didTappedSaveButton(_:)), for: .touchUpInside)
         return button
@@ -47,9 +47,9 @@ class HeaderView: UIView {
     
     private let exitButton: UIButton = {
         let button = UIButton()
-        button.tintColor = .blue
+        button.tintColor = .white
         button.setImage(UIImage(systemName: "multiply"), for: .normal)
-        let symbolSize = UIImage.SymbolConfiguration.init(pointSize: 20)
+        let symbolSize = UIImage.SymbolConfiguration.init(pointSize: 25)
         button.setPreferredSymbolConfiguration(symbolSize, forImageIn: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(didTappedExitButton(_:)), for: .touchUpInside)
@@ -58,7 +58,7 @@ class HeaderView: UIView {
     
     private let underLineView: UIView = {
         let view = UIView()
-        view.backgroundColor = .lightGray
+        view.backgroundColor = .systemGray5
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

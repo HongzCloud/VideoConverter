@@ -93,8 +93,7 @@ class MediaView: UIView {
     }
     
     private func setMediaPlayButtonConstraints() {
-        mediaPlayButton.backgroundColor = .green
-        mediaPlayButton.tintColor = .black
+        mediaPlayButton.tintColor = .mint
         mediaPlayButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
         
         self.addSubview(mediaPlayButton)
@@ -107,8 +106,7 @@ class MediaView: UIView {
     }
     
     private func setMediaShareButtonConstraints() {
-        mediaShareButton.backgroundColor = .yellow
-        mediaShareButton.tintColor = .black
+        mediaShareButton.tintColor = .yellow
         mediaShareButton.setImage(UIImage(systemName: "arrowshape.turn.up.right.fill"), for: .normal)
         
         self.addSubview(mediaShareButton)

@@ -30,7 +30,7 @@ class ConvertView: UIView {
         button.layer.cornerRadius = 5
         button.clipsToBounds = true
         button.backgroundColor = .darkGray
-        button.tintColor = .black
+        button.tintColor = .mint
         button.setImage(UIImage(systemName: "gobackward"), for: .normal)
         let symbolSize = UIImage.SymbolConfiguration.init(pointSize: 20)
         button.setPreferredSymbolConfiguration(symbolSize, forImageIn: .normal)
@@ -43,6 +43,13 @@ class ConvertView: UIView {
         let pickerView = UIPickerView()
         pickerView.translatesAutoresizingMaskIntoConstraints = false
         return pickerView
+    }()
+
+    private let topLineView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemGray5
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     override init(frame: CGRect) {
@@ -59,6 +66,7 @@ class ConvertView: UIView {
         setConvertButton()
         setCurrentExtensionNameLabelConstraints()
         setDidConvertedExtensionNamePickerViewConstraints()
+        setUnderLineView()
     }
     
     private func setCurrentExtensionNameLabelConstraints() {
@@ -81,8 +89,7 @@ class ConvertView: UIView {
     }
     
     private func setDidConvertedExtensionNamePickerViewConstraints() {
-        self.didConvertedExtensionNamePickerView.backgroundColor = .lightGray
-        
+
         self.addSubview(didConvertedExtensionNamePickerView)
         NSLayoutConstraint.activate([
             self.didConvertedExtensionNamePickerView.leadingAnchor.constraint(equalTo: self.convertButton.trailingAnchor),
@@ -91,6 +98,17 @@ class ConvertView: UIView {
             self.didConvertedExtensionNamePickerView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
 
         
+        ])
+    }
+    
+    private func setUnderLineView() {
+        self.addSubview(topLineView)
+        
+        NSLayoutConstraint.activate([
+            self.topLineView.heightAnchor.constraint(equalToConstant: 1),
+            self.topLineView.topAnchor.constraint(equalTo: self.topAnchor),
+            self.topLineView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            self.topLineView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ])
     }
     

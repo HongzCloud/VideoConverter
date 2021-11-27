@@ -47,7 +47,6 @@ class PlayerViewController: UIViewController {
     private func setHeaderViewConstraints() {
         self.headerView.alpha = 0.4
         self.headerView.translatesAutoresizingMaskIntoConstraints = false
-        self.headerView.backgroundColor = .lightGray
         if let title = player.currentItem?.asset as? AVURLAsset {
             self.headerView.configure(title: title.url.lastPathComponent, exitButtonIsHidden: false)
         }
