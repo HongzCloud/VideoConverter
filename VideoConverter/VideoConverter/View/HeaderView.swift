@@ -15,6 +15,8 @@ protocol CustomHeaderViewDelegate: AnyObject {
 
 class HeaderView: UIView {
 
+    weak var delegate: CustomHeaderViewDelegate?
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
@@ -54,7 +56,12 @@ class HeaderView: UIView {
         return button
     }()
     
-    weak var delegate: CustomHeaderViewDelegate?
+    private let underLineView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lightGray
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -71,6 +78,7 @@ class HeaderView: UIView {
         setExitButton()
         setTitleLabelConstraints()
         setSaveButtonConstraints()
+        setUnderLineView()
     }
     
     private func setTitleLabelConstraints() {
@@ -111,6 +119,17 @@ class HeaderView: UIView {
             self.exitButton.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             self.exitButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
             self.exitButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 1/6)
+        ])
+    }
+    
+    private func setUnderLineView() {
+        self.addSubview(underLineView)
+        
+        NSLayoutConstraint.activate([
+            self.underLineView.heightAnchor.constraint(equalToConstant: 1),
+            self.underLineView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            self.underLineView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            self.underLineView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ])
     }
     

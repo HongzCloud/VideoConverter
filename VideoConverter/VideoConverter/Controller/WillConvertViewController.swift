@@ -32,8 +32,6 @@ class WillConvertViewController: UIViewController {
         setHeaderViewConstraints()
         setConvertViewConstraints()
         setTableViewConstraints()
-        
-        
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -59,7 +57,6 @@ class WillConvertViewController: UIViewController {
     
     private func setHeaderViewConstraints() {
         self.headerView.translatesAutoresizingMaskIntoConstraints = false
-        self.headerView.backgroundColor = .lightGray
         self.headerView.configure(title: "Viedo List", photoLibraryButtonIsHidden: false)
         
         self.view.addSubview(headerView)

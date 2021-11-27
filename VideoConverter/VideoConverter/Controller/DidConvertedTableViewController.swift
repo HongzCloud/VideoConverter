@@ -34,7 +34,6 @@ class DidConvertedTableViewController: UIViewController {
     
     private func setHeaderView() {
         self.headerView.translatesAutoresizingMaskIntoConstraints = false
-        self.headerView.backgroundColor = .lightGray
         self.headerView.configure(title: "Audio List")
         
         self.view.addSubview(headerView)
