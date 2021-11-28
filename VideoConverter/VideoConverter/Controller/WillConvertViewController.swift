@@ -218,11 +218,18 @@ extension WillConvertViewController: ConvertViewDelegate {
         let outputStr = inputName + "." + pathExtension
         let output = FileHelper().createFileURL(outputStr, in: .didConverted)
         let fileFormats = FileFormat.allCases
+        convertView.startConvertAnimation()
         
-        convert(asset: asset, output: output, fileFormat: fileFormats[pathExtensionIndex])
+        convert(asset: asset, output: output, fileFormat: fileFormats[pathExtensionIndex], completion: {
+            DispatchQueue.main.async {
+                self.willConvertTableView.reloadData()
+                convertView.endConvertAnimation()
+            }
+        })
     }
     
-    func convert(asset: AVAsset, output: URL, fileFormat: FileFormat) {
+    func convert(asset: AVAsset, output: URL, fileFormat: FileFormat, completion: @escaping () -> Void) {
+
         switch fileFormat {
         case .wav:
             asset.writeAudio(output: output,
@@ -230,28 +237,28 @@ extension WillConvertViewController: ConvertViewDelegate {
                              sampleRate: .m44k,
                              bitRate: nil,
                              bitDepth: .m32,
-                             completion: self.willConvertTableView.reloadData)
+                             completion: completion)
         case .mp3:
             asset.writeAudio(output: output,
                              format: fileFormat,
                              sampleRate: .m44k,
                              bitRate: .m192k,
                              bitDepth: nil,
-                             completion: self.willConvertTableView.reloadData)
+                             completion: completion)
         case .m4a:
             asset.writeAudio(output: output,
                              format: fileFormat,
                              sampleRate: .m44k,
                              bitRate: .m192k,
                              bitDepth: nil,
-                             completion: self.willConvertTableView.reloadData)
+                             completion: completion)
         case .caf:
             asset.writeAudio(output: output,
                              format: fileFormat,
                              sampleRate: .m44k,
                              bitRate: .m192k,
                              bitDepth: nil,
-                             completion: self.willConvertTableView.reloadData)
+                             completion: completion)
         }
     }
 }

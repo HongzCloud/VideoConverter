@@ -1,20 +1,24 @@
 PODS:
   - lame (1.0.0)
+  - lottie-ios (3.2.3)
   - Toast-Swift (5.0.1)
 
 DEPENDENCIES:
   - lame
+  - lottie-ios
   - Toast-Swift (~> 5.0.1)
 
 SPEC REPOS:
   trunk:
     - lame
+    - lottie-ios
     - Toast-Swift
 
 SPEC CHECKSUMS:
   lame: 1edb6e24a4e2056b9d1fd90c9fddc10c9aff875d
+  lottie-ios: c058aeafa76daa4cf64d773554bccc8385d0150e
   Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
 
-PODFILE CHECKSUM: f4eeac00d7161929996118ce1f1e779d20e4b224
+PODFILE CHECKSUM: 2940e59c8ab2416fe12f30d8e7b0fa906dd3a9fc
 
 COCOAPODS: 1.10.1

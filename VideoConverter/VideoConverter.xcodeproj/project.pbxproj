@@ -25,6 +25,7 @@
 		1E9F2E4A274CE879006E4FB0 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1E9F2E49274CE879006E4FB0 /* Settings.bundle */; };
 		1E9F2E5F27525C47006E4FB0 /* UIColor+AssetsColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9F2E5E27525C47006E4FB0 /* UIColor+AssetsColor.swift */; };
 		1E9F2E61275267EE006E4FB0 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9F2E60275267EE006E4FB0 /* CustomTabBarController.swift */; };
+		1E9F2E632752983D006E4FB0 /* 43229-reverse-arrows.json in Resources */ = {isa = PBXBuildFile; fileRef = 1E9F2E622752983C006E4FB0 /* 43229-reverse-arrows.json */; };
 		1EA1EEDD2721B85800C22C2C /* AudioConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA1EEDC2721B85800C22C2C /* AudioConverter.swift */; };
 		1EA1EEE12723095F00C22C2C /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA1EEE02723095F00C22C2C /* FileHelper.swift */; };
 		1EA1EEE32723145000C22C2C /* FileHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA1EEE22723145000C22C2C /* FileHelperTests.swift */; };
@@ -88,6 +89,7 @@
 		1E9F2E49274CE879006E4FB0 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		1E9F2E5E27525C47006E4FB0 /* UIColor+AssetsColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+AssetsColor.swift"; sourceTree = "<group>"; };
 		1E9F2E60275267EE006E4FB0 /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
+		1E9F2E622752983C006E4FB0 /* 43229-reverse-arrows.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "43229-reverse-arrows.json"; path = "../../../../Downloads/43229-reverse-arrows.json"; sourceTree = "<group>"; };
 		1EA1EEDC2721B85800C22C2C /* AudioConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioConverter.swift; sourceTree = "<group>"; };
 		1EA1EEE02723095F00C22C2C /* FileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
 		1EA1EEE22723145000C22C2C /* FileHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHelperTests.swift; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 				1EC8590A27204047005A1F3B /* Info.plist */,
 				1EA1EEE02723095F00C22C2C /* FileHelper.swift */,
 				1EA1EEDC2721B85800C22C2C /* AudioConverter.swift */,
+				1E9F2E622752983C006E4FB0 /* 43229-reverse-arrows.json */,
 				1EA1EEE52724376600C22C2C /* sampleMP3.mp3 */,
 				1E2B406E2729CE6D006E1FEB /* sampleWAV.wav */,
 				1EB2C79E272FE49E004B1338 /* sampleVideoMP4.mp4 */,
@@ -399,6 +402,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1EC8590927204047005A1F3B /* LaunchScreen.storyboard in Resources */,
+				1E9F2E632752983D006E4FB0 /* 43229-reverse-arrows.json in Resources */,
 				1EB2C79F272FE590004B1338 /* sampleVideoMP4.mp4 in Resources */,
 				1E2B406F2729CE6E006E1FEB /* sampleWAV.wav in Resources */,
 				1EC8590627204047005A1F3B /* Assets.xcassets in Resources */,

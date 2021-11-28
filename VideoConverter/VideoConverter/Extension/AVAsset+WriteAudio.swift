@@ -40,7 +40,7 @@ extension AVAsset {
                                          bitRate: bitRate,
                                          bitDepth: bitDepth)
             let outputType = assetConverter.fileFormatToFileType(fileFormat: format)
-            assetConverter.convert(output: output, outputType: outputType, outputSettins: settings, completion: nil)
+            assetConverter.convert(output: output, outputType: outputType, outputSettins: settings, completion: completion)
         }
     }
 }

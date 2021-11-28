@@ -6,6 +6,7 @@ target 'VideoConverter' do
   use_frameworks!
   pod 'lame'
   pod 'Toast-Swift', '~> 5.0.1'
+  pod 'lottie-ios'
   # Pods for VideoConverter
 
   target 'VideoConverterTests' do

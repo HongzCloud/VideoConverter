@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Lottie
 
 protocol ConvertViewDelegate: AnyObject {
     func didTappedConvertButton(_ convertView: ConvertView)
@@ -25,15 +26,9 @@ class ConvertView: UIView {
         return label
     }()
     
-    private let convertButton: UIButton = {
-        let button = UIButton()
-        button.layer.cornerRadius = 5
-        button.clipsToBounds = true
-        button.backgroundColor = .darkGray
-        button.tintColor = .mint
-        button.setImage(UIImage(systemName: "gobackward"), for: .normal)
-        let symbolSize = UIImage.SymbolConfiguration.init(pointSize: 20)
-        button.setPreferredSymbolConfiguration(symbolSize, forImageIn: .normal)
+    private let convertButton: AnimatedButton = {
+        let button = AnimatedButton(animation: .named("43229-reverse-arrows")!)
+        button.animationView.loopMode = .loop
         button.addTarget(self, action: #selector(didTappedConvertButton(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -89,8 +84,8 @@ class ConvertView: UIView {
     }
     
     private func setDidConvertedExtensionNamePickerViewConstraints() {
-
         self.addSubview(didConvertedExtensionNamePickerView)
+        
         NSLayoutConstraint.activate([
             self.didConvertedExtensionNamePickerView.leadingAnchor.constraint(equalTo: self.convertButton.trailingAnchor),
             self.didConvertedExtensionNamePickerView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
@@ -110,6 +105,14 @@ class ConvertView: UIView {
             self.topLineView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             self.topLineView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ])
+    }
+    
+    func startConvertAnimation() {
+        self.convertButton.animationView.play(completion: nil)
+    }
+    
+    func endConvertAnimation() {
+        self.convertButton.animationView.pause()
     }
     
     @objc
