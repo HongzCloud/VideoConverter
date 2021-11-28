@@ -113,6 +113,7 @@ class ConvertView: UIView {
     
     func endConvertAnimation() {
         self.convertButton.animationView.pause()
+        self.convertButton.animationView.currentFrame = 0
     }
     
     @objc

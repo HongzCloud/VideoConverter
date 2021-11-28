@@ -224,6 +224,16 @@ extension WillConvertViewController: ConvertViewDelegate {
             DispatchQueue.main.async {
                 self.willConvertTableView.reloadData()
                 convertView.endConvertAnimation()
+                
+                var style = ToastStyle()
+                style.messageColor = .mint!
+                self.view.makeToast("변환 완료",
+                                    duration: 2,
+                                    point: CGPoint(x: self.view.center.x, y: self.view.center.y * 3/2),
+                                    title: nil,
+                                    image: nil,
+                                    style: style,
+                                    completion: nil)
             }
         })
     }
