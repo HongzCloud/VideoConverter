@@ -40,8 +40,8 @@ class PlayerViewController: UIViewController {
     }
     
     private func setUIObject() {
-        setHeaderViewConstraints()
         setPlayerViewConstraints()
+        setHeaderViewConstraints()
         setPlayerControlViewConstraints()
     }
     
@@ -52,7 +52,7 @@ class PlayerViewController: UIViewController {
             self.headerView.configure(title: title.url.lastPathComponent, exitButtonIsHidden: false)
         }
         
-        self.view.addSubview(headerView)
+        self.playerView.addSubview(headerView)
         let safeArea = self.view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             self.headerView.topAnchor.constraint(equalTo: safeArea.topAnchor),
@@ -72,7 +72,8 @@ class PlayerViewController: UIViewController {
             self.playerView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
             self.playerView.centerYAnchor.constraint(equalTo: safeArea.centerYAnchor),
             self.playerView.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
-            self.playerView.heightAnchor.constraint(equalTo: self.playerView.widthAnchor, multiplier: 9/16)
+            self.playerView.topAnchor.constraint(equalTo: safeArea.topAnchor),
+            self.playerView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor)
         ])
     }
     
@@ -118,7 +119,7 @@ class PlayerViewController: UIViewController {
         self.player = AVPlayer(url: url)
         
         self.playerLayer = AVPlayerLayer(player: player)
-        self.playerLayer.videoGravity = .resize
+        self.playerLayer.videoGravity = .resizeAspect
         
         self.playerView.layer.addSublayer(playerLayer)
     }
