@@ -176,8 +176,10 @@ class PlayerControlView: UIView {
         self.durationSlider.value = value
     }
     
-    func configureTimeLabel(currentTime: String, endTime: String) {
+    func configureTimeLabel(currentTime: String = "00:00", endTime: String?) {
         self.currentTimeLabel.text = currentTime
-        self.endTimeLabel.text = endTime
+        if let endTime = endTime {
+            self.endTimeLabel.text = endTime
+        }
     }
 }

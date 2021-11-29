@@ -21,6 +21,7 @@ class PlayerViewController: UIViewController {
         super.viewDidLoad()
         setUIObject()
         addTimeObserver()
+        player.currentItem?.addObserver(self, forKeyPath: "duration", options: [.new,.initial], context: nil)
         self.headerView.delegate = self
         self.playerControlView.delegate = self
         
@@ -98,7 +99,15 @@ class PlayerViewController: UIViewController {
             self?.playerControlView.configureSlider(maxValue: Float(currentItem.duration.seconds),
                                                     minValue: 0,
                                                     value: Float(currentItem.currentTime().seconds))
+            self?.playerControlView.configureTimeLabel(currentTime: currentItem.currentTime().seconds.durationText,
+                                                      endTime: nil)
         })
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "duration", let duration = player.currentItem?.duration.seconds, duration > 0.0 {
+            self.playerControlView.configureTimeLabel(endTime: duration.durationText)
+        }
     }
 
     @objc func exitVC(_ sender: UIButton!) {
