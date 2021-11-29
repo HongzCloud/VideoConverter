@@ -88,7 +88,21 @@ extension DidConvertedTableViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath)->CGFloat {
         return tableView.frame.height / 10
     }
-
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let action = UIContextualAction(style: .normal, title: nil) { (action, view, completion) in
+            
+            //tableView.deleteRows(at: [indexPath], with: .automatic)
+            completion(true)
+        }
+        
+        action.backgroundColor = .red
+        action.image = UIImage(systemName: "trash")
+        
+        let configuration = UISwipeActionsConfiguration(actions: [action])
+        configuration.performsFirstActionWithFullSwipe = false
+        return configuration
+    }
 }
 
 extension DidConvertedTableViewController: MediaViewDelegate {
@@ -126,3 +140,4 @@ extension DidConvertedTableViewController: MediaViewDelegate {
             if let shareError = error { print(shareError)} }
     }
 }
+
