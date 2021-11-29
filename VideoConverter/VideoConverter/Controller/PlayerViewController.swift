@@ -109,7 +109,11 @@ class PlayerViewController: UIViewController {
         self.player = AVPlayer(url: url)
         
         self.playerLayer = AVPlayerLayer(player: player)
+<<<<<<< Updated upstream
         self.playerLayer.videoGravity = .resize
+=======
+        self.playerLayer.videoGravity = .resizeAspectFill
+>>>>>>> Stashed changes
         
         self.playerView.layer.addSublayer(playerLayer)
     }

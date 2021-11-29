@@ -188,11 +188,13 @@ extension WillConvertViewController: MediaViewDelegate {
     }
     
     func didTappedMediaShareButton() {
+        self.view.makeToastActivity(.center)
         let asset = willConvertMedia[0] as! AVURLAsset
         
         var shareObject = [Any]()
         shareObject.append(asset.url)
         let activityViewController = UIActivityViewController(activityItems : shareObject, applicationActivities: nil)
+        self.view.hideToastActivity()
         activityViewController.popoverPresentationController?.sourceView = self.view
         self.present(activityViewController, animated: true, completion: nil)
         activityViewController.completionWithItemsHandler = {
