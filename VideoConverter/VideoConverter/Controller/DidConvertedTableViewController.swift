@@ -57,6 +57,29 @@ class DidConvertedTableViewController: UIViewController {
         ])
     }
     
+    private func editFileNameAlert(oldName: String, completion: @escaping (_ newName: String) -> Void) {
+        let alert = UIAlertController(title: "파일명 수정", message: "파일명을 입력하세요.", preferredStyle: .alert)
+
+        let ok = UIAlertAction(title: "OK", style: .default) { (ok) in
+            let text = alert.textFields?.first?.text
+            if let text = text {
+                completion(text)
+            }
+        }
+
+        let cancel = UIAlertAction(title: "cancel", style: .cancel) { (cancel) in
+             //code
+        }
+
+        alert.addAction(cancel)
+        alert.addAction(ok)
+        alert.addTextField { textField in
+            textField.text = oldName
+        }
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     private func getFiles(_ directory: Directory) -> [AVAsset]? {
         guard let urls = FileHelper().urls(for: directory) else { return nil }
         var avAssests = [AVAsset]()
@@ -107,22 +130,25 @@ extension DidConvertedTableViewController: UITableViewDelegate {
         }
         let fileNameEditAction = UIContextualAction(style: .normal, title: nil) { [self] (action, view, completion) in
             
-            do {
-                //수정하기
-                let asset = self.didConvertMedia[indexPath.row] as! AVURLAsset
-                let newFileName = "newFileName." + asset.url.pathExtension
+            //수정하기
+            let asset = self.didConvertMedia[indexPath.row] as! AVURLAsset
+            editFileNameAlert(oldName: asset.url.deletingPathExtension().lastPathComponent, completion: { newName in
+                
+                let newFileName = newName + "." + asset.url.pathExtension
                 let newPath = asset.url.deletingLastPathComponent().appendingPathComponent(newFileName)
                 didConvertMedia[indexPath.row] = AVAsset(url: newPath)
-                try FileManager.default.moveItem(at: asset.url, to: newPath)
-               
                 
-            } catch let e {
-                //에러처리
-                print(e.localizedDescription)
-            }
+                do {
+                    try FileManager.default.moveItem(at: asset.url, to: newPath)
+                } catch let e {
+                    //에러처리
+                    print(e.localizedDescription)
+                }
+            })
             tableView.reloadRows(at: [indexPath], with: .automatic)
             completion(true)
         }
+        
         
         action.backgroundColor = .red
         action.image = UIImage(systemName: "trash")
