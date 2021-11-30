@@ -105,11 +105,30 @@ extension DidConvertedTableViewController: UITableViewDelegate {
             tableView.deleteRows(at: [indexPath], with: .automatic)
             completion(true)
         }
+        let fileNameEditAction = UIContextualAction(style: .normal, title: nil) { [self] (action, view, completion) in
+            
+            do {
+                //수정하기
+                let asset = self.didConvertMedia[indexPath.row] as! AVURLAsset
+                let newFileName = "newFileName." + asset.url.pathExtension
+                let newPath = asset.url.deletingLastPathComponent().appendingPathComponent(newFileName)
+                didConvertMedia[indexPath.row] = AVAsset(url: newPath)
+                try FileManager.default.moveItem(at: asset.url, to: newPath)
+               
+                
+            } catch let e {
+                //에러처리
+                print(e.localizedDescription)
+            }
+            tableView.reloadRows(at: [indexPath], with: .automatic)
+            completion(true)
+        }
         
         action.backgroundColor = .red
         action.image = UIImage(systemName: "trash")
+        fileNameEditAction.image = UIImage(systemName: "square.and.pencil")
         
-        let configuration = UISwipeActionsConfiguration(actions: [action])
+        let configuration = UISwipeActionsConfiguration(actions: [action, fileNameEditAction])
         configuration.performsFirstActionWithFullSwipe = false
         return configuration
     }
