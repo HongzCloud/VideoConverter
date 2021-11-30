@@ -92,7 +92,17 @@ extension DidConvertedTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let action = UIContextualAction(style: .normal, title: nil) { (action, view, completion) in
             
-            //tableView.deleteRows(at: [indexPath], with: .automatic)
+            do {
+                //삭제하기
+                let asset = self.didConvertMedia[indexPath.row] as! AVURLAsset
+                try FileManager.default.removeItem(at: asset.url)
+                self.didConvertMedia.remove(at: indexPath.row)
+                
+            } catch let e {
+                //에러처리
+                print(e.localizedDescription)
+            }
+            tableView.deleteRows(at: [indexPath], with: .automatic)
             completion(true)
         }
         
