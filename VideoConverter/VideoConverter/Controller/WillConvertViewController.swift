@@ -20,6 +20,7 @@ class WillConvertViewController: UIViewController {
     var tableViewConstraints: [NSLayoutConstraint]? = nil
     private var selectedCellIndex: IndexPath?
     var videoSaveToast: UIView!
+    private var alert: UIAlertController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -111,7 +112,7 @@ class WillConvertViewController: UIViewController {
     }
     
     private func editFileNameAlert(oldName: String, completion: @escaping (_ newName: String) -> Void) {
-        let alert = UIAlertController(title: "파일명 수정", message: "파일명을 입력하세요.", preferredStyle: .alert)
+        let alert = UIAlertController(title: "파일명 수정", message: "파일명을 입력하세요.(확장자 제외)", preferredStyle: .alert)
 
         let ok = UIAlertAction(title: "OK", style: .default) { (ok) in
             let text = alert.textFields?.first?.text
@@ -121,17 +122,31 @@ class WillConvertViewController: UIViewController {
         }
 
         let cancel = UIAlertAction(title: "cancel", style: .cancel) { (cancel) in
-             //code
         }
 
         alert.addAction(cancel)
         alert.addAction(ok)
-        alert.addTextField { textField in
+        alert.addTextField { [self] textField in
             textField.text = oldName
+            textField.addTarget(self, action: #selector(alertTextFieldDidChange(_:)), for: .editingChanged)
         }
         
         self.present(alert, animated: true, completion: nil)
     }
+    
+    @objc func alertTextFieldDidChange(_ sender: UITextField) {
+        self.alert?.actions[1].isEnabled = isValidFileName(sender.text!)
+    }
+    
+   private func isValidFileName(_ name: String) -> Bool {
+       //영어 소문자,대문자,한글,숫자 1~20자리
+       let pattern = "^[A-Za-z0-9가-힣_]{1,20}$"
+       let regex = try? NSRegularExpression(pattern: pattern)
+       if let _ = regex?.firstMatch(in: name, options: [], range: NSRange(location: 0, length: name.count)) {
+           return true
+       }
+       return false
+   }
 }
 
 extension WillConvertViewController: UITableViewDataSource {

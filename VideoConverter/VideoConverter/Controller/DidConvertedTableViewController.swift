@@ -12,6 +12,7 @@ class DidConvertedTableViewController: UIViewController {
     var didConvertMedia = [AVAsset]()
     @IBOutlet weak var didConvertedTableView: UITableView!
     private var headerView = HeaderView()
+    private var alert: UIAlertController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,27 +59,44 @@ class DidConvertedTableViewController: UIViewController {
     }
     
     private func editFileNameAlert(oldName: String, completion: @escaping (_ newName: String) -> Void) {
-        let alert = UIAlertController(title: "파일명 수정", message: "파일명을 입력하세요.", preferredStyle: .alert)
+        alert = UIAlertController(title: "파일명 수정", message: "파일명을 입력하세요.", preferredStyle: .alert)
 
-        let ok = UIAlertAction(title: "OK", style: .default) { (ok) in
-            let text = alert.textFields?.first?.text
+        let ok = UIAlertAction(title: "OK", style: .default) { [self] (ok) in
+            let text = alert!.textFields?.first?.text
             if let text = text {
+             
                 completion(text)
             }
         }
 
         let cancel = UIAlertAction(title: "cancel", style: .cancel) { (cancel) in
-             //code
+
         }
 
-        alert.addAction(cancel)
-        alert.addAction(ok)
-        alert.addTextField { textField in
+        alert!.addAction(cancel)
+        alert!.addAction(ok)
+        alert!.addTextField { [self] textField in
             textField.text = oldName
+            textField.addTarget(self, action: #selector(alertTextFieldDidChange(_:)), for: .editingChanged)
         }
         
-        self.present(alert, animated: true, completion: nil)
+        self.present(alert!, animated: true, completion: nil)
     }
+    
+    @objc func alertTextFieldDidChange(_ sender: UITextField) {
+        self.alert?.actions[1].isEnabled = isValidFileName(sender.text!)
+    }
+    
+   private func isValidFileName(_ name: String) -> Bool {
+       //영어 소문자,대문자,한글,숫자 1~20자리
+       let pattern = "^[A-Za-z0-9가-힣_]{1,20}$"
+       let regex = try? NSRegularExpression(pattern: pattern)
+       if let _ = regex?.firstMatch(in: name, options: [], range: NSRange(location: 0, length: name.count)) {
+           return true
+       }
+       
+       return false
+   }
     
     private func getFiles(_ directory: Directory) -> [AVAsset]? {
         guard let urls = FileHelper().urls(for: directory) else { return nil }
