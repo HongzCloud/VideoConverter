@@ -19,6 +19,9 @@ class VideoListCollectionViewCell: UICollectionViewCell {
     
     private let durationLabel: UILabel = {
         let duration = UILabel()
+        duration.font = UIFont.systemFont(ofSize: 13)
+        duration.clipsToBounds = true
+        duration.layer.cornerRadius = 5
         duration.backgroundColor = .black
         duration.textColor = .white
         duration.text = "00:00"

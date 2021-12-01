@@ -39,7 +39,7 @@ class HeaderView: UIView {
     private let saveButton: UIButton = {
         let button = UIButton()
         button.setTitle("저장", for: .normal)
-        button.setTitleColor(.label, for: .normal)
+        button.setTitleColor(.mint, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(didTappedSaveButton(_:)), for: .touchUpInside)
         return button
