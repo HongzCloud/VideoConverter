@@ -54,8 +54,25 @@ class PlayerControlView: UIView {
     private let durationSlider: UISlider = {
         let slider = UISlider()
         slider.addTarget(self, action: #selector(sliderValueChanged(_:)), for: .valueChanged)
+        slider.thumbTintColor = .mint
+        slider.tintColor = .mint
         slider.translatesAutoresizingMaskIntoConstraints = false
         return slider
+    }()
+    
+    private let currentTimeLabel: UILabel = {
+        let label = UILabel()
+        label.text = "00:00"
+        label.textColor = .mint
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let endTimeLabel: UILabel = {
+        let label = UILabel()
+        label.text = "00:00"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     override init(frame: CGRect) {
@@ -73,6 +90,8 @@ class PlayerControlView: UIView {
         setDurationSlider()
         setBackwardButton()
         setForwardButton()
+        setCurrentTimeLabel()
+        setEndTimeLabel()
     }
     
     private func setPlayButtonConstraints() {
@@ -119,6 +138,24 @@ class PlayerControlView: UIView {
         ])
     }
     
+    private func setCurrentTimeLabel() {
+        self.addSubview(currentTimeLabel)
+        
+        NSLayoutConstraint.activate([
+            self.currentTimeLabel.leadingAnchor.constraint(equalTo: self.durationSlider.leadingAnchor),
+            self.currentTimeLabel.topAnchor.constraint(equalTo: self.durationSlider.bottomAnchor)
+        ])
+    }
+    
+    private func setEndTimeLabel() {
+        self.addSubview(endTimeLabel)
+        
+        NSLayoutConstraint.activate([
+            self.endTimeLabel.trailingAnchor.constraint(equalTo: self.durationSlider.trailingAnchor),
+            self.endTimeLabel.topAnchor.constraint(equalTo: self.durationSlider.bottomAnchor)
+        ])
+    }
+    
     @objc func didTappedPlayButton(_ sender: UIButton!) {
         self.delegate?.didTappedPlayButton(playButton)
     }
@@ -139,5 +176,12 @@ class PlayerControlView: UIView {
         self.durationSlider.maximumValue = maxValue
         self.durationSlider.minimumValue = minValue
         self.durationSlider.value = value
+    }
+    
+    func configureTimeLabel(currentTime: String = "00:00", endTime: String?) {
+        self.currentTimeLabel.text = currentTime
+        if let endTime = endTime {
+            self.endTimeLabel.text = endTime
+        }
     }
 }

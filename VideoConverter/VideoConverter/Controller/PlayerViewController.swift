@@ -21,6 +21,7 @@ class PlayerViewController: UIViewController {
         super.viewDidLoad()
         setUIObject()
         addTimeObserver()
+        player.currentItem?.addObserver(self, forKeyPath: "duration", options: [.new,.initial], context: nil)
         self.headerView.delegate = self
         self.playerControlView.delegate = self
         
@@ -39,8 +40,8 @@ class PlayerViewController: UIViewController {
     }
     
     private func setUIObject() {
-        setHeaderViewConstraints()
         setPlayerViewConstraints()
+        setHeaderViewConstraints()
         setPlayerControlViewConstraints()
     }
     
@@ -51,7 +52,7 @@ class PlayerViewController: UIViewController {
             self.headerView.configure(title: title.url.lastPathComponent, exitButtonIsHidden: false)
         }
         
-        self.view.addSubview(headerView)
+        self.playerView.addSubview(headerView)
         let safeArea = self.view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             self.headerView.topAnchor.constraint(equalTo: safeArea.topAnchor),
@@ -71,7 +72,8 @@ class PlayerViewController: UIViewController {
             self.playerView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
             self.playerView.centerYAnchor.constraint(equalTo: safeArea.centerYAnchor),
             self.playerView.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
-            self.playerView.heightAnchor.constraint(equalTo: self.playerView.widthAnchor, multiplier: 9/16)
+            self.playerView.topAnchor.constraint(equalTo: safeArea.topAnchor),
+            self.playerView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor)
         ])
     }
     
@@ -98,7 +100,15 @@ class PlayerViewController: UIViewController {
             self?.playerControlView.configureSlider(maxValue: Float(currentItem.duration.seconds),
                                                     minValue: 0,
                                                     value: Float(currentItem.currentTime().seconds))
+            self?.playerControlView.configureTimeLabel(currentTime: currentItem.currentTime().seconds.durationText,
+                                                      endTime: nil)
         })
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "duration", let duration = player.currentItem?.duration.seconds, duration > 0.0 {
+            self.playerControlView.configureTimeLabel(endTime: duration.durationText)
+        }
     }
 
     @objc func exitVC(_ sender: UIButton!) {
