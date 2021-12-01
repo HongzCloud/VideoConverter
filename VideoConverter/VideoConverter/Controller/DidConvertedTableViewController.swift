@@ -155,7 +155,7 @@ extension DidConvertedTableViewController: UITableViewDelegate {
                 let newFileName = newName + "." + asset.url.pathExtension
                 let newPath = asset.url.deletingLastPathComponent().appendingPathComponent(newFileName)
                 didConvertMedia[indexPath.row] = AVAsset(url: newPath)
-                
+                tableView.reloadRows(at: [indexPath], with: .automatic)
                 do {
                     try FileManager.default.moveItem(at: asset.url, to: newPath)
                 } catch let e {
@@ -163,7 +163,7 @@ extension DidConvertedTableViewController: UITableViewDelegate {
                     print(e.localizedDescription)
                 }
             })
-            tableView.reloadRows(at: [indexPath], with: .automatic)
+
             completion(true)
         }
         
