@@ -342,8 +342,13 @@ extension WillConvertViewController: ConvertViewDelegate {
                 do {
                     try FileManager.default.moveItem(at: asset.url, to: newPath)
                 } catch let e {
-                    //에러처리
-                    print(e.localizedDescription)
+                    //파일명 수정 에러처리
+                    let alert = UIAlertController(title: "파일명 수정", message: "파일명 변경 실패", preferredStyle: .alert)
+                    let ok = UIAlertAction(title: "OK", style: .default)
+                    
+                    alert.addAction(ok)
+                    self.present(alert, animated: true, completion: nil)
+                    assertionFailure(e.localizedDescription)
                 }
             })
 
