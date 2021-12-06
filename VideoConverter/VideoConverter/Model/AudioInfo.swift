@@ -8,19 +8,6 @@
 import Foundation
 import AVFoundation
 
-struct Audio {
-    private(set) var formatID = kAudioFormatLinearPCM
-    private(set) var sampleRate: UInt32 = 44100
-    private(set) var bitRate: UInt32 = 0
-    private(set) var bitDepth: UInt32 = 0
-    private(set) var channel: UInt32 = 0
-    private(set) var url: URL
-    
-    init(url: URL) {
-        self.url = url
-    }
-}
-
 enum FileFormat: CaseIterable {
     case wav
     case mp3

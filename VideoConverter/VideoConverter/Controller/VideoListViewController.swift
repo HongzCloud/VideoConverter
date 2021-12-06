@@ -18,8 +18,8 @@ protocol VideoSaveCompletionDelegate: AnyObject {
 class VideoListViewController: UIViewController {
 
     @IBOutlet weak var videoListColletcionView: UICollectionView!
-    private let header = HeaderView()
-    private let sectionInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+    private var header: HeaderView!
+    private var sectionInsets: UIEdgeInsets!
     private var videos = [PHAsset]()
     private var selectedCellIndex: IndexPath?
     
@@ -27,22 +27,16 @@ class VideoListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        videoListColletcionView.dataSource = self
-        videoListColletcionView.delegate = self
-        videoListColletcionView.register(VideoListCollectionViewCell.self, forCellWithReuseIdentifier: "VideoListCollectionViewCell")
-        self.header.delegate = self
-        setUIObject()
-        getVideos { [self] in
+        setHeader()
+        setVideoListCollectionView()
+        loadVideos { [self] in
             self.videoListColletcionView.reloadData()
         }
     }
-    
-    private func setUIObject() {
-        setHeaderConstraints()
-        setVideoListCollectionView()
-    }
-    
-    private func setHeaderConstraints() {
+
+    private func setHeader() {
+        self.header = HeaderView()
+        self.header.delegate = self
         self.header.configure(title: "비디오 목록",exitButtonIsHidden: false, saveButtonIsHidden: false)
         self.header.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(header)
@@ -56,7 +50,13 @@ class VideoListViewController: UIViewController {
     }
     
     private func setVideoListCollectionView() {
+        self.sectionInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        
+        self.videoListColletcionView.dataSource = self
+        self.videoListColletcionView.delegate = self
+        self.videoListColletcionView.register(VideoListCollectionViewCell.self, forCellWithReuseIdentifier: "VideoListCollectionViewCell")
         self.videoListColletcionView.translatesAutoresizingMaskIntoConstraints = false
+        
         let safeArea = self.view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             self.videoListColletcionView.topAnchor.constraint(equalTo: self.header.bottomAnchor),
@@ -66,7 +66,7 @@ class VideoListViewController: UIViewController {
         ])
     }
     
-    private func getVideos(completion: () -> Void) {
+    private func loadVideos(completion: () -> Void) {
         let fetchOption = PHFetchOptions()
         fetchOption.includeAssetSourceTypes = [.typeUserLibrary]
         let allVideos = PHAsset.fetchAssets(with: .video, options: fetchOption)
@@ -74,6 +74,7 @@ class VideoListViewController: UIViewController {
         allVideos.enumerateObjects({ phAsset, pointer,_  in
             self.videos.append(phAsset)
         })
+        
         completion()
     }
 }
@@ -105,7 +106,6 @@ extension VideoListViewController: UICollectionViewDelegate, UICollectionViewDel
         let cellHeight = (height - heightPadding) / itemsPerColumn
         
         return CGSize(width: cellWidth, height: cellHeight)
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

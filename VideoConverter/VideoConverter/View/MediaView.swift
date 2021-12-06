@@ -8,8 +8,8 @@
 import UIKit
 
 protocol MediaViewDelegate: AnyObject {
-    func didTappedPlayButton(index: Int)
-    func didTappedMediaShareButton()
+    func didTappedPlayButton(selectedIndex: Int)
+    func didTappedMediaShareButton(selectedIndex: Int)
 }
 
 class MediaView: UIView {
@@ -131,12 +131,12 @@ class MediaView: UIView {
     
     @objc
     func didTappedMediaPlayButton(_ sender: UIButton!) {
-        self.delegate?.didTappedPlayButton(index: index)
+        self.delegate?.didTappedPlayButton(selectedIndex: index)
     }
     
     @objc
     func didTappedMediaShareButton(_ sender: UIButton!) {
-        self.delegate?.didTappedMediaShareButton()
+        self.delegate?.didTappedMediaShareButton(selectedIndex: index)
     }
     
     func configure(image: UIImage?, name: String, duration: String) {

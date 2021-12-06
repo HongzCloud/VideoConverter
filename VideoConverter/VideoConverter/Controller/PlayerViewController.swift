@@ -10,8 +10,8 @@ import AVFoundation
 
 class PlayerViewController: UIViewController {
 
-    private var playerView = PlayerView()
-    private var playerControlView = PlayerControlView()
+    private var playerView: PlayerView!
+    private var playerControlView: PlayerControlView!
     private var player: AVPlayer!
     private var playerLayer: AVPlayerLayer!
     private var isPlaying = false
@@ -19,40 +19,34 @@ class PlayerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUIObject()
+        setPlayerView()
+        setHeaderView()
+        setPlayerControlView()
         addTimeObserver()
-        player.currentItem?.addObserver(self, forKeyPath: "duration", options: [.new,.initial], context: nil)
-        self.headerView.delegate = self
-        self.playerControlView.delegate = self
+    }
+    
+    func setPlayer(url: URL) {
+        self.player = AVPlayer(url: url)
+        self.playerLayer = AVPlayerLayer(player: player)
+        self.playerLayer.videoGravity = .resizeAspect
+        self.player.currentItem?.addObserver(self, forKeyPath: "duration", options: [.new,.initial], context: nil)
+    }
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTappedPlayerView(_:)))
-        self.playerView.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc func didTappedPlayerView(_ sender: UITapGestureRecognizer) {
-        playerControlView.isHidden = !playerControlView.isHidden
-        headerView.isHidden = !headerView.isHidden
-    }
-    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.playerLayer.frame = playerView.bounds
     }
-    
-    private func setUIObject() {
-        setPlayerViewConstraints()
-        setHeaderViewConstraints()
-        setPlayerControlViewConstraints()
-    }
-    
-    private func setHeaderViewConstraints() {
+
+    private func setHeaderView() {
+        self.headerView = HeaderView()
+        self.headerView.delegate = self
         self.headerView.alpha = 0.4
         self.headerView.translatesAutoresizingMaskIntoConstraints = false
         if let title = player.currentItem?.asset as? AVURLAsset {
             self.headerView.configure(title: title.url.lastPathComponent, exitButtonIsHidden: false)
         }
-        
         self.playerView.addSubview(headerView)
+        
         let safeArea = self.view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             self.headerView.topAnchor.constraint(equalTo: safeArea.topAnchor),
@@ -62,9 +56,14 @@ class PlayerViewController: UIViewController {
         ])
     }
     
-    private func setPlayerViewConstraints() {
+    private func setPlayerView() {
+        self.playerView = PlayerView()
+        let tapGesture = UITapGestureRecognizer(target: self,
+                                                action: #selector(didTappedPlayerView(_:)))
+        self.playerView.addGestureRecognizer(tapGesture)
         self.playerView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(playerView)
+        self.playerView.layer.addSublayer(playerLayer)
         
         let safeArea = self.view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
@@ -77,8 +76,15 @@ class PlayerViewController: UIViewController {
         ])
     }
     
-    private func setPlayerControlViewConstraints() {
-        playerControlView.translatesAutoresizingMaskIntoConstraints = false
+    @objc func didTappedPlayerView(_ sender: UITapGestureRecognizer) {
+        playerControlView.isHidden = !playerControlView.isHidden
+        headerView.isHidden = !headerView.isHidden
+    }
+    
+    private func setPlayerControlView() {
+        self.playerControlView = PlayerControlView()
+        self.playerControlView.delegate = self
+        self.playerControlView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(playerControlView)
         
         let safeArea = self.view.safeAreaLayoutGuide
@@ -113,13 +119,6 @@ class PlayerViewController: UIViewController {
 
     @objc func exitVC(_ sender: UIButton!) {
         self.dismiss(animated: true, completion: nil)
-    }
-    
-    func setPlayer(url: URL) {
-        self.player = AVPlayer(url: url)
-        self.playerLayer = AVPlayerLayer(player: player)
-        self.playerLayer.videoGravity = .resizeAspect
-        self.playerView.layer.addSublayer(playerLayer)
     }
 }
 

@@ -12,41 +12,34 @@ import Toast_Swift
 
 class WillConvertViewController: UIViewController {
 
-    var willConvertMedia = [AVAsset]()
+    private var assetManager: AssetManager!
     @IBOutlet weak var willConvertTableView: UITableView!
-    let convertView = ConvertView()
-    let headerView = HeaderView()
-    let pickerViewData = FileFormat.allCases.map{ $0.text }
-    var tableViewConstraints: [NSLayoutConstraint]? = nil
+    private var convertView: ConvertView!
+    private var headerView: HeaderView!
+    private var pickerViewData: [String]!
+    private var tableViewConstraints: [NSLayoutConstraint]? = nil
     private var selectedCellIndex: IndexPath?
-    var videoSaveToast: UIView!
+    private var videoSaveToast: UIView!
     private var alert: UIAlertController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.willConvertTableView.delegate = self
-        self.willConvertTableView.dataSource = self
-        self.willConvertTableView.register(WillConvertTableViewCell.self, forCellReuseIdentifier: "WillConvertTableViewCell")
-        self.headerView.delegate = self
-        self.convertView.delegate = self
-
-        setHeaderViewConstraints()
-        setConvertViewConstraints()
-        setTableViewConstraints()
+        self.assetManager = AssetManager(directoryPath: .willConvert)
+        self.pickerViewData = FileFormat.allCases.map{ $0.text }
+        setHeaderView()
+        setConvertView()
+        setTableView()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        willConvertMedia.removeAll()
-        if let files = getFiles(.willConvert) {
-            willConvertMedia = files
-            self.willConvertTableView.reloadData()
-        }
+        self.assetManager.reloadAssets()
     }
 
     private func newTableViewConstraints() -> [NSLayoutConstraint] {
-        let safeArea = self.view.safeAreaLayoutGuide
         self.willConvertTableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let safeArea = self.view.safeAreaLayoutGuide
         let constrains = [
             self.willConvertTableView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor),
             self.willConvertTableView.bottomAnchor.constraint(equalTo: self.convertView.topAnchor),
@@ -56,7 +49,9 @@ class WillConvertViewController: UIViewController {
         return constrains
     }
     
-    private func setHeaderViewConstraints() {
+    private func setHeaderView() {
+        self.headerView = HeaderView()
+        self.headerView.delegate = self
         self.headerView.translatesAutoresizingMaskIntoConstraints = false
         self.headerView.configure(title: "Viedo List", photoLibraryButtonIsHidden: false)
         
@@ -70,14 +65,16 @@ class WillConvertViewController: UIViewController {
         ])
     }
     
-    private func setConvertViewConstraints() {
+    private func setConvertView() {
+        self.convertView = ConvertView()
+        self.convertView.delegate = self
+        self.convertView.isHidden = true
         self.convertView.translatesAutoresizingMaskIntoConstraints = false
         self.convertView.didConvertedExtensionNamePickerView.delegate = self
         self.convertView.didConvertedExtensionNamePickerView.dataSource = self
-        self.convertView.isHidden = true
-        let safeArea = self.view.safeAreaLayoutGuide
         
         self.view.addSubview(convertView)
+        let safeArea = self.view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             self.convertView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
             self.convertView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
@@ -86,7 +83,11 @@ class WillConvertViewController: UIViewController {
         ])
     }
     
-    private func setTableViewConstraints() {
+    private func setTableView() {
+        self.willConvertTableView.delegate = self
+        self.willConvertTableView.dataSource = self
+        self.willConvertTableView.register(WillConvertTableViewCell.self, forCellReuseIdentifier: "WillConvertTableViewCell")
+        
         let safeArea = self.view.safeAreaLayoutGuide
         self.willConvertTableView.translatesAutoresizingMaskIntoConstraints = false
         let constraints = [
@@ -98,17 +99,6 @@ class WillConvertViewController: UIViewController {
         NSLayoutConstraint.activate(constraints)
         
         self.tableViewConstraints = constraints
-    }
-
-    private func getFiles(_ directory: Directory) -> [AVAsset]? {
-        guard let urls = FileHelper().urls(for: directory) else { return nil }
-        var avAssests = [AVAsset]()
-        
-        for url in urls {
-            avAssests.append(AVAsset(url: url))
-        }
-        
-        return avAssests
     }
     
     private func editFileNameAlert(oldName: String, completion: @escaping (_ newName: String) -> Void) {
@@ -151,12 +141,12 @@ class WillConvertViewController: UIViewController {
 
 extension WillConvertViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return willConvertMedia.count
+        return self.assetManager.assets.count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "WillConvertTableViewCell") as? WillConvertTableViewCell else { return UITableViewCell() }
-        let file = willConvertMedia[indexPath.row] as! AVURLAsset
+        let file = self.assetManager.assets[indexPath.row] as! AVURLAsset
         cell.configure(image: nil, name: file.url.lastPathComponent, duration: file.duration.durationText)
         cell.setPlayButtonDelegate(self)
         cell.setMediaViewIndex(indexPath.row)
@@ -170,7 +160,7 @@ extension WillConvertViewController: UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let file = willConvertMedia[indexPath.row] as! AVURLAsset
+        let file = self.assetManager.assets[indexPath.row] as! AVURLAsset
         self.selectedCellIndex = indexPath
         convertView.isHidden = false
         convertView.configure(currentFormat: file.url.pathExtension, index: indexPath.row)
@@ -193,10 +183,6 @@ extension WillConvertViewController : UIPickerViewDelegate, UIPickerViewDataSour
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return pickerViewData[row]
     }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        print("select=\(row)")
-    }
 }
 
 extension WillConvertViewController: CustomHeaderViewDelegate {
@@ -214,30 +200,36 @@ extension WillConvertViewController: CustomHeaderViewDelegate {
 }
 
 extension WillConvertViewController: MediaViewDelegate {
-
-    func didTappedPlayButton(index: Int) {
+    
+    func didTappedPlayButton(selectedIndex: Int) {
         guard let svc = self.storyboard?.instantiateViewController(withIdentifier: "PlayerViewController") as? PlayerViewController else {
             return
         }
-        let asset = willConvertMedia[index] as! AVURLAsset
+        let asset = self.assetManager.assets[selectedIndex] as! AVURLAsset
         svc.setPlayer(url: asset.url)
         svc.modalPresentationStyle = .fullScreen
         self.present(svc, animated: true)
     }
     
-    func didTappedMediaShareButton() {
+    func didTappedMediaShareButton(selectedIndex: Int) {
         self.view.makeToastActivity(.center)
-        let asset = willConvertMedia[0] as! AVURLAsset
+        let asset = self.assetManager.assets[selectedIndex] as! AVURLAsset
         
         var shareObject = [Any]()
         shareObject.append(asset.url)
-        let activityViewController = UIActivityViewController(activityItems : shareObject, applicationActivities: nil)
+        
+        let actVC = UIActivityViewController(activityItems : shareObject, applicationActivities: nil)
+        actVC.popoverPresentationController?.sourceView = self.view
+        
         self.view.hideToastActivity()
-        activityViewController.popoverPresentationController?.sourceView = self.view
-        self.present(activityViewController, animated: true, completion: nil)
-        activityViewController.completionWithItemsHandler = {
-            (activityType: UIActivity.ActivityType?, completed: Bool,
-             arrayReturnedItems: [Any]?, error: Error?) in
+        self.present(actVC, animated: true, completion: nil)
+        
+        actVC.completionWithItemsHandler = {
+            (activityType: UIActivity.ActivityType?,
+             completed: Bool,
+             arrayReturnedItems: [Any]?,
+             error: Error?) in
+            
             if completed {
                 self.view.makeToast("공유 성공")
             } else {
@@ -251,7 +243,7 @@ extension WillConvertViewController: MediaViewDelegate {
 
 extension WillConvertViewController: ConvertViewDelegate {
     func didTappedConvertButton(_ convertView: ConvertView) {
-        let asset = willConvertMedia[convertView.index] as! AVURLAsset
+        let asset = self.assetManager.assets[convertView.index] as! AVURLAsset
         let pathExtensionIndex = self.convertView.didConvertedExtensionNamePickerView.selectedRow(inComponent: 0)
         let pathExtension = pickerViewData[pathExtensionIndex]
         let inputName = asset.url.deletingPathExtension().lastPathComponent
@@ -313,46 +305,52 @@ extension WillConvertViewController: ConvertViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let action = UIContextualAction(style: .normal, title: nil) { (action, view, completion) in
+        let action = UIContextualAction(style: .normal, title: nil) {
+            (action, view, completion) in
             
-            do {
-                //삭제하기
-                let asset = self.willConvertMedia[indexPath.row] as! AVURLAsset
-                try FileManager.default.removeItem(at: asset.url)
-                self.willConvertMedia.remove(at: indexPath.row)
-                
-            } catch let e {
-                //에러처리
-                print(e.localizedDescription)
-            }
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-            completion(true)
-        }
-        
-        let fileNameEditAction = UIContextualAction(style: .normal, title: nil) { [self] (action, view, completion) in
-            
-            //수정하기
-            let asset = self.willConvertMedia[indexPath.row] as! AVURLAsset
-            editFileNameAlert(oldName: asset.url.deletingPathExtension().lastPathComponent, completion: { newName in
-                
-                let newFileName = newName + "." + asset.url.pathExtension
-                let newPath = asset.url.deletingLastPathComponent().appendingPathComponent(newFileName)
-                willConvertMedia[indexPath.row] = AVAsset(url: newPath)
-                tableView.reloadRows(at: [indexPath], with: .automatic)
-                do {
-                    try FileManager.default.moveItem(at: asset.url, to: newPath)
-                } catch let e {
-                    //파일명 수정 에러처리
-                    let alert = UIAlertController(title: "파일명 수정", message: "파일명 변경 실패", preferredStyle: .alert)
+            //삭제하기
+            self.assetManager.removeAsset(at: indexPath.row, completion: {
+                result in
+                if result {
+                    tableView.deleteRows(at: [indexPath], with: .automatic)
+                    completion(true)
+                } else {
+                    let alert = UIAlertController(title: "파일 삭제",
+                                                  message: "파일을 삭제할 수 없습니다.",
+                                                  preferredStyle: .alert)
+
                     let ok = UIAlertAction(title: "OK", style: .default)
                     
                     alert.addAction(ok)
                     self.present(alert, animated: true, completion: nil)
-                    assertionFailure(e.localizedDescription)
                 }
             })
-
-            completion(true)
+        }
+        
+        let fileNameEditAction = UIContextualAction(style: .normal, title: nil) { [self]
+            (action, view, completion) in
+            
+            //수정하기
+            let asset = self.assetManager.assets[indexPath.row] as! AVURLAsset
+            let oldName = asset.url.deletingPathExtension().lastPathComponent
+            editFileNameAlert(oldName: oldName, completion: { newName in
+                self.assetManager.editAsset(at: indexPath.row, name: newName, completion: {
+                    result in
+                    
+                    if result {
+                        tableView.reloadRows(at: [indexPath], with: .automatic)
+                        completion(true)
+                    } else {
+                        let alert = UIAlertController(title: "파일명 수정",
+                                                      message: "파일명 변경 실패",
+                                                      preferredStyle: .alert)
+                        let ok = UIAlertAction(title: "OK", style: .default)
+                        
+                        alert.addAction(ok)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                })
+            })
         }
         
         action.backgroundColor = .red
@@ -361,6 +359,7 @@ extension WillConvertViewController: ConvertViewDelegate {
         
         let configuration = UISwipeActionsConfiguration(actions: [action, fileNameEditAction])
         configuration.performsFirstActionWithFullSwipe = false
+        
         return configuration
     }
 }
@@ -379,9 +378,7 @@ extension WillConvertViewController: VideoSaveCompletionDelegate {
     
     func endSave() {
         self.view.hideToast(self.videoSaveToast)
-        if let files = getFiles(.willConvert) {
-            willConvertMedia = files
-            self.willConvertTableView.reloadData()
-        }
+        self.assetManager.reloadAssets()
+        self.willConvertTableView.reloadData()
     }
 }

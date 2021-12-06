@@ -9,33 +9,27 @@ import UIKit
 
 class DidConvertedTableViewController: UIViewController {
 
-    var didConvertMedia = [AVAsset]()
+    private var assetManager: AssetManager!
     @IBOutlet weak var didConvertedTableView: UITableView!
-    private var headerView = HeaderView()
+    private var headerView: HeaderView!
     private var alert: UIAlertController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        didConvertedTableView.dataSource = self
-        didConvertedTableView.delegate = self
-        didConvertedTableView.register(WillConvertTableViewCell.self, forCellReuseIdentifier: "WillConvertTableViewCell")
-        
+        self.assetManager = AssetManager(directoryPath: .didConverted)
         setHeaderView()
-        setTableViewConstraints()
+        setTableView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        self.didConvertMedia.removeAll()
-        if let files = getFiles(.didConverted) {
-            didConvertMedia = files
-        }
-        self.didConvertedTableView.reloadData()
+        self.assetManager.reloadAssets()
     }
     
     private func setHeaderView() {
-        self.headerView.translatesAutoresizingMaskIntoConstraints = false
+        self.headerView = HeaderView()
         self.headerView.configure(title: "Audio List")
+        self.headerView.translatesAutoresizingMaskIntoConstraints = false
         
         self.view.addSubview(headerView)
         let safeArea = self.view.safeAreaLayoutGuide
@@ -47,9 +41,13 @@ class DidConvertedTableViewController: UIViewController {
         ])
     }
     
-    private func setTableViewConstraints() {
-        let safeArea = self.view.safeAreaLayoutGuide
+    private func setTableView() {
+        self.didConvertedTableView.dataSource = self
+        self.didConvertedTableView.delegate = self
+        self.didConvertedTableView.register(WillConvertTableViewCell.self, forCellReuseIdentifier: "WillConvertTableViewCell")
         self.didConvertedTableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let safeArea = self.view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             self.didConvertedTableView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor),
             self.didConvertedTableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
@@ -59,20 +57,19 @@ class DidConvertedTableViewController: UIViewController {
     }
     
     private func editFileNameAlert(oldName: String, completion: @escaping (_ newName: String) -> Void) {
-        alert = UIAlertController(title: "파일명 수정", message: "파일명을 입력하세요.", preferredStyle: .alert)
+        alert = UIAlertController(title: "파일명 수정",
+                                  message: "파일명을 입력하세요.",
+                                  preferredStyle: .alert)
 
         let ok = UIAlertAction(title: "OK", style: .default) { [self] (ok) in
             let text = alert!.textFields?.first?.text
             if let text = text {
-             
                 completion(text)
             }
         }
 
-        let cancel = UIAlertAction(title: "cancel", style: .cancel) { (cancel) in
-
-        }
-
+        let cancel = UIAlertAction(title: "cancel", style: .cancel)
+        
         alert!.addAction(cancel)
         alert!.addAction(ok)
         alert!.addTextField { [self] textField in
@@ -112,12 +109,12 @@ class DidConvertedTableViewController: UIViewController {
 
 extension DidConvertedTableViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return didConvertMedia.count
+        return self.assetManager.assets.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "WillConvertTableViewCell") as? WillConvertTableViewCell else { return UITableViewCell() }
-        let file = didConvertMedia[indexPath.row] as! AVURLAsset
+        let file = self.assetManager.assets[indexPath.row] as! AVURLAsset
         cell.configure(image: nil, name: file.url.lastPathComponent, duration: file.duration.durationText)
         cell.setPlayButtonDelegate(self)
         cell.setMediaViewIndex(indexPath.row)
@@ -131,42 +128,51 @@ extension DidConvertedTableViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let action = UIContextualAction(style: .normal, title: nil) { (action, view, completion) in
-            
-            do {
-                //삭제하기
-                let asset = self.didConvertMedia[indexPath.row] as! AVURLAsset
-                try FileManager.default.removeItem(at: asset.url)
-                self.didConvertMedia.remove(at: indexPath.row)
-                
-            } catch let e {
-                //에러처리
-                print(e.localizedDescription)
-            }
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-            completion(true)
+
+        let action = UIContextualAction(style: .normal, title: nil) {
+            (action, view, completion) in
+            //삭제하기
+            self.assetManager.removeAsset(at: indexPath.row, completion: {
+                result in
+                if result {
+                    tableView.deleteRows(at: [indexPath], with: .automatic)
+                    completion(true)
+                } else {
+                    let alert = UIAlertController(title: "파일 삭제",
+                                                  message: "파일을 삭제할 수 없습니다.",
+                                                  preferredStyle: .alert)
+                    let ok = UIAlertAction(title: "OK", style: .default)
+                    
+                    alert.addAction(ok)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            })
         }
+        
         let fileNameEditAction = UIContextualAction(style: .normal, title: nil) { [self] (action, view, completion) in
             
             //수정하기
-            let asset = self.didConvertMedia[indexPath.row] as! AVURLAsset
-            editFileNameAlert(oldName: asset.url.deletingPathExtension().lastPathComponent, completion: { newName in
-                
-                let newFileName = newName + "." + asset.url.pathExtension
-                let newPath = asset.url.deletingLastPathComponent().appendingPathComponent(newFileName)
-                didConvertMedia[indexPath.row] = AVAsset(url: newPath)
-                tableView.reloadRows(at: [indexPath], with: .automatic)
-                do {
-                    try FileManager.default.moveItem(at: asset.url, to: newPath)
-                } catch let e {
-                    //에러처리
-                    print(e.localizedDescription)
-                }
+            let asset = self.assetManager.assets[indexPath.row] as! AVURLAsset
+            let oldName = asset.url.deletingPathExtension().lastPathComponent
+            editFileNameAlert(oldName: oldName, completion: { newName in
+                self.assetManager.editAsset(at: indexPath.row, name: newName, completion: {
+                    result in
+                    
+                    if result {
+                        tableView.reloadRows(at: [indexPath], with: .automatic)
+                        completion(true)
+                    } else {
+                        let alert = UIAlertController(title: "파일명 수정",
+                                                      message: "파일명 변경 실패",
+                                                      preferredStyle: .alert)
+                        let ok = UIAlertAction(title: "OK", style: .default)
+                        
+                        alert.addAction(ok)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                })
             })
-
-            completion(true)
         }
-        
         
         action.backgroundColor = .red
         action.image = UIImage(systemName: "trash")
@@ -174,35 +180,42 @@ extension DidConvertedTableViewController: UITableViewDelegate {
         
         let configuration = UISwipeActionsConfiguration(actions: [action, fileNameEditAction])
         configuration.performsFirstActionWithFullSwipe = false
+        
         return configuration
     }
 }
 
 extension DidConvertedTableViewController: MediaViewDelegate {
 
-    func didTappedPlayButton(index: Int) {
+    func didTappedPlayButton(selectedIndex: Int) {
         guard let svc = self.storyboard?.instantiateViewController(withIdentifier: "PlayerViewController") as? PlayerViewController else {
             return
         }
-        let asset = didConvertMedia[index] as! AVURLAsset
+        let asset = self.assetManager.assets[selectedIndex] as! AVURLAsset
         svc.setPlayer(url: asset.url)
         svc.modalPresentationStyle = .fullScreen
         self.present(svc, animated: true)
     }
     
-    func didTappedMediaShareButton() {
+    func didTappedMediaShareButton(selectedIndex: Int) {
         self.view.makeToastActivity(.center)
-        let asset = didConvertMedia[0] as! AVURLAsset
+        let asset = self.assetManager.assets[selectedIndex] as! AVURLAsset
         
         var shareObject = [Any]()
         shareObject.append(asset.url)
-        let activityViewController = UIActivityViewController(activityItems : shareObject, applicationActivities: nil)
+        
+        let actVC = UIActivityViewController(activityItems : shareObject, applicationActivities: nil)
+        actVC.popoverPresentationController?.sourceView = self.view
+        
         self.view.hideToastActivity()
-        activityViewController.popoverPresentationController?.sourceView = self.view
-        self.present(activityViewController, animated: true, completion: nil)
-        activityViewController.completionWithItemsHandler = {
-            (activityType: UIActivity.ActivityType?, completed: Bool,
-             arrayReturnedItems: [Any]?, error: Error?) in
+        self.present(actVC, animated: true, completion: nil)
+        
+        actVC.completionWithItemsHandler = {
+            (activityType: UIActivity.ActivityType?,
+             completed: Bool,
+             arrayReturnedItems: [Any]?,
+             error: Error?) in
+            
             if completed {
                 self.view.makeToast("공유 성공")
             } else {
