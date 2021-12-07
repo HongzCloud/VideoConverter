@@ -206,9 +206,22 @@ extension WillConvertViewController: MediaViewDelegate {
             return
         }
         let asset = self.assetManager.assets[selectedIndex] as! AVURLAsset
-        svc.setPlayer(url: asset.url)
-        svc.modalPresentationStyle = .fullScreen
-        self.present(svc, animated: true)
+        if asset.isPlayable {
+            svc.setPlayer(url: asset.url)
+            svc.modalPresentationStyle = .fullScreen
+            self.present(svc, animated: true)
+        } else {
+            var style = ToastStyle()
+            style.messageColor = .mint!
+            
+            self.view.makeToast("재생할 수 없는 파일입니다",
+                                duration: 2,
+                                point: CGPoint(x: self.view.center.x, y: self.view.center.y * 3/2),
+                                title: nil,
+                                image: nil,
+                                style: style,
+                                completion: nil)
+        }
     }
     
     func didTappedMediaShareButton(selectedIndex: Int) {
