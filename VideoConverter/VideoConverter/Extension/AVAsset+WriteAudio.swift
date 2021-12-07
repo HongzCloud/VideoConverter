@@ -9,7 +9,7 @@ import Foundation
 import Photos
 
 extension AVAsset {
-    func writeAudio(output: URL, format: FileFormat, sampleRate: SampleRate, bitRate: BitRate?, bitDepth: BitPerChannel?, completion: @escaping () -> Void) {
+    func writeAudio(output: URL, format: FileFormat, sampleRate: SampleRate, bitRate: BitRate?, bitDepth: BitPerChannel?, completion: @escaping (Bool) -> Void) {
  
         let assetConverter = AudioConverter(asset: self)
         switch format {
@@ -26,7 +26,7 @@ extension AVAsset {
             assetConverter.convert(output: tempOutput,
                                    outputType: outputType,
                                    outputSettins: tempSetting,
-                                   completion: {
+                                   completion: { result in
                 //wav -> mp3
                 let asset = AVAsset(url: tempOutput)
                 AudioConverter(asset: asset).convertMP3(output: output,

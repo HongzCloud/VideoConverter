@@ -22,7 +22,7 @@ final class AudioConverter {
     }
     
     //video -> wav, caf, m4a
-    func convert(output: URL, outputType: AVFileType,  outputSettins: [String : Any], completion: (() -> Void)?) {
+    func convert(output: URL, outputType: AVFileType,  outputSettins: [String : Any], completion: @escaping (Bool) -> Void) {
         let convertAudioQueueLabel = "convertAudioQueue"
         let convertAudioQueue = DispatchQueue(label: convertAudioQueueLabel)
         
@@ -45,6 +45,7 @@ final class AudioConverter {
                 success = self.startAssetReaderAndWriter(dispatchQueue: convertAudioQueue, completion: completion)
                 return
             } else {
+                completion(false)
                 print("Failed to start Asset Reader and Writer")
             }
             
@@ -59,7 +60,7 @@ final class AudioConverter {
         sample: SampleRate,
         bitRate: BitRate,
         onProgress: ((Float) -> (Void))? = nil,
-        onComplete: (() -> (Void))? = nil
+        onComplete: @escaping (Bool) -> Void
     ) -> Bool {
         let avUrlAsset = asset as! AVURLAsset
         let pcmFile: UnsafeMutablePointer<FILE>
@@ -128,9 +129,7 @@ final class AudioConverter {
             mp3buffer.deallocate()
             
             DispatchQueue.main.sync {
-                if let onComplete = onComplete {
-                    onComplete()
-                }
+                onComplete(true)
             }
         }
         
@@ -203,7 +202,7 @@ final class AudioConverter {
         return true
     }
     
-    private func startAssetReaderAndWriter(dispatchQueue: DispatchQueue, completion: (() -> Void)?) -> Bool {
+    private func startAssetReaderAndWriter(dispatchQueue: DispatchQueue, completion: ((Bool) -> Void)?) -> Bool {
         print("Writing Asset...")
         assetWriter.startWriting()
         assetReader.startReading()
@@ -220,7 +219,7 @@ final class AudioConverter {
                     self.assetWriterAudioInput.markAsFinished()
                     self.assetReader.cancelReading()
                     self.assetWriter.finishWriting {
-                        completion?()
+                        completion?(true)
                         print("Complete Writing Asset")
                     }
                     break

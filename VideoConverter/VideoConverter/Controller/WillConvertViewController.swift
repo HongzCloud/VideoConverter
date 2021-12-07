@@ -255,20 +255,32 @@ extension WillConvertViewController: ConvertViewDelegate {
         
         convertView.startConvertAnimation()
         
-        asset.writeAudio(output: output, format: format, sampleRate: .m44k, bitRate: .m320k, bitDepth: .m16, completion: {
+        asset.writeAudio(output: output, format: format, sampleRate: .m44k, bitRate: .m320k, bitDepth: .m16, completion: { result in
             DispatchQueue.main.async {
-                self.willConvertTableView.reloadData()
-                convertView.endConvertAnimation()
-                
                 var style = ToastStyle()
                 style.messageColor = .mint!
-                self.view.makeToast("변환 완료",
-                                    duration: 2,
-                                    point: CGPoint(x: self.view.center.x, y: self.view.center.y * 3/2),
-                                    title: nil,
-                                    image: nil,
-                                    style: style,
-                                    completion: nil)
+                let point = CGPoint(x: self.view.center.x, y: self.view.center.y * 3/2)
+                
+                if result {
+                    self.willConvertTableView.reloadData()
+                    convertView.endConvertAnimation()
+                    
+                    self.view.makeToast("변환 완료",
+                                        duration: 2,
+                                        point: point,
+                                        title: nil,
+                                        image: nil,
+                                        style: style,
+                                        completion: nil)
+                } else {
+                    self.view.makeToast("변환이 불가능한 파일입니다.",
+                                        duration: 2,
+                                        point: point,
+                                        title: nil,
+                                        image: nil,
+                                        style: style,
+                                        completion: nil)
+                }
             }
         })
     }
