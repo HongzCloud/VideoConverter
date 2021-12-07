@@ -16,7 +16,7 @@ class WillConvertViewController: UIViewController {
     @IBOutlet weak var willConvertTableView: UITableView!
     private var convertView: ConvertView!
     private var headerView: HeaderView!
-    private var pickerViewData: [String]!
+    private var pickerViewData: [FileFormat]!
     private var tableViewConstraints: [NSLayoutConstraint]? = nil
     private var selectedCellIndex: IndexPath?
     private var videoSaveToast: UIView!
@@ -25,7 +25,7 @@ class WillConvertViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.assetManager = AssetManager(directoryPath: .willConvert)
-        self.pickerViewData = FileFormat.allCases.map{ $0.text }
+        self.pickerViewData = FileFormat.allCases.map{ $0}
         setHeaderView()
         setConvertView()
         setTableView()
@@ -181,7 +181,7 @@ extension WillConvertViewController : UIPickerViewDelegate, UIPickerViewDataSour
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return pickerViewData[row]
+        return pickerViewData[row].text
     }
 }
 
@@ -244,15 +244,18 @@ extension WillConvertViewController: MediaViewDelegate {
 extension WillConvertViewController: ConvertViewDelegate {
     func didTappedConvertButton(_ convertView: ConvertView) {
         let asset = self.assetManager.assets[convertView.index] as! AVURLAsset
+        
+        
         let pathExtensionIndex = self.convertView.didConvertedExtensionNamePickerView.selectedRow(inComponent: 0)
-        let pathExtension = pickerViewData[pathExtensionIndex]
+        let pathExtension = pickerViewData[pathExtensionIndex].text
+        let format = pickerViewData[pathExtensionIndex]
         let inputName = asset.url.deletingPathExtension().lastPathComponent
         let outputStr = inputName + "." + pathExtension
         let output = FileHelper().createFileURL(outputStr, in: .didConverted)
-        let fileFormats = FileFormat.allCases
+        
         convertView.startConvertAnimation()
         
-        convert(asset: asset, output: output, fileFormat: fileFormats[pathExtensionIndex], completion: {
+        asset.writeAudio(output: output, format: format, sampleRate: .m44k, bitRate: .m320k, bitDepth: .m16, completion: {
             DispatchQueue.main.async {
                 self.willConvertTableView.reloadData()
                 convertView.endConvertAnimation()
@@ -268,40 +271,6 @@ extension WillConvertViewController: ConvertViewDelegate {
                                     completion: nil)
             }
         })
-    }
-    
-    func convert(asset: AVAsset, output: URL, fileFormat: FileFormat, completion: @escaping () -> Void) {
-
-        switch fileFormat {
-        case .wav:
-            asset.writeAudio(output: output,
-                             format: fileFormat,
-                             sampleRate: .m44k,
-                             bitRate: nil,
-                             bitDepth: .m32,
-                             completion: completion)
-        case .mp3:
-            asset.writeAudio(output: output,
-                             format: fileFormat,
-                             sampleRate: .m44k,
-                             bitRate: .m192k,
-                             bitDepth: nil,
-                             completion: completion)
-        case .m4a:
-            asset.writeAudio(output: output,
-                             format: fileFormat,
-                             sampleRate: .m44k,
-                             bitRate: .m192k,
-                             bitDepth: nil,
-                             completion: completion)
-        case .caf:
-            asset.writeAudio(output: output,
-                             format: fileFormat,
-                             sampleRate: .m44k,
-                             bitRate: .m192k,
-                             bitDepth: nil,
-                             completion: completion)
-        }
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {

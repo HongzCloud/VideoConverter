@@ -40,7 +40,7 @@ final class FileHelper {
         }
         
         var fileInfo = name.split(separator: ".")
-        let directoryURL = directoryType == .didConverted ? outputDirectoryURL : inputDirectoryURL
+        let directoryURL = directoryType.rawValue
         var num = 0
         
         func isExistFile(atPath: String) -> Bool {

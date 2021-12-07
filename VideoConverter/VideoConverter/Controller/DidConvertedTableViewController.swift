@@ -24,6 +24,7 @@ class DidConvertedTableViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         self.assetManager.reloadAssets()
+        self.didConvertedTableView.reloadData()
     }
     
     private func setHeaderView() {

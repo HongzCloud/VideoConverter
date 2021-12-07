@@ -148,8 +148,6 @@ final class AudioConverter {
         case .mp3:
             //video -> wav -> lame(encoder) mp3
             return AVFileType.wav
-        default:
-            return AVFileType.m4a
         }
     }
     
@@ -164,13 +162,13 @@ final class AudioConverter {
         outputSettings[AVSampleRateKey] = sampleRate.rawValue
         outputSettings[AVNumberOfChannelsKey] = 2
         outputSettings[AVChannelLayoutKey] = NSData(bytes:&channelLayout, length:MemoryLayout<AudioChannelLayout>.size)
-        if let bitDepth = bitDepth {
+        if let bitDepth = bitDepth, format == .caf || format == .wav {
             outputSettings[AVLinearPCMIsBigEndianKey] = false
             outputSettings[AVLinearPCMIsFloatKey] = false
             outputSettings[AVLinearPCMIsNonInterleaved] = false
             outputSettings[AVLinearPCMBitDepthKey] = bitDepth.rawValue
         }
-        if let bitRate = bitRate {
+        if let bitRate = bitRate, format == .mp3 || format == .m4a {
             outputSettings[AVEncoderBitRateKey] = bitRate.rawValue
         }
         

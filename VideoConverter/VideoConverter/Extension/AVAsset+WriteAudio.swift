@@ -21,6 +21,8 @@ extension AVAsset {
                                                            bitRate: nil,
                                                            bitDepth: .m16)
             let outputType = assetConverter.fileFormatToFileType(fileFormat: .mp3)
+            print(tempOutput)
+            print(FileManager.default.temporaryDirectory)
             assetConverter.convert(output: tempOutput,
                                    outputType: outputType,
                                    outputSettins: tempSetting,
