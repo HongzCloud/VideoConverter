@@ -11,7 +11,7 @@
 		1E022E9D273FD62F006B51DF /* WillConvertTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E022E9B273FD62F006B51DF /* WillConvertTableViewCell.swift */; };
 		1E022EA0273FE18E006B51DF /* MediaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E022E9F273FE18E006B51DF /* MediaView.swift */; };
 		1E022EA32741838B006B51DF /* CMTime+TimeToString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E022EA22741838B006B51DF /* CMTime+TimeToString.swift */; };
-		1E022EA827422522006B51DF /* DidConvertedTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E022EA727422522006B51DF /* DidConvertedTableViewController.swift */; };
+		1E022EA827422522006B51DF /* DidConvertedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E022EA727422522006B51DF /* DidConvertedViewController.swift */; };
 		1E022EAA27422DB3006B51DF /* ConvertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E022EA927422DB3006B51DF /* ConvertView.swift */; };
 		1E17D3EF2748E8BE00027A82 /* TimeInterval+ToString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E17D3EE2748E8BE00027A82 /* TimeInterval+ToString.swift */; };
 		1E17D3F12748EF8000027A82 /* PHAsset+Thumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E17D3F02748EF8000027A82 /* PHAsset+Thumbnail.swift */; };
@@ -19,12 +19,17 @@
 		1E17D3F7274A295B00027A82 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E17D3F6274A295B00027A82 /* PlayerView.swift */; };
 		1E17D3F9274A98FD00027A82 /* PlayerControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E17D3F8274A98FD00027A82 /* PlayerControlView.swift */; };
 		1E2B406F2729CE6E006E1FEB /* sampleWAV.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1E2B406E2729CE6D006E1FEB /* sampleWAV.wav */; };
+		1E541E6A275FB1200078A519 /* WillConvertCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E541E69275FB1200078A519 /* WillConvertCoordinator.swift */; };
+		1E541E6E275FC0FD0078A519 /* AppFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E541E6D275FC0FD0078A519 /* AppFlowCoordinator.swift */; };
+		1E541E70276080EC0078A519 /* AppDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E541E6F276080EC0078A519 /* AppDIContainer.swift */; };
+		1E541E732760B9840078A519 /* MainTabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E541E722760B9840078A519 /* MainTabBarCoordinator.swift */; };
+		1E541E7527632DDC0078A519 /* DidConvertedCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E541E7427632DDB0078A519 /* DidConvertedCoordinator.swift */; };
 		1E9B0C252743982200150ABD /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9B0C242743982200150ABD /* HeaderView.swift */; };
 		1E9B0C292745150600150ABD /* VideoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9B0C282745150600150ABD /* VideoListViewController.swift */; };
 		1E9B0C2B274757B700150ABD /* VideoListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9B0C2A274757B700150ABD /* VideoListCollectionViewCell.swift */; };
 		1E9F2E4A274CE879006E4FB0 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1E9F2E49274CE879006E4FB0 /* Settings.bundle */; };
 		1E9F2E5F27525C47006E4FB0 /* UIColor+AssetsColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9F2E5E27525C47006E4FB0 /* UIColor+AssetsColor.swift */; };
-		1E9F2E61275267EE006E4FB0 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9F2E60275267EE006E4FB0 /* CustomTabBarController.swift */; };
+		1E9F2E61275267EE006E4FB0 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9F2E60275267EE006E4FB0 /* MainTabBarController.swift */; };
 		1E9F2E632752983D006E4FB0 /* 43229-reverse-arrows.json in Resources */ = {isa = PBXBuildFile; fileRef = 1E9F2E622752983C006E4FB0 /* 43229-reverse-arrows.json */; };
 		1E9F2E7D275CDDEB006E4FB0 /* AssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9F2E7C275CDDEB006E4FB0 /* AssetManager.swift */; };
 		1EA1EEDD2721B85800C22C2C /* AudioConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA1EEDC2721B85800C22C2C /* AudioConverter.swift */; };
@@ -76,7 +81,7 @@
 		1E022E9B273FD62F006B51DF /* WillConvertTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WillConvertTableViewCell.swift; sourceTree = "<group>"; };
 		1E022E9F273FE18E006B51DF /* MediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaView.swift; sourceTree = "<group>"; };
 		1E022EA22741838B006B51DF /* CMTime+TimeToString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMTime+TimeToString.swift"; sourceTree = "<group>"; };
-		1E022EA727422522006B51DF /* DidConvertedTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DidConvertedTableViewController.swift; sourceTree = "<group>"; };
+		1E022EA727422522006B51DF /* DidConvertedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DidConvertedViewController.swift; sourceTree = "<group>"; };
 		1E022EA927422DB3006B51DF /* ConvertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertView.swift; sourceTree = "<group>"; };
 		1E17D3EE2748E8BE00027A82 /* TimeInterval+ToString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+ToString.swift"; sourceTree = "<group>"; };
 		1E17D3F02748EF8000027A82 /* PHAsset+Thumbnail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PHAsset+Thumbnail.swift"; sourceTree = "<group>"; };
@@ -84,12 +89,17 @@
 		1E17D3F6274A295B00027A82 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		1E17D3F8274A98FD00027A82 /* PlayerControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerControlView.swift; sourceTree = "<group>"; };
 		1E2B406E2729CE6D006E1FEB /* sampleWAV.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = sampleWAV.wav; path = ../../../../Downloads/sampleWAV.wav; sourceTree = "<group>"; };
+		1E541E69275FB1200078A519 /* WillConvertCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WillConvertCoordinator.swift; sourceTree = "<group>"; };
+		1E541E6D275FC0FD0078A519 /* AppFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlowCoordinator.swift; sourceTree = "<group>"; };
+		1E541E6F276080EC0078A519 /* AppDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDIContainer.swift; sourceTree = "<group>"; };
+		1E541E722760B9840078A519 /* MainTabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarCoordinator.swift; sourceTree = "<group>"; };
+		1E541E7427632DDB0078A519 /* DidConvertedCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DidConvertedCoordinator.swift; sourceTree = "<group>"; };
 		1E9B0C242743982200150ABD /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		1E9B0C282745150600150ABD /* VideoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListViewController.swift; sourceTree = "<group>"; };
 		1E9B0C2A274757B700150ABD /* VideoListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListCollectionViewCell.swift; sourceTree = "<group>"; };
 		1E9F2E49274CE879006E4FB0 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		1E9F2E5E27525C47006E4FB0 /* UIColor+AssetsColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+AssetsColor.swift"; sourceTree = "<group>"; };
-		1E9F2E60275267EE006E4FB0 /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
+		1E9F2E60275267EE006E4FB0 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		1E9F2E622752983C006E4FB0 /* 43229-reverse-arrows.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "43229-reverse-arrows.json"; path = "../../../../Downloads/43229-reverse-arrows.json"; sourceTree = "<group>"; };
 		1E9F2E7C275CDDEB006E4FB0 /* AssetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetManager.swift; sourceTree = "<group>"; };
 		1EA1EEDC2721B85800C22C2C /* AudioConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioConverter.swift; sourceTree = "<group>"; };
@@ -186,12 +196,39 @@
 			isa = PBXGroup;
 			children = (
 				1EC8590027204044005A1F3B /* WillConvertViewController.swift */,
-				1E022EA727422522006B51DF /* DidConvertedTableViewController.swift */,
+				1E022EA727422522006B51DF /* DidConvertedViewController.swift */,
 				1E9B0C282745150600150ABD /* VideoListViewController.swift */,
 				1E17D3F4274A237200027A82 /* PlayerViewController.swift */,
-				1E9F2E60275267EE006E4FB0 /* CustomTabBarController.swift */,
+				1E9F2E60275267EE006E4FB0 /* MainTabBarController.swift */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		1E541E68275FB0DA0078A519 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				1E541E7627633DF90078A519 /* TabBar */,
+				1E541E6D275FC0FD0078A519 /* AppFlowCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		1E541E71276081030078A519 /* DIContainer */ = {
+			isa = PBXGroup;
+			children = (
+				1E541E6F276080EC0078A519 /* AppDIContainer.swift */,
+			);
+			path = DIContainer;
+			sourceTree = "<group>";
+		};
+		1E541E7627633DF90078A519 /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				1E541E722760B9840078A519 /* MainTabBarCoordinator.swift */,
+				1E541E69275FB1200078A519 /* WillConvertCoordinator.swift */,
+				1E541E7427632DDB0078A519 /* DidConvertedCoordinator.swift */,
+			);
+			path = TabBar;
 			sourceTree = "<group>";
 		};
 		1EC858F027204043005A1F3B = {
@@ -219,6 +256,8 @@
 		1EC858FB27204044005A1F3B /* VideoConverter */ = {
 			isa = PBXGroup;
 			children = (
+				1E541E71276081030078A519 /* DIContainer */,
+				1E541E68275FB0DA0078A519 /* Coordinator */,
 				1EC8592E27207419005A1F3B /* Model */,
 				1E022E98273FD45D006B51DF /* View */,
 				1E022EA427422473006B51DF /* Controller */,
@@ -549,21 +588,26 @@
 				1EA1EEDD2721B85800C22C2C /* AudioConverter.swift in Sources */,
 				1E17D3F5274A237200027A82 /* PlayerViewController.swift in Sources */,
 				1E9B0C2B274757B700150ABD /* VideoListCollectionViewCell.swift in Sources */,
+				1E541E7527632DDC0078A519 /* DidConvertedCoordinator.swift in Sources */,
 				1E17D3F12748EF8000027A82 /* PHAsset+Thumbnail.swift in Sources */,
-				1E022EA827422522006B51DF /* DidConvertedTableViewController.swift in Sources */,
+				1E541E70276080EC0078A519 /* AppDIContainer.swift in Sources */,
+				1E022EA827422522006B51DF /* DidConvertedViewController.swift in Sources */,
 				1EC858FD27204044005A1F3B /* AppDelegate.swift in Sources */,
 				1E022EA32741838B006B51DF /* CMTime+TimeToString.swift in Sources */,
 				1E17D3F9274A98FD00027A82 /* PlayerControlView.swift in Sources */,
 				1E022E9D273FD62F006B51DF /* WillConvertTableViewCell.swift in Sources */,
 				1E022EAA27422DB3006B51DF /* ConvertView.swift in Sources */,
+				1E541E6E275FC0FD0078A519 /* AppFlowCoordinator.swift in Sources */,
 				1EC858FF27204044005A1F3B /* SceneDelegate.swift in Sources */,
 				1E9F2E7D275CDDEB006E4FB0 /* AssetManager.swift in Sources */,
 				1EA1EEE12723095F00C22C2C /* FileHelper.swift in Sources */,
-				1E9F2E61275267EE006E4FB0 /* CustomTabBarController.swift in Sources */,
+				1E9F2E61275267EE006E4FB0 /* MainTabBarController.swift in Sources */,
 				1E9B0C252743982200150ABD /* HeaderView.swift in Sources */,
 				1E022EA0273FE18E006B51DF /* MediaView.swift in Sources */,
 				1E17D3F7274A295B00027A82 /* PlayerView.swift in Sources */,
+				1E541E732760B9840078A519 /* MainTabBarCoordinator.swift in Sources */,
 				1E9F2E5F27525C47006E4FB0 /* UIColor+AssetsColor.swift in Sources */,
+				1E541E6A275FB1200078A519 /* WillConvertCoordinator.swift in Sources */,
 				1E17D3EF2748E8BE00027A82 /* TimeInterval+ToString.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

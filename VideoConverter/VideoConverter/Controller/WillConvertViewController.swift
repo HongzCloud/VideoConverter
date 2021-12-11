@@ -22,6 +22,8 @@ class WillConvertViewController: UIViewController {
     private var videoSaveToast: UIView!
     private var alert: UIAlertController?
     
+    private var coordinator: WillConvertCoordinator?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.assetManager = AssetManager(directoryPath: .willConvert)
@@ -34,8 +36,22 @@ class WillConvertViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         self.assetManager.reloadAssets()
+        self.willConvertTableView.reloadData()
+    }
+    
+    static func create(with assetManager: AssetManager) -> WillConvertViewController {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let vc = storyboard.instantiateViewController(withIdentifier: "WillConvertViewController") as? WillConvertViewController else {
+            return WillConvertViewController()
+        }
+        vc.assetManager = assetManager
+        return vc
     }
 
+    func coordinate(to coordinator: WillConvertCoordinator) {
+        self.coordinator = coordinator
+    }
+    
     private func newTableViewConstraints() -> [NSLayoutConstraint] {
         self.willConvertTableView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -137,6 +153,11 @@ class WillConvertViewController: UIViewController {
        }
        return false
    }
+    
+    func refresh() {
+        self.assetManager.reloadAssets()
+        self.willConvertTableView.reloadData()
+    }
 }
 
 extension WillConvertViewController: UITableViewDataSource {
@@ -188,28 +209,18 @@ extension WillConvertViewController : UIPickerViewDelegate, UIPickerViewDataSour
 extension WillConvertViewController: CustomHeaderViewDelegate {
 
     func didTappedPhotoLibraryButton() {
-        guard let svc = self.storyboard?.instantiateViewController(withIdentifier: "VideoListViewController") as? VideoListViewController else {
-            return
-        }
-        
-        svc.delegate = self
-      
-        svc.modalPresentationStyle = .fullScreen
-        self.present(svc, animated: true)
+        coordinator?.presentVideoListViewController()
     }
 }
 
 extension WillConvertViewController: MediaViewDelegate {
     
     func didTappedPlayButton(selectedIndex: Int) {
-        guard let svc = self.storyboard?.instantiateViewController(withIdentifier: "PlayerViewController") as? PlayerViewController else {
-            return
-        }
+
         let asset = self.assetManager.assets[selectedIndex] as! AVURLAsset
+        
         if asset.isPlayable {
-            svc.setPlayer(url: asset.url)
-            svc.modalPresentationStyle = .fullScreen
-            self.present(svc, animated: true)
+            coordinator?.presentPlayerViewController(url: asset.url)
         } else {
             var style = ToastStyle()
             style.messageColor = .mint!
@@ -225,32 +236,8 @@ extension WillConvertViewController: MediaViewDelegate {
     }
     
     func didTappedMediaShareButton(selectedIndex: Int) {
-        self.view.makeToastActivity(.center)
         let asset = self.assetManager.assets[selectedIndex] as! AVURLAsset
-        
-        var shareObject = [Any]()
-        shareObject.append(asset.url)
-        
-        let actVC = UIActivityViewController(activityItems : shareObject, applicationActivities: nil)
-        actVC.popoverPresentationController?.sourceView = self.view
-        
-        self.view.hideToastActivity()
-        self.present(actVC, animated: true, completion: nil)
-        
-        actVC.completionWithItemsHandler = {
-            (activityType: UIActivity.ActivityType?,
-             completed: Bool,
-             arrayReturnedItems: [Any]?,
-             error: Error?) in
-            
-            if completed {
-                self.view.makeToast("공유 성공")
-            } else {
-                if error != nil {
-                    self.view.makeToast("공유 실패")
-                }
-            }
-            if let shareError = error { print(shareError)} }
+        coordinator?.presentShareViewController(url: asset.url)
     }
 }
 
@@ -258,17 +245,15 @@ extension WillConvertViewController: ConvertViewDelegate {
     func didTappedConvertButton(_ convertView: ConvertView) {
         let asset = self.assetManager.assets[convertView.index] as! AVURLAsset
         
-        
         let pathExtensionIndex = self.convertView.didConvertedExtensionNamePickerView.selectedRow(inComponent: 0)
-        let pathExtension = pickerViewData[pathExtensionIndex].text
-        let format = pickerViewData[pathExtensionIndex]
+        let newFormat = pickerViewData[pathExtensionIndex]
         let inputName = asset.url.deletingPathExtension().lastPathComponent
-        let outputStr = inputName + "." + pathExtension
+        let outputStr = inputName + "." + newFormat.text
         let output = FileHelper().createFileURL(outputStr, in: .didConverted)
         
         convertView.startConvertAnimation()
         
-        asset.writeAudio(output: output, format: format, sampleRate: .m44k, bitRate: .m320k, bitDepth: .m16, completion: { result in
+        asset.writeAudio(output: output, format: newFormat, sampleRate: .m44k, bitRate: .m320k, bitDepth: .m16, completion: { result in
             DispatchQueue.main.async {
                 var style = ToastStyle()
                 style.messageColor = .mint!
@@ -355,24 +340,5 @@ extension WillConvertViewController: ConvertViewDelegate {
         configuration.performsFirstActionWithFullSwipe = false
         
         return configuration
-    }
-}
-
-extension WillConvertViewController: VideoSaveCompletionDelegate {
-    func startSave() {
-        var style = ToastStyle()
-        style.messageColor = .mint!
-       
-        self.videoSaveToast = try? self.view.toastViewForMessage("비디오 가져오는 중", title: nil, image: nil, style: style)
-        
-        if let toast = self.videoSaveToast {
-            self.view.showToast(toast, point: CGPoint(x: self.view.center.x, y: self.view.center.y/3))
-        }
-    }
-    
-    func endSave() {
-        self.view.hideToast(self.videoSaveToast)
-        self.assetManager.reloadAssets()
-        self.willConvertTableView.reloadData()
     }
 }

@@ -1,18 +1,21 @@
 //
-//  DidConvertedTableViewController.swift
+//  DidConvertedViewController.swift
 //  VideoConverter
 //
 //  Created by 오킹 on 2021/11/15.
 //
 import AVFoundation
 import UIKit
+import Toast_Swift
 
-class DidConvertedTableViewController: UIViewController {
+class DidConvertedViewController: UIViewController {
 
     private var assetManager: AssetManager!
     @IBOutlet weak var didConvertedTableView: UITableView!
     private var headerView: HeaderView!
     private var alert: UIAlertController?
+    
+    private var coordinator: DidConvertedCoordinator?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +30,20 @@ class DidConvertedTableViewController: UIViewController {
         self.didConvertedTableView.reloadData()
     }
     
+    static func create(with assetManager: AssetManager) -> DidConvertedViewController {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let vc = storyboard.instantiateViewController(withIdentifier: "DidConvertedViewController") as? DidConvertedViewController else {
+            return DidConvertedViewController()
+        }
+        vc.assetManager = assetManager
+        return vc
+    }
+
+    
+    func coordinate(to coordinator: DidConvertedCoordinator) {
+        self.coordinator = coordinator
+    }
+
     private func setHeaderView() {
         self.headerView = HeaderView()
         self.headerView.configure(title: "Audio List")
@@ -108,7 +125,7 @@ class DidConvertedTableViewController: UIViewController {
     }
 }
 
-extension DidConvertedTableViewController: UITableViewDataSource {
+extension DidConvertedViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.assetManager.assets.count
     }
@@ -123,7 +140,7 @@ extension DidConvertedTableViewController: UITableViewDataSource {
     }
 }
 
-extension DidConvertedTableViewController: UITableViewDelegate {
+extension DidConvertedViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath)->CGFloat {
         return tableView.frame.height / 10
     }
@@ -186,45 +203,31 @@ extension DidConvertedTableViewController: UITableViewDelegate {
     }
 }
 
-extension DidConvertedTableViewController: MediaViewDelegate {
+extension DidConvertedViewController: MediaViewDelegate {
 
     func didTappedPlayButton(selectedIndex: Int) {
-        guard let svc = self.storyboard?.instantiateViewController(withIdentifier: "PlayerViewController") as? PlayerViewController else {
-            return
-        }
+       
         let asset = self.assetManager.assets[selectedIndex] as! AVURLAsset
-        svc.setPlayer(url: asset.url)
-        svc.modalPresentationStyle = .fullScreen
-        self.present(svc, animated: true)
+        
+        if asset.isPlayable {
+            coordinator?.presentPlayerViewController(url: asset.url)
+        } else {
+            var style = ToastStyle()
+            style.messageColor = .mint!
+            
+            self.view.makeToast("재생할 수 없는 파일입니다",
+                                duration: 2,
+                                point: CGPoint(x: self.view.center.x, y: self.view.center.y * 3/2),
+                                title: nil,
+                                image: nil,
+                                style: style,
+                                completion: nil)
+        }
     }
     
     func didTappedMediaShareButton(selectedIndex: Int) {
-        self.view.makeToastActivity(.center)
         let asset = self.assetManager.assets[selectedIndex] as! AVURLAsset
-        
-        var shareObject = [Any]()
-        shareObject.append(asset.url)
-        
-        let actVC = UIActivityViewController(activityItems : shareObject, applicationActivities: nil)
-        actVC.popoverPresentationController?.sourceView = self.view
-        
-        self.view.hideToastActivity()
-        self.present(actVC, animated: true, completion: nil)
-        
-        actVC.completionWithItemsHandler = {
-            (activityType: UIActivity.ActivityType?,
-             completed: Bool,
-             arrayReturnedItems: [Any]?,
-             error: Error?) in
-            
-            if completed {
-                self.view.makeToast("공유 성공")
-            } else {
-                if error != nil {
-                    self.view.makeToast("공유 실패")
-                }
-            }
-            if let shareError = error { print(shareError)} }
+        coordinator?.presentShareViewController(url: asset.url)
     }
 }
 

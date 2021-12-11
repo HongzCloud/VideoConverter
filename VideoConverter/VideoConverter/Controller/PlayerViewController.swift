@@ -25,6 +25,21 @@ class PlayerViewController: UIViewController {
         addTimeObserver()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.playerLayer.frame = playerView.bounds
+    }
+    
+    static func create(with url: URL) -> PlayerViewController {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let vc = storyboard.instantiateViewController(withIdentifier: "PlayerViewController") as? PlayerViewController else {
+            return PlayerViewController()
+        }
+        vc.setPlayer(url: url)
+     
+        return vc
+    }
+    
     func setPlayer(url: URL) {
         self.player = AVPlayer(url: url)
         self.playerLayer = AVPlayerLayer(player: player)
@@ -32,11 +47,6 @@ class PlayerViewController: UIViewController {
         self.player.currentItem?.addObserver(self, forKeyPath: "duration", options: [.new,.initial], context: nil)
     }
         
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        self.playerLayer.frame = playerView.bounds
-    }
-
     private func setHeaderView() {
         self.headerView = HeaderView()
         self.headerView.delegate = self

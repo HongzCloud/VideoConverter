@@ -10,9 +10,9 @@ import UIKit
 import Photos
 
 
-protocol VideoSaveCompletionDelegate: AnyObject {
-    func startSave()
-    func endSave()
+protocol VideoSavingDelegate: AnyObject {
+    func showVideoSavingToast()
+    func hideVideoSavingToast()
 }
 
 class VideoListViewController: UIViewController {
@@ -23,7 +23,7 @@ class VideoListViewController: UIViewController {
     private var videos = [PHAsset]()
     private var selectedCellIndex: IndexPath?
     
-    weak var delegate: VideoSaveCompletionDelegate?
+    weak var coordinator: VideoSavingDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +33,15 @@ class VideoListViewController: UIViewController {
             self.videoListColletcionView.reloadData()
         }
     }
-
+    
+    static func create() -> VideoListViewController {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let vc = storyboard.instantiateViewController(withIdentifier: "VideoListViewController") as? VideoListViewController else {
+            return VideoListViewController()
+        }
+        return vc
+    }
+    
     private func setHeader() {
         self.header = HeaderView()
         self.header.delegate = self
@@ -134,11 +142,11 @@ extension VideoListViewController: CustomHeaderViewDelegate {
             session.outputURL = FileHelper().createFileURL(asset.url.lastPathComponent, in: .willConvert)
             session.outputFileType = AVFileType.mp4
                 
-            self.delegate?.startSave()
+            self.coordinator?.showVideoSavingToast()
             
             session.exportAsynchronously {
                 DispatchQueue.main.async {
-                    self.delegate?.endSave()
+                    self.coordinator?.hideVideoSavingToast()
                 }
                 
             }
