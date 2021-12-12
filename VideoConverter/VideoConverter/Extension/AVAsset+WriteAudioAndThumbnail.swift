@@ -5,7 +5,7 @@
 //  Created by 오킹 on 2021/11/01.
 //
 
-import Foundation
+import UIKit
 import Photos
 
 extension AVAsset {
@@ -43,6 +43,21 @@ extension AVAsset {
                                          bitDepth: bitDepth)
             let outputType = assetConverter.fileFormatToFileType(fileFormat: format)
             assetConverter.convert(output: output, outputType: outputType, outputSettins: settings, completion: completion)
+        }
+    }
+    
+    func generateThumbnail(completion: @escaping (UIImage?) -> Void) {
+        DispatchQueue.global().async {
+            let imageGenerator = AVAssetImageGenerator(asset: self)
+            let time = CMTime(seconds: 0.0, preferredTimescale: 600)
+            let times = [NSValue(time: time)]
+            imageGenerator.generateCGImagesAsynchronously(forTimes: times, completionHandler: { _, image, _, _, _ in
+                if let image = image {
+                    completion(UIImage(cgImage: image))
+                } else {
+                    completion(nil)
+                }
+            })
         }
     }
 }

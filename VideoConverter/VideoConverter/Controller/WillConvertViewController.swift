@@ -21,22 +21,23 @@ class WillConvertViewController: UIViewController {
     private var selectedCellIndex: IndexPath?
     private var videoSaveToast: UIView!
     private var alert: UIAlertController?
-    
+    private var dataSource: DiffableDataSource!
+
     private var coordinator: WillConvertCoordinator?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.assetManager = AssetManager(directoryPath: .willConvert)
         self.pickerViewData = FileFormat.allCases.map{ $0}
         setHeaderView()
         setConvertView()
         setTableView()
+        configureDataSource()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         self.assetManager.reloadAssets()
-        self.willConvertTableView.reloadData()
+        self.makeAndApplySnapShot()
     }
     
     static func create(with assetManager: AssetManager) -> WillConvertViewController {
@@ -101,7 +102,7 @@ class WillConvertViewController: UIViewController {
     
     private func setTableView() {
         self.willConvertTableView.delegate = self
-        self.willConvertTableView.dataSource = self
+       // self.willConvertTableView.dataSource = self
         self.willConvertTableView.register(WillConvertTableViewCell.self, forCellReuseIdentifier: "WillConvertTableViewCell")
         
         let safeArea = self.view.safeAreaLayoutGuide
@@ -154,9 +155,39 @@ class WillConvertViewController: UIViewController {
        return false
    }
     
+    private func makeAndApplySnapShot() {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, AVAsset>()
+        
+        snapshot.appendSections([.main])
+        snapshot.appendItems(assetManager.assets)
+        self.dataSource.apply(snapshot, animatingDifferences: false, completion: nil)
+    }
+    
+    private func configureDataSource() {
+        dataSource = DiffableDataSource(tableView: willConvertTableView, cellProvider: { tableView, indexPath, asset in
+            
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "WillConvertTableViewCell") as? WillConvertTableViewCell else { return UITableViewCell() }
+            
+            let avUrlAsset = asset as! AVURLAsset
+  
+            asset.generateThumbnail(completion: { thumnailImage in
+                DispatchQueue.main.async {
+                    cell.configure(image: thumnailImage, name: avUrlAsset.url.lastPathComponent, duration: avUrlAsset.duration.durationText)
+                }
+            }
+            )
+            cell.setPlayButtonDelegate(self)
+            cell.setMediaViewIndex(indexPath.row)
+            
+            return cell
+        })
+        
+        self.willConvertTableView.dataSource = dataSource
+    }
+    
     func refresh() {
         self.assetManager.reloadAssets()
-        self.willConvertTableView.reloadData()
+        self.makeAndApplySnapShot()
     }
 }
 
@@ -189,6 +220,71 @@ extension WillConvertViewController: UITableViewDelegate {
             NSLayoutConstraint.deactivate(self.tableViewConstraints!)
             NSLayoutConstraint.activate(newTableViewConstraints())
         }
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let action = UIContextualAction(style: .normal, title: nil) { [self]
+            (action, view, completion) in
+            
+            //삭제하기
+            self.assetManager.removeAsset(at: indexPath.row, completion: {
+                result in
+                if result {
+                    //tableView.deleteRows(at: [indexPath], with: .automatic)
+                    var snapshot2 = NSDiffableDataSourceSnapshot<Section, AVAsset>()
+                    
+                    snapshot2.appendSections([.main])
+                    snapshot2.appendItems(assetManager.assets)
+                    self.dataSource.apply(snapshot2)
+                    completion(true)
+                   
+                } else {
+                    let alert = UIAlertController(title: "파일 삭제",
+                                                  message: "파일을 삭제할 수 없습니다.",
+                                                  preferredStyle: .alert)
+
+                    let ok = UIAlertAction(title: "OK", style: .default)
+                    
+                    alert.addAction(ok)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            })
+        }
+        
+        let fileNameEditAction = UIContextualAction(style: .normal, title: nil) { [self]
+            (action, view, completion) in
+            
+            //수정하기
+            let asset = self.assetManager.assets[indexPath.row] as! AVURLAsset
+            let oldName = asset.url.deletingPathExtension().lastPathComponent
+            editFileNameAlert(oldName: oldName, completion: { newName in
+                self.assetManager.editAsset(at: indexPath.row, name: newName, completion: {
+                    result in
+                    
+                    if result {
+                        self.makeAndApplySnapShot()
+                        completion(true)
+                    } else {
+                        let alert = UIAlertController(title: "파일명 수정",
+                                                      message: "파일명 변경 실패",
+                                                      preferredStyle: .alert)
+                        let ok = UIAlertAction(title: "OK", style: .default)
+                        
+                        alert.addAction(ok)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                })
+            })
+        }
+        
+        action.backgroundColor = .red
+        action.image = UIImage(systemName: "trash")
+        fileNameEditAction.image = UIImage(systemName: "square.and.pencil")
+        
+        let configuration = UISwipeActionsConfiguration(actions: [action, fileNameEditAction])
+        configuration.performsFirstActionWithFullSwipe = false
+        
+        return configuration
     }
 }
 
@@ -260,7 +356,7 @@ extension WillConvertViewController: ConvertViewDelegate {
                 let point = CGPoint(x: self.view.center.x, y: self.view.center.y * 3/2)
                 
                 if result {
-                    self.willConvertTableView.reloadData()
+                    self.makeAndApplySnapShot()
                     convertView.endConvertAnimation()
                     
                     self.view.makeToast("변환 완료",
@@ -282,63 +378,15 @@ extension WillConvertViewController: ConvertViewDelegate {
             }
         })
     }
-    
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let action = UIContextualAction(style: .normal, title: nil) {
-            (action, view, completion) in
-            
-            //삭제하기
-            self.assetManager.removeAsset(at: indexPath.row, completion: {
-                result in
-                if result {
-                    tableView.deleteRows(at: [indexPath], with: .automatic)
-                    completion(true)
-                } else {
-                    let alert = UIAlertController(title: "파일 삭제",
-                                                  message: "파일을 삭제할 수 없습니다.",
-                                                  preferredStyle: .alert)
+}
 
-                    let ok = UIAlertAction(title: "OK", style: .default)
-                    
-                    alert.addAction(ok)
-                    self.present(alert, animated: true, completion: nil)
-                }
-            })
-        }
-        
-        let fileNameEditAction = UIContextualAction(style: .normal, title: nil) { [self]
-            (action, view, completion) in
-            
-            //수정하기
-            let asset = self.assetManager.assets[indexPath.row] as! AVURLAsset
-            let oldName = asset.url.deletingPathExtension().lastPathComponent
-            editFileNameAlert(oldName: oldName, completion: { newName in
-                self.assetManager.editAsset(at: indexPath.row, name: newName, completion: {
-                    result in
-                    
-                    if result {
-                        tableView.reloadRows(at: [indexPath], with: .automatic)
-                        completion(true)
-                    } else {
-                        let alert = UIAlertController(title: "파일명 수정",
-                                                      message: "파일명 변경 실패",
-                                                      preferredStyle: .alert)
-                        let ok = UIAlertAction(title: "OK", style: .default)
-                        
-                        alert.addAction(ok)
-                        self.present(alert, animated: true, completion: nil)
-                    }
-                })
-            })
-        }
-        
-        action.backgroundColor = .red
-        action.image = UIImage(systemName: "trash")
-        fileNameEditAction.image = UIImage(systemName: "square.and.pencil")
-        
-        let configuration = UISwipeActionsConfiguration(actions: [action, fileNameEditAction])
-        configuration.performsFirstActionWithFullSwipe = false
-        
-        return configuration
+class DiffableDataSource: UITableViewDiffableDataSource<Section, AVAsset> {
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        true
     }
+}
+
+enum Section {
+    case main
 }

@@ -9,6 +9,7 @@ import Foundation
 import AVFoundation
 
 final class AssetManager {
+    
     private(set) var assets: [AVAsset]
     private var directoryPath: Directory
     

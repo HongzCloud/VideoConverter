@@ -141,7 +141,7 @@ class MediaView: UIView {
     
     func configure(image: UIImage?, name: String, duration: String) {
         if image != nil {
-            //set image
+            mediaImageView.image = image
         } else {
             mediaImageView.image = UIImage(systemName: "music.note")
             mediaImageView.tintColor = .black
