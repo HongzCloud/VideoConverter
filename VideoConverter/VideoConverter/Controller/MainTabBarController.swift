@@ -15,17 +15,11 @@ class MainTabBarController: UITabBarController {
         self.tabBar.tintColor = .mint
     }
     
-    static func create(with coordinators: [Coordinator]) -> MainTabBarController {
+    static func create() -> MainTabBarController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "MainTabBarController") as? MainTabBarController else {
             return MainTabBarController()
         }
-        var childControllers = [UINavigationController]()
-        
-        for coordinator in coordinators {
-            childControllers.append(coordinator.navigationController)
-        }
-        vc.viewControllers = childControllers
         return vc
     }
 }

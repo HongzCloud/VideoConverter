@@ -26,12 +26,28 @@ final class AssetManager {
             assetList.append(AVAsset(url: url))
         }
         
+        assetList.sort { one, other in
+            let firstAsset = one as! AVURLAsset
+            let secondAsset = other as! AVURLAsset
+            
+            return firstAsset.url.path < secondAsset.url.path
+        }
+        
         return assetList
     }
     
     func reloadAssets() {
         self.assets.removeAll()
         self.assets = AssetManager.loadAssets(directoryPath)
+        self.assets.sort { one, other in
+            let firstAsset = one as! AVURLAsset
+            let secondAsset = other as! AVURLAsset
+            return firstAsset.url.path < secondAsset.url.path
+        }
+    }
+    
+    func appendAsset(_ asset: AVAsset) {
+        self.assets.append(asset)
     }
     
     func removeAsset(at index: Int, completion: (Bool) -> Void) {

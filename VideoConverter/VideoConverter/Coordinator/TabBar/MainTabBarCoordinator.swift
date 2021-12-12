@@ -8,6 +8,7 @@
 import UIKit
 
 protocol MainTabBarCoordinatorDependencies {
+    func makeMainTabBarController() -> MainTabBarController
     func makeWillConvertCoordinator() -> WillConvertCoordinator
     func makeDidConvertedCoordinator() -> DidConvertedCoordinator
 }
@@ -23,7 +24,7 @@ final class MainTabBarCoordinator: Coordinator {
     }
     
     func start() {
-         let tabBarController = UITabBarController()
+        let tabBarController = dependencies.makeMainTabBarController()
         let willConvertFlow = dependencies.makeWillConvertCoordinator()
         let didConvertedFlow = dependencies.makeDidConvertedCoordinator()
         willConvertFlow.start()

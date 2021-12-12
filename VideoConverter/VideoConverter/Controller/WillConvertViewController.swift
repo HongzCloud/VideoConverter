@@ -35,9 +35,9 @@ class WillConvertViewController: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
+        super.viewDidAppear(true)
         self.assetManager.reloadAssets()
-        self.makeAndApplySnapShot()
+        self.makeAndApplySnapShot(isAnimatable: false)
     }
     
     static func create(with assetManager: AssetManager) -> WillConvertViewController {
@@ -155,12 +155,12 @@ class WillConvertViewController: UIViewController {
        return false
    }
     
-    private func makeAndApplySnapShot() {
+    private func makeAndApplySnapShot(isAnimatable: Bool) {
         var snapshot = NSDiffableDataSourceSnapshot<Section, AVAsset>()
         
         snapshot.appendSections([.main])
         snapshot.appendItems(assetManager.assets)
-        self.dataSource.apply(snapshot, animatingDifferences: false, completion: nil)
+        self.dataSource.apply(snapshot, animatingDifferences: isAnimatable, completion: nil)
     }
     
     private func configureDataSource() {
@@ -169,7 +169,7 @@ class WillConvertViewController: UIViewController {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "WillConvertTableViewCell") as? WillConvertTableViewCell else { return UITableViewCell() }
             
             let avUrlAsset = asset as! AVURLAsset
-  
+            
             asset.generateThumbnail(completion: { thumnailImage in
                 DispatchQueue.main.async {
                     cell.configure(image: thumnailImage, name: avUrlAsset.url.lastPathComponent, duration: avUrlAsset.duration.durationText)
@@ -187,7 +187,12 @@ class WillConvertViewController: UIViewController {
     
     func refresh() {
         self.assetManager.reloadAssets()
-        self.makeAndApplySnapShot()
+        self.makeAndApplySnapShot(isAnimatable: true)
+    }
+    
+    func addVideo(_ asset: AVAsset) {
+        self.assetManager.appendAsset(asset)
+        self.makeAndApplySnapShot(isAnimatable: true)
     }
 }
 
@@ -230,14 +235,8 @@ extension WillConvertViewController: UITableViewDelegate {
             self.assetManager.removeAsset(at: indexPath.row, completion: {
                 result in
                 if result {
-                    //tableView.deleteRows(at: [indexPath], with: .automatic)
-                    var snapshot2 = NSDiffableDataSourceSnapshot<Section, AVAsset>()
-                    
-                    snapshot2.appendSections([.main])
-                    snapshot2.appendItems(assetManager.assets)
-                    self.dataSource.apply(snapshot2)
+                    self.makeAndApplySnapShot(isAnimatable: true)
                     completion(true)
-                   
                 } else {
                     let alert = UIAlertController(title: "파일 삭제",
                                                   message: "파일을 삭제할 수 없습니다.",
@@ -262,7 +261,7 @@ extension WillConvertViewController: UITableViewDelegate {
                     result in
                     
                     if result {
-                        self.makeAndApplySnapShot()
+                        self.makeAndApplySnapShot(isAnimatable: true)
                         completion(true)
                     } else {
                         let alert = UIAlertController(title: "파일명 수정",
@@ -314,7 +313,7 @@ extension WillConvertViewController: MediaViewDelegate {
     func didTappedPlayButton(selectedIndex: Int) {
 
         let asset = self.assetManager.assets[selectedIndex] as! AVURLAsset
-        
+
         if asset.isPlayable {
             coordinator?.presentPlayerViewController(url: asset.url)
         } else {
@@ -356,7 +355,6 @@ extension WillConvertViewController: ConvertViewDelegate {
                 let point = CGPoint(x: self.view.center.x, y: self.view.center.y * 3/2)
                 
                 if result {
-                    self.makeAndApplySnapShot()
                     convertView.endConvertAnimation()
                     
                     self.view.makeToast("변환 완료",
@@ -377,13 +375,6 @@ extension WillConvertViewController: ConvertViewDelegate {
                 }
             }
         })
-    }
-}
-
-class DiffableDataSource: UITableViewDiffableDataSource<Section, AVAsset> {
-    
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        true
     }
 }
 

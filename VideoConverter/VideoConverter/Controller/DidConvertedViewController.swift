@@ -14,20 +14,21 @@ class DidConvertedViewController: UIViewController {
     @IBOutlet weak var didConvertedTableView: UITableView!
     private var headerView: HeaderView!
     private var alert: UIAlertController?
+    private var dataSource: DiffableDataSource!
     
     private var coordinator: DidConvertedCoordinator?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.assetManager = AssetManager(directoryPath: .didConverted)
         setHeaderView()
         setTableView()
+        configureDataSource()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
         self.assetManager.reloadAssets()
-        self.didConvertedTableView.reloadData()
+        self.makeAndApplySnapShot(isAnimatable: false)
     }
     
     static func create(with assetManager: AssetManager) -> DidConvertedViewController {
@@ -60,7 +61,6 @@ class DidConvertedViewController: UIViewController {
     }
     
     private func setTableView() {
-        self.didConvertedTableView.dataSource = self
         self.didConvertedTableView.delegate = self
         self.didConvertedTableView.register(WillConvertTableViewCell.self, forCellReuseIdentifier: "WillConvertTableViewCell")
         self.didConvertedTableView.translatesAutoresizingMaskIntoConstraints = false
@@ -112,33 +112,38 @@ class DidConvertedViewController: UIViewController {
        
        return false
    }
+
+    private func configureDataSource() {
+        dataSource = DiffableDataSource(tableView: didConvertedTableView, cellProvider: { tableView, indexPath, asset in
+            
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "WillConvertTableViewCell") as? WillConvertTableViewCell else { return UITableViewCell() }
+            
+            let avUrlAsset = asset as! AVURLAsset
+  
+            asset.generateThumbnail(completion: { thumnailImage in
+                DispatchQueue.main.async {
+                    cell.configure(image: thumnailImage, name: avUrlAsset.url.lastPathComponent, duration: avUrlAsset.duration.durationText)
+                }
+            })
+            
+            cell.setPlayButtonDelegate(self)
+            cell.setMediaViewIndex(indexPath.row)
+            
+            return cell
+        })
+        
+        self.didConvertedTableView.dataSource = dataSource
+    }
     
-    private func getFiles(_ directory: Directory) -> [AVAsset]? {
-        guard let urls = FileHelper().urls(for: directory) else { return nil }
-        var avAssests = [AVAsset]()
+    private func makeAndApplySnapShot(isAnimatable: Bool) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, AVAsset>()
         
-        for url in urls {
-            avAssests.append(AVAsset(url: url))
-        }
-        
-        return avAssests
+        snapshot.appendSections([.main])
+        snapshot.appendItems(assetManager.assets)
+        self.dataSource.apply(snapshot, animatingDifferences: isAnimatable, completion: nil)
     }
 }
 
-extension DidConvertedViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.assetManager.assets.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "WillConvertTableViewCell") as? WillConvertTableViewCell else { return UITableViewCell() }
-        let file = self.assetManager.assets[indexPath.row] as! AVURLAsset
-        cell.configure(image: nil, name: file.url.lastPathComponent, duration: file.duration.durationText)
-        cell.setPlayButtonDelegate(self)
-        cell.setMediaViewIndex(indexPath.row)
-        return cell
-    }
-}
 
 extension DidConvertedViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath)->CGFloat {
@@ -153,7 +158,7 @@ extension DidConvertedViewController: UITableViewDelegate {
             self.assetManager.removeAsset(at: indexPath.row, completion: {
                 result in
                 if result {
-                    tableView.deleteRows(at: [indexPath], with: .automatic)
+                    self.makeAndApplySnapShot(isAnimatable: true)
                     completion(true)
                 } else {
                     let alert = UIAlertController(title: "파일 삭제",
@@ -177,7 +182,7 @@ extension DidConvertedViewController: UITableViewDelegate {
                     result in
                     
                     if result {
-                        tableView.reloadRows(at: [indexPath], with: .automatic)
+                        self.makeAndApplySnapShot(isAnimatable: true)
                         completion(true)
                     } else {
                         let alert = UIAlertController(title: "파일명 수정",

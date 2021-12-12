@@ -24,6 +24,7 @@
 		1E541E70276080EC0078A519 /* AppDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E541E6F276080EC0078A519 /* AppDIContainer.swift */; };
 		1E541E732760B9840078A519 /* MainTabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E541E722760B9840078A519 /* MainTabBarCoordinator.swift */; };
 		1E541E7527632DDC0078A519 /* DidConvertedCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E541E7427632DDB0078A519 /* DidConvertedCoordinator.swift */; };
+		1E541E8B276648600078A519 /* DiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E541E8A276648600078A519 /* DiffableDataSource.swift */; };
 		1E9B0C252743982200150ABD /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9B0C242743982200150ABD /* HeaderView.swift */; };
 		1E9B0C292745150600150ABD /* VideoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9B0C282745150600150ABD /* VideoListViewController.swift */; };
 		1E9B0C2B274757B700150ABD /* VideoListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9B0C2A274757B700150ABD /* VideoListCollectionViewCell.swift */; };
@@ -94,6 +95,7 @@
 		1E541E6F276080EC0078A519 /* AppDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDIContainer.swift; sourceTree = "<group>"; };
 		1E541E722760B9840078A519 /* MainTabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarCoordinator.swift; sourceTree = "<group>"; };
 		1E541E7427632DDB0078A519 /* DidConvertedCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DidConvertedCoordinator.swift; sourceTree = "<group>"; };
+		1E541E8A276648600078A519 /* DiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffableDataSource.swift; sourceTree = "<group>"; };
 		1E9B0C242743982200150ABD /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		1E9B0C282745150600150ABD /* VideoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListViewController.swift; sourceTree = "<group>"; };
 		1E9B0C2A274757B700150ABD /* VideoListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				1E9B0C282745150600150ABD /* VideoListViewController.swift */,
 				1E17D3F4274A237200027A82 /* PlayerViewController.swift */,
 				1E9F2E60275267EE006E4FB0 /* MainTabBarController.swift */,
+				1E541E8A276648600078A519 /* DiffableDataSource.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -600,6 +603,7 @@
 				1E541E6E275FC0FD0078A519 /* AppFlowCoordinator.swift in Sources */,
 				1EC858FF27204044005A1F3B /* SceneDelegate.swift in Sources */,
 				1E9F2E7D275CDDEB006E4FB0 /* AssetManager.swift in Sources */,
+				1E541E8B276648600078A519 /* DiffableDataSource.swift in Sources */,
 				1EA1EEE12723095F00C22C2C /* FileHelper.swift in Sources */,
 				1E9F2E61275267EE006E4FB0 /* MainTabBarController.swift in Sources */,
 				1E9B0C252743982200150ABD /* HeaderView.swift in Sources */,

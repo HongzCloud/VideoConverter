@@ -17,6 +17,10 @@ final class AppDIContainer: AppFlowCoordinatorDependencies {
 
 extension AppDIContainer: MainTabBarCoordinatorDependencies {
     
+    func makeMainTabBarController() -> MainTabBarController {
+        return MainTabBarController.create()
+    }
+    
     func makeWillConvertCoordinator() -> WillConvertCoordinator {
         return WillConvertCoordinator(dependencies: self)
     }

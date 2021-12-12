@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AVFoundation
 import Toast_Swift
 
 protocol WillConvertCoordinatorDependencies {
@@ -32,6 +33,7 @@ final class WillConvertCoordinator: Coordinator {
         
         let vc = defaultViewController
         vc.tabBarItem = UITabBarItem(title: "Before", image: UIImage(systemName: "list.and.film"), tag: 0)
+     
         vc.coordinate(to: self)
         self.navigationController.pushViewController(vc, animated: true)
     }
@@ -81,8 +83,8 @@ final class WillConvertCoordinator: Coordinator {
 }
 
 extension WillConvertCoordinator: VideoSavingDelegate {
-    
-    func showVideoSavingToast() {
+
+    func startVideoSaving() {
         var style = ToastStyle()
         style.messageColor = .mint!
         
@@ -93,8 +95,8 @@ extension WillConvertCoordinator: VideoSavingDelegate {
         }
     }
     
-    func hideVideoSavingToast() {
+    func completeVideoSaving(asset: AVAsset) {
         self.navigationController.view.hideToast()
-        self.defaultViewController.refresh()
+        self.defaultViewController.addVideo(asset)
     }
 }

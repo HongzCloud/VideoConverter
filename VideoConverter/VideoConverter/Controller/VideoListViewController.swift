@@ -11,8 +11,8 @@ import Photos
 
 
 protocol VideoSavingDelegate: AnyObject {
-    func showVideoSavingToast()
-    func hideVideoSavingToast()
+    func startVideoSaving()
+    func completeVideoSaving(asset: AVAsset)
 }
 
 class VideoListViewController: UIViewController {
@@ -142,11 +142,14 @@ extension VideoListViewController: CustomHeaderViewDelegate {
             session.outputURL = FileHelper().createFileURL(asset.url.lastPathComponent, in: .willConvert)
             session.outputFileType = AVFileType.mp4
                 
-            self.coordinator?.showVideoSavingToast()
+            self.coordinator?.startVideoSaving()
             
             session.exportAsynchronously {
                 DispatchQueue.main.async {
-                    self.coordinator?.hideVideoSavingToast()
+                    if let outURL = session.outputURL {
+                        let asset = AVAsset(url: outURL)
+                        self.coordinator?.completeVideoSaving(asset: asset)
+                    }
                 }
                 
             }
