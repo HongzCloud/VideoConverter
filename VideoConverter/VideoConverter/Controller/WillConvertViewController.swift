@@ -102,7 +102,6 @@ class WillConvertViewController: UIViewController {
     
     private func setTableView() {
         self.willConvertTableView.delegate = self
-       // self.willConvertTableView.dataSource = self
         self.willConvertTableView.register(WillConvertTableViewCell.self, forCellReuseIdentifier: "WillConvertTableViewCell")
         
         let safeArea = self.view.safeAreaLayoutGuide

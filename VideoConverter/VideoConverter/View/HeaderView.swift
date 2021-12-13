@@ -11,6 +11,7 @@ protocol CustomHeaderViewDelegate: AnyObject {
     func didTappedPhotoLibraryButton()
     func didTappedExitButton()
     func didTappedSaveButton()
+    func didTappedSceneRotateButton()
 }
 
 class HeaderView: UIView {
@@ -56,6 +57,18 @@ class HeaderView: UIView {
         return button
     }()
     
+    private let sceneRotateButton: UIButton = {
+        let button = UIButton()
+        button.tintColor = .white
+        button.setImage(UIImage(systemName: "rotate.left"), for: .normal)
+        let symbolSize = UIImage.SymbolConfiguration.init(pointSize: 25)
+        button.setPreferredSymbolConfiguration(symbolSize, forImageIn: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(didTappedSceneRotateButton(_:)), for: .touchUpInside)
+        
+        return button
+    }()
+    
     private let underLineView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemGray5
@@ -79,6 +92,7 @@ class HeaderView: UIView {
         setTitleLabelConstraints()
         setSaveButtonConstraints()
         setUnderLineView()
+        setSceneRotateButton()
     }
     
     private func setTitleLabelConstraints() {
@@ -122,6 +136,16 @@ class HeaderView: UIView {
         ])
     }
     
+    private func setSceneRotateButton() {
+        self.addSubview(sceneRotateButton)
+        
+        NSLayoutConstraint.activate([
+            self.sceneRotateButton.topAnchor.constraint(equalTo: self.topAnchor),
+            self.sceneRotateButton.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            self.sceneRotateButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -15),
+        ])
+    }
+    
     private func setUnderLineView() {
         self.addSubview(underLineView)
         
@@ -145,11 +169,21 @@ class HeaderView: UIView {
         delegate?.didTappedSaveButton()
     }
     
-    func configure(title: String, photoLibraryButtonIsHidden: Bool = true, exitButtonIsHidden: Bool = true, saveButtonIsHidden: Bool = true) {
+    @objc func didTappedSceneRotateButton(_ sender: UIButton!) {
+        delegate?.didTappedSceneRotateButton()
+    }
+    
+    func configure(title: String,
+                   photoLibraryButtonIsHidden: Bool = true,
+                   exitButtonIsHidden: Bool = true,
+                   saveButtonIsHidden: Bool = true,
+                   sceneRotateButtonIsHidden: Bool = true
+    ) {
         self.titleLabel.text = title
         self.photoLibraryButton.isHidden = photoLibraryButtonIsHidden
         self.exitButton.isHidden = exitButtonIsHidden
         self.saveButton.isHidden = saveButtonIsHidden
+        self.sceneRotateButton.isHidden = sceneRotateButtonIsHidden
     }
 }
 
@@ -157,4 +191,5 @@ extension CustomHeaderViewDelegate {
     func didTappedPhotoLibraryButton(){}
     func didTappedExitButton(){}
     func didTappedSaveButton(){}
+    func didTappedSceneRotateButton(){}
 }

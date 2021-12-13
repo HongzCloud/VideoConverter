@@ -16,6 +16,7 @@ class PlayerViewController: UIViewController {
     private var playerLayer: AVPlayerLayer!
     private var isPlaying = false
     private var headerView = HeaderView()
+    private var orientation: UIInterfaceOrientation!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +26,12 @@ class PlayerViewController: UIViewController {
         addTimeObserver()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        orientation = UIInterfaceOrientation.portrait
+        UIDevice.current.setValue(orientation.rawValue, forKey: "orientation")
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.playerLayer.frame = playerView.bounds
@@ -53,7 +60,7 @@ class PlayerViewController: UIViewController {
         self.headerView.alpha = 0.4
         self.headerView.translatesAutoresizingMaskIntoConstraints = false
         if let title = player.currentItem?.asset as? AVURLAsset {
-            self.headerView.configure(title: title.url.lastPathComponent, exitButtonIsHidden: false)
+            self.headerView.configure(title: title.url.lastPathComponent, exitButtonIsHidden: false, sceneRotateButtonIsHidden: false)
         }
         self.playerView.addSubview(headerView)
         
@@ -178,6 +185,16 @@ extension PlayerViewController: PlayerControlViewDelegate {
 }
 
 extension PlayerViewController: CustomHeaderViewDelegate {
+    
+    func didTappedSceneRotateButton() {
+        if orientation == UIInterfaceOrientation.landscapeRight {
+            orientation = UIInterfaceOrientation.portrait
+        } else {
+            orientation = UIInterfaceOrientation.landscapeRight
+        }
+        UIDevice.current.setValue(orientation.rawValue, forKey: "orientation")
+    }
+    
     func didTappedExitButton() {
         self.dismiss(animated: true, completion: nil)
     }

@@ -120,10 +120,12 @@ class MediaView: UIView {
     
     private func setMediaDurationLabelConstraints() {
         mediaDurationLabel.font = UIFont.systemFont(ofSize: 12)
-        
+//        mediaDurationLabel.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+//        mediaNameLabel.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
         self.addSubview(mediaDurationLabel)
         NSLayoutConstraint.activate([
             mediaDurationLabel.bottomAnchor.constraint(equalTo: mediaImageView.bottomAnchor),
+            mediaDurationLabel.topAnchor.constraint(equalTo: mediaNameLabel.bottomAnchor),
             mediaDurationLabel.leadingAnchor.constraint(equalTo: mediaImageView.trailingAnchor, constant: constant*2),
             mediaDurationLabel.trailingAnchor.constraint(equalTo: self.mediaPlayButton.leadingAnchor, constant: -5)
         ])
