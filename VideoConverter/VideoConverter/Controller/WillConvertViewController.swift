@@ -70,7 +70,7 @@ class WillConvertViewController: UIViewController {
         self.headerView = HeaderView()
         self.headerView.delegate = self
         self.headerView.translatesAutoresizingMaskIntoConstraints = false
-        self.headerView.configure(title: "Viedo List", photoLibraryButtonIsHidden: false)
+        self.headerView.configure(title: "비디오 목록", photoLibraryButtonIsHidden: false)
         
         self.view.addSubview(headerView)
         let safeArea = self.view.safeAreaLayoutGuide
@@ -78,7 +78,7 @@ class WillConvertViewController: UIViewController {
             self.headerView.topAnchor.constraint(equalTo: safeArea.topAnchor),
             self.headerView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
             self.headerView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
-            self.headerView.heightAnchor.constraint(equalTo: safeArea.heightAnchor, multiplier: 1/14)
+            self.headerView.heightAnchor.constraint(equalTo: safeArea.heightAnchor, multiplier: 1/13)
         ])
     }
     
@@ -104,6 +104,11 @@ class WillConvertViewController: UIViewController {
         self.willConvertTableView.delegate = self
         self.willConvertTableView.register(WillConvertTableViewCell.self, forCellReuseIdentifier: "WillConvertTableViewCell")
         
+        //pull to refresh
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action:  #selector(refresh(_:)), for: .valueChanged)
+        self.willConvertTableView.refreshControl = refreshControl
+        
         let safeArea = self.view.safeAreaLayoutGuide
         self.willConvertTableView.translatesAutoresizingMaskIntoConstraints = false
         let constraints = [
@@ -115,6 +120,17 @@ class WillConvertViewController: UIViewController {
         NSLayoutConstraint.activate(constraints)
         
         self.tableViewConstraints = constraints
+    }
+    
+    
+    @objc func refresh(_ control: UIRefreshControl) {
+        self.willConvertTableView.alpha = 0.5
+        self.assetManager.reloadAssets()
+        self.makeAndApplySnapShot(isAnimatable: false)
+        control.endRefreshing()
+        UIView.animate(withDuration: 1, animations: {
+            self.willConvertTableView.alpha = 1
+        }, completion: nil)
     }
     
     private func editFileNameAlert(oldName: String, completion: @escaping (_ newName: String) -> Void) {
@@ -182,11 +198,6 @@ class WillConvertViewController: UIViewController {
         })
         
         self.willConvertTableView.dataSource = dataSource
-    }
-    
-    func refresh() {
-        self.assetManager.reloadAssets()
-        self.makeAndApplySnapShot(isAnimatable: true)
     }
     
     func addVideo(_ asset: AVAsset) {

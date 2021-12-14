@@ -47,7 +47,7 @@ class DidConvertedViewController: UIViewController {
 
     private func setHeaderView() {
         self.headerView = HeaderView()
-        self.headerView.configure(title: "Audio List")
+        self.headerView.configure(title: "오디오 목록")
         self.headerView.translatesAutoresizingMaskIntoConstraints = false
         
         self.view.addSubview(headerView)
@@ -56,7 +56,7 @@ class DidConvertedViewController: UIViewController {
             self.headerView.topAnchor.constraint(equalTo: safeArea.topAnchor),
             self.headerView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
             self.headerView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
-            self.headerView.heightAnchor.constraint(equalTo: safeArea.heightAnchor, multiplier: 1/14)
+            self.headerView.heightAnchor.constraint(equalTo: safeArea.heightAnchor, multiplier: 1/13)
         ])
     }
     
@@ -65,6 +65,11 @@ class DidConvertedViewController: UIViewController {
         self.didConvertedTableView.register(WillConvertTableViewCell.self, forCellReuseIdentifier: "WillConvertTableViewCell")
         self.didConvertedTableView.translatesAutoresizingMaskIntoConstraints = false
         
+        //pull to refresh
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action:  #selector(refresh(_:)), for: .valueChanged)
+        self.didConvertedTableView.refreshControl = refreshControl
+        
         let safeArea = self.view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             self.didConvertedTableView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor),
@@ -72,6 +77,16 @@ class DidConvertedViewController: UIViewController {
             self.didConvertedTableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
             self.didConvertedTableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
         ])
+    }
+    
+    @objc func refresh(_ control: UIRefreshControl) {
+        self.didConvertedTableView.alpha = 0.5
+        self.assetManager.reloadAssets()
+        self.makeAndApplySnapShot(isAnimatable: false)
+        control.endRefreshing()
+        UIView.animate(withDuration: 1, animations: {
+            self.didConvertedTableView.alpha = 1
+        }, completion: nil)
     }
     
     private func editFileNameAlert(oldName: String, completion: @escaping (_ newName: String) -> Void) {
@@ -235,4 +250,3 @@ extension DidConvertedViewController: MediaViewDelegate {
         coordinator?.presentShareViewController(url: asset.url)
     }
 }
-
