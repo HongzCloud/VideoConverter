@@ -27,7 +27,7 @@ final class DidConvertedCoordinator: Coordinator {
         navigationController.isNavigationBarHidden = true
         
         let vc = dependencies.makeDidConvertedViewController()
-        vc.tabBarItem = UITabBarItem(title: "After", image: UIImage(systemName: "list.and.film"), tag: 1)
+        vc.tabBarItem = UITabBarItem(title: "After", image: UIImage(systemName: "music.note.list"), tag: 1)
         vc.coordinate(to: self)
         
         self.navigationController.pushViewController(vc, animated: true)

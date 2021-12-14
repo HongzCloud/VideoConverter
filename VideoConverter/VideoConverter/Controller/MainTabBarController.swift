@@ -11,8 +11,9 @@ class MainTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tabBar.unselectedItemTintColor = .gray
-        self.tabBar.tintColor = .mint
+        self.tabBar.backgroundColor = .systemBackground
+        self.tabBar.unselectedItemTintColor = .lightGray
+        self.tabBar.tintColor = .greenAndMint
     }
     
     static func create() -> MainTabBarController {

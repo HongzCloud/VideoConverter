@@ -50,6 +50,7 @@ class ConvertView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUIObject()
+        self.backgroundColor = .systemBackground
     }
     
     required init?(coder: NSCoder) {

@@ -71,11 +71,26 @@ final class WillConvertCoordinator: Coordinator {
              arrayReturnedItems: [Any]?,
              error: Error?) in
             
+            var style = ToastStyle()
+            style.messageColor = .greenAndMint!
+            
             if completed {
-                self.navigationController.view.makeToast("공유 성공")
+                self.navigationController.view.makeToast("공유 성공",
+                                                         duration: 2,
+                                                         point: CGPoint(x: self.navigationController.view.center.x, y: self.navigationController.view.center.y * 3/2),
+                                                         title: nil,
+                                                         image: nil,
+                                                         style: style,
+                                                         completion: nil)
             } else {
                 if error != nil {
-                    self.navigationController.view.makeToast("공유 실패")
+                    self.navigationController.view.makeToast("공유 실패",
+                                                             duration: 2,
+                                                             point: CGPoint(x: self.navigationController.view.center.x, y: self.navigationController.view.center.y * 3/2),
+                                                             title: nil,
+                                                             image: nil,
+                                                             style: style,
+                                                             completion: nil)
                 }
             }
             if let shareError = error { print(shareError)} }
@@ -86,7 +101,7 @@ extension WillConvertCoordinator: VideoSavingDelegate {
 
     func startVideoSaving() {
         var style = ToastStyle()
-        style.messageColor = .mint!
+        style.messageColor = .greenAndMint!
         
         let toast = try? self.navigationController.view.toastViewForMessage("비디오 가져오는 중", title: nil, image: nil, style: style)
         

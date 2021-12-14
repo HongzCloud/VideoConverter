@@ -17,7 +17,6 @@ class WillConvertViewController: UIViewController {
     private var convertView: ConvertView!
     private var headerView: HeaderView!
     private var pickerViewData: [FileFormat]!
-    private var tableViewConstraints: [NSLayoutConstraint]? = nil
     private var selectedCellIndex: IndexPath?
     private var videoSaveToast: UIView!
     private var alert: UIAlertController?
@@ -27,7 +26,7 @@ class WillConvertViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.pickerViewData = FileFormat.allCases.map{ $0}
+        self.pickerViewData = FileFormat.allCases.map{ $0 }
         setHeaderView()
         setConvertView()
         setTableView()
@@ -52,20 +51,7 @@ class WillConvertViewController: UIViewController {
     func coordinate(to coordinator: WillConvertCoordinator) {
         self.coordinator = coordinator
     }
-    
-    private func newTableViewConstraints() -> [NSLayoutConstraint] {
-        self.willConvertTableView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let safeArea = self.view.safeAreaLayoutGuide
-        let constrains = [
-            self.willConvertTableView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor),
-            self.willConvertTableView.bottomAnchor.constraint(equalTo: self.convertView.topAnchor),
-            self.willConvertTableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-            self.willConvertTableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
-        ]
-        return constrains
-    }
-    
+
     private func setHeaderView() {
         self.headerView = HeaderView()
         self.headerView.delegate = self
@@ -118,8 +104,6 @@ class WillConvertViewController: UIViewController {
             self.willConvertTableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
         ]
         NSLayoutConstraint.activate(constraints)
-        
-        self.tableViewConstraints = constraints
     }
     
     
@@ -231,9 +215,9 @@ extension WillConvertViewController: UITableViewDelegate {
         self.selectedCellIndex = indexPath
         convertView.isHidden = false
         convertView.configure(currentFormat: file.url.pathExtension, index: indexPath.row)
-        if (self.tableViewConstraints != nil) && self.headerView.isHidden == false {
-            NSLayoutConstraint.deactivate(self.tableViewConstraints!)
-            NSLayoutConstraint.activate(newTableViewConstraints())
+        
+        if !self.headerView.isHidden {
+            willConvertTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: self.convertView.frame.height, right: 0)
         }
     }
     
@@ -328,7 +312,7 @@ extension WillConvertViewController: MediaViewDelegate {
             coordinator?.presentPlayerViewController(url: asset.url)
         } else {
             var style = ToastStyle()
-            style.messageColor = .mint!
+            style.messageColor = .greenAndMint!
             
             self.view.makeToast("재생할 수 없는 파일입니다",
                                 duration: 2,
@@ -342,7 +326,9 @@ extension WillConvertViewController: MediaViewDelegate {
     
     func didTappedMediaShareButton(selectedIndex: Int) {
         let asset = self.assetManager.assets[selectedIndex] as! AVURLAsset
-        coordinator?.presentShareViewController(url: asset.url)
+        DispatchQueue.main.async { [self] in
+            coordinator?.presentShareViewController(url: asset.url)
+        }
     }
 }
 
@@ -361,7 +347,7 @@ extension WillConvertViewController: ConvertViewDelegate {
         asset.writeAudio(output: output, format: newFormat, sampleRate: .m44k, bitRate: .m320k, bitDepth: .m16, completion: { result in
             DispatchQueue.main.async {
                 var style = ToastStyle()
-                style.messageColor = .mint!
+                style.messageColor = .greenAndMint!
                 let point = CGPoint(x: self.view.center.x, y: self.view.center.y * 3/2)
                 
                 if result {

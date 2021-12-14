@@ -93,21 +93,21 @@ class MediaView: UIView {
     }
     
     private func setMediaPlayButtonConstraints() {
-        mediaPlayButton.tintColor = .mint
+        mediaPlayButton.tintColor = .greenAndMint
         mediaPlayButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
         
         self.addSubview(mediaPlayButton)
         NSLayoutConstraint.activate([
             mediaPlayButton.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            mediaPlayButton.trailingAnchor.constraint(equalTo: self.mediaShareButton.leadingAnchor, constant: -constant),
+            mediaPlayButton.trailingAnchor.constraint(equalTo: self.mediaShareButton.leadingAnchor),
             mediaPlayButton.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.5),
             mediaPlayButton.widthAnchor.constraint(equalTo: self.mediaPlayButton.heightAnchor)
         ])
     }
     
     private func setMediaShareButtonConstraints() {
-        mediaShareButton.tintColor = .yellow
-        mediaShareButton.setImage(UIImage(systemName: "arrowshape.turn.up.right.fill"), for: .normal)
+        mediaShareButton.tintColor = .grayAndWhite
+        mediaShareButton.setImage(UIImage(systemName: "square.and.arrow.up"), for: .normal)
         
         self.addSubview(mediaShareButton)
         NSLayoutConstraint.activate([
@@ -120,8 +120,7 @@ class MediaView: UIView {
     
     private func setMediaDurationLabelConstraints() {
         mediaDurationLabel.font = UIFont.systemFont(ofSize: 12)
-//        mediaDurationLabel.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
-//        mediaNameLabel.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+
         self.addSubview(mediaDurationLabel)
         NSLayoutConstraint.activate([
             mediaDurationLabel.bottomAnchor.constraint(equalTo: mediaImageView.bottomAnchor),

@@ -28,7 +28,7 @@ class HeaderView: UIView {
     
     private let photoLibraryButton: UIButton = {
         let button = UIButton()
-        button.tintColor = .mint
+        button.tintColor = .greenAndMint
         button.setImage(UIImage(systemName: "plus"), for: .normal)
         let symbolSize = UIImage.SymbolConfiguration.init(pointSize: 20)
         button.setPreferredSymbolConfiguration(symbolSize, forImageIn: .normal)
@@ -40,7 +40,7 @@ class HeaderView: UIView {
     private let saveButton: UIButton = {
         let button = UIButton()
         button.setTitle("저장", for: .normal)
-        button.setTitleColor(.mint, for: .normal)
+        button.setTitleColor(.greenAndMint, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(didTappedSaveButton(_:)), for: .touchUpInside)
         return button
@@ -48,7 +48,7 @@ class HeaderView: UIView {
     
     private let exitButton: UIButton = {
         let button = UIButton()
-        button.tintColor = .white
+        button.tintColor = .label
         button.setImage(UIImage(systemName: "multiply"), for: .normal)
         let symbolSize = UIImage.SymbolConfiguration.init(pointSize: 25)
         button.setPreferredSymbolConfiguration(symbolSize, forImageIn: .normal)
@@ -59,7 +59,7 @@ class HeaderView: UIView {
     
     private let sceneRotateButton: UIButton = {
         let button = UIButton()
-        button.tintColor = .white
+        button.tintColor = .label
         button.setImage(UIImage(systemName: "rotate.left"), for: .normal)
         let symbolSize = UIImage.SymbolConfiguration.init(pointSize: 25)
         button.setPreferredSymbolConfiguration(symbolSize, forImageIn: .normal)
@@ -79,11 +79,13 @@ class HeaderView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUIObject()
+        self.backgroundColor = .systemBackground
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setUIObject()
+        self.backgroundColor = .systemBackground
     }
     
     private func setUIObject() {

@@ -25,12 +25,6 @@ class PlayerViewController: UIViewController {
         setPlayerControlView()
         addTimeObserver()
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(true)
-        orientation = UIInterfaceOrientation.portrait
-        UIDevice.current.setValue(orientation.rawValue, forKey: "orientation")
-    }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -57,7 +51,7 @@ class PlayerViewController: UIViewController {
     private func setHeaderView() {
         self.headerView = HeaderView()
         self.headerView.delegate = self
-        self.headerView.alpha = 0.4
+        self.headerView.alpha = 0.2
         self.headerView.translatesAutoresizingMaskIntoConstraints = false
         if let title = player.currentItem?.asset as? AVURLAsset {
             self.headerView.configure(title: title.url.lastPathComponent, exitButtonIsHidden: false, sceneRotateButtonIsHidden: false)
@@ -133,10 +127,6 @@ class PlayerViewController: UIViewController {
             self.playerControlView.configureTimeLabel(endTime: duration.durationText)
         }
     }
-
-    @objc func exitVC(_ sender: UIButton!) {
-        self.dismiss(animated: true, completion: nil)
-    }
 }
 
 extension PlayerViewController: PlayerControlViewDelegate {
@@ -196,6 +186,8 @@ extension PlayerViewController: CustomHeaderViewDelegate {
     }
     
     func didTappedExitButton() {
+        orientation = UIInterfaceOrientation.portrait
+        UIDevice.current.setValue(orientation.rawValue, forKey: "orientation")
         self.dismiss(animated: true, completion: nil)
     }
 }

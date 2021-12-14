@@ -159,7 +159,6 @@ class DidConvertedViewController: UIViewController {
     }
 }
 
-
 extension DidConvertedViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath)->CGFloat {
         return tableView.frame.height / 10
@@ -233,7 +232,7 @@ extension DidConvertedViewController: MediaViewDelegate {
             coordinator?.presentPlayerViewController(url: asset.url)
         } else {
             var style = ToastStyle()
-            style.messageColor = .mint!
+            style.messageColor = .greenAndMint!
             
             self.view.makeToast("재생할 수 없는 파일입니다",
                                 duration: 2,

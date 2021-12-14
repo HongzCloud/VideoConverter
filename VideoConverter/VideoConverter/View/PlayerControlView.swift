@@ -54,8 +54,8 @@ class PlayerControlView: UIView {
     private let durationSlider: UISlider = {
         let slider = UISlider()
         slider.addTarget(self, action: #selector(sliderValueChanged(_:)), for: .valueChanged)
-        slider.thumbTintColor = .mint
-        slider.tintColor = .mint
+        slider.thumbTintColor = .greenAndMint
+        slider.tintColor = .greenAndMint
         slider.translatesAutoresizingMaskIntoConstraints = false
         return slider
     }()
@@ -63,7 +63,7 @@ class PlayerControlView: UIView {
     private let currentTimeLabel: UILabel = {
         let label = UILabel()
         label.text = "00:00"
-        label.textColor = .mint
+        label.textColor = .greenAndMint
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

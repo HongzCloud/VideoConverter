@@ -9,6 +9,6 @@ import Foundation
 import UIKit
 
 extension UIColor {
-    static let mint = UIColor(named: "Mint")
-    
+    static let greenAndMint = UIColor(named: "GreenAndMint")
+    static let grayAndWhite = UIColor(named: "GrayAndWhite")
 }
