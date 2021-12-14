@@ -78,10 +78,9 @@ final class AudioConverter {
             let lame = lame_init()
             
             lame_set_in_samplerate(lame, 44100)
-            lame_set_out_samplerate(lame, Int32(sample.rawValue))
-            lame_set_brate(lame, Int32(bitRate.rawValue))
+            lame_set_out_samplerate(lame, 0)
+            lame_set_brate(lame, 0)
             lame_set_quality(lame, 4)
-            lame_set_VBR(lame, vbr_default)
             lame_init_params(lame)
             
             fseek(pcmFile, 0 , SEEK_END)
@@ -96,7 +95,7 @@ final class AudioConverter {
             let pcmbuffer = UnsafeMutablePointer<Int16>.allocate(capacity: Int(pcmSize * 2))
             
             let mp3Size: Int32 = 1024 * 8
-            let mp3buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: Int(mp3Size))
+            let mp3buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: Int(mp3Size * 2))
             
             var write: Int32 = 0
             var read = 0
