@@ -25,12 +25,6 @@ class DidConvertedViewController: UIViewController {
         configureDataSource()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
-        self.assetManager.reloadAssets()
-        self.makeAndApplySnapShot(isAnimatable: false)
-    }
-    
     static func create(with assetManager: AssetManager) -> DidConvertedViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "DidConvertedViewController") as? DidConvertedViewController else {
@@ -148,6 +142,7 @@ class DidConvertedViewController: UIViewController {
         })
         
         self.didConvertedTableView.dataSource = dataSource
+        self.makeAndApplySnapShot(isAnimatable: false)
     }
     
     private func makeAndApplySnapShot(isAnimatable: Bool) {

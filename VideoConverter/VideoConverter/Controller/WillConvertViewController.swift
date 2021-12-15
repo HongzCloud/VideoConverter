@@ -32,12 +32,6 @@ class WillConvertViewController: UIViewController {
         setTableView()
         configureDataSource()
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
-        self.assetManager.reloadAssets()
-        self.makeAndApplySnapShot(isAnimatable: false)
-    }
     
     static func create(with assetManager: AssetManager) -> WillConvertViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -182,6 +176,7 @@ class WillConvertViewController: UIViewController {
         })
         
         self.willConvertTableView.dataSource = dataSource
+        self.makeAndApplySnapShot(isAnimatable: false)
     }
     
     func addVideo(_ asset: AVAsset) {

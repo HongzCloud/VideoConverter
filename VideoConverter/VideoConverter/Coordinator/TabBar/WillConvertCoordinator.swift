@@ -93,7 +93,7 @@ final class WillConvertCoordinator: Coordinator {
                                                              completion: nil)
                 }
             }
-            if let shareError = error { print(shareError)} }
+            //if let shareError = error { os_log(shareError)} }
     }
 }
 
