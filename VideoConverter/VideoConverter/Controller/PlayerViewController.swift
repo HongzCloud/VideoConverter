@@ -183,6 +183,7 @@ extension PlayerViewController: CustomHeaderViewDelegate {
             orientation = UIInterfaceOrientation.landscapeRight
         }
         UIDevice.current.setValue(orientation.rawValue, forKey: "orientation")
+        UINavigationController.attemptRotationToDeviceOrientation()
     }
     
     func didTappedExitButton() {
