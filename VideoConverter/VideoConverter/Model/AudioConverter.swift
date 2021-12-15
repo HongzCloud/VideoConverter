@@ -39,14 +39,14 @@ final class AudioConverter {
                                                     fileType: outputType,
                                                     dispatchQueue: convertAudioQueue)
             } else {
-                print("Failed setting up Asset Reader and Writer")
+                Log.error("Setting Asset Reader and Writer Error:", localError ?? "unknown Error")
             }
             if (success) {
                 success = self.startAssetReaderAndWriter(dispatchQueue: convertAudioQueue, completion: completion)
                 return
             } else {
                 completion(false)
-                print("Failed to start Asset Reader and Writer")
+                Log.error("Starting start Asset Reader and Writer Error:", localError ?? "unknown Error")
             }
             
         })
@@ -201,14 +201,14 @@ final class AudioConverter {
             self.assetReader.add(assetReaderAudioOutput)
             self.assetWriter.add(assetWriterAudioInput)
         } catch {
-            print("Fail setup AVAssetReader, AVAssetWriter")
+            Log.error("Fail setup Asset reader and writer")
         }
         
         return true
     }
     
     private func startAssetReaderAndWriter(dispatchQueue: DispatchQueue, completion: ((Bool) -> Void)?) -> Bool {
-        print("Writing Asset...")
+        Log.debug("Writing Asset...")
         assetWriter.startWriting()
         assetReader.startReading()
         assetWriter.startSession(atSourceTime: CMTime.zero)
@@ -225,7 +225,7 @@ final class AudioConverter {
                     self.assetReader.cancelReading()
                     self.assetWriter.finishWriting {
                         completion?(true)
-                        print("Complete Writing Asset")
+                        Log.debug("Complete Writing Asset")
                     }
                     break
                 }

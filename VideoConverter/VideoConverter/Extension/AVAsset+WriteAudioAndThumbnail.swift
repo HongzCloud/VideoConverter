@@ -21,8 +21,7 @@ extension AVAsset {
                                                            bitRate: nil,
                                                            bitDepth: .m16)
             let outputType = assetConverter.fileFormatToFileType(fileFormat: .mp3)
-            print(tempOutput)
-            print(FileManager.default.temporaryDirectory)
+            
             assetConverter.convert(output: tempOutput,
                                    outputType: outputType,
                                    outputSettins: tempSetting,
@@ -44,6 +43,7 @@ extension AVAsset {
             let outputType = assetConverter.fileFormatToFileType(fileFormat: format)
             assetConverter.convert(output: output, outputType: outputType, outputSettins: settings, completion: completion)
         }
+        Log.debug("Output file URL:", output)
     }
     
     func generateThumbnail(completion: @escaping (UIImage?) -> Void) {

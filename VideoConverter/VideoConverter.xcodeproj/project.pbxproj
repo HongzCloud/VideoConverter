@@ -25,6 +25,7 @@
 		1E541E7527632DDC0078A519 /* DidConvertedCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E541E7427632DDB0078A519 /* DidConvertedCoordinator.swift */; };
 		1E541E8B276648600078A519 /* DiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E541E8A276648600078A519 /* DiffableDataSource.swift */; };
 		1E541E942769CFEA0078A519 /* 43229-reverse-arrows.json in Resources */ = {isa = PBXBuildFile; fileRef = 1E541E932769CFEA0078A519 /* 43229-reverse-arrows.json */; };
+		1E541E9C2769E7170078A519 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E541E9B2769E7170078A519 /* Log.swift */; };
 		1E9B0C252743982200150ABD /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9B0C242743982200150ABD /* HeaderView.swift */; };
 		1E9B0C292745150600150ABD /* VideoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9B0C282745150600150ABD /* VideoListViewController.swift */; };
 		1E9B0C2B274757B700150ABD /* VideoListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9B0C2A274757B700150ABD /* VideoListCollectionViewCell.swift */; };
@@ -92,6 +93,8 @@
 		1E541E7427632DDB0078A519 /* DidConvertedCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DidConvertedCoordinator.swift; sourceTree = "<group>"; };
 		1E541E8A276648600078A519 /* DiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffableDataSource.swift; sourceTree = "<group>"; };
 		1E541E932769CFEA0078A519 /* 43229-reverse-arrows.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "43229-reverse-arrows.json"; path = "../../../../.Trash/43229-reverse-arrows.json"; sourceTree = "<group>"; };
+		1E541E9B2769E7170078A519 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
+		1E541E9D2769EFC20078A519 /* OSLog.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OSLog.framework; path = System/Library/Frameworks/OSLog.framework; sourceTree = SDKROOT; };
 		1E9B0C242743982200150ABD /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		1E9B0C282745150600150ABD /* VideoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListViewController.swift; sourceTree = "<group>"; };
 		1E9B0C2A274757B700150ABD /* VideoListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -228,6 +231,14 @@
 			path = TabBar;
 			sourceTree = "<group>";
 		};
+		1E541E9A2769E6F70078A519 /* LoggingSystem */ = {
+			isa = PBXGroup;
+			children = (
+				1E541E9B2769E7170078A519 /* Log.swift */,
+			);
+			path = LoggingSystem;
+			sourceTree = "<group>";
+		};
 		1EC858F027204043005A1F3B = {
 			isa = PBXGroup;
 			children = (
@@ -253,6 +264,7 @@
 		1EC858FB27204044005A1F3B /* VideoConverter */ = {
 			isa = PBXGroup;
 			children = (
+				1E541E9A2769E6F70078A519 /* LoggingSystem */,
 				1EC858FC27204044005A1F3B /* AppDelegate.swift */,
 				1EC858FE27204044005A1F3B /* SceneDelegate.swift */,
 				1E541E71276081030078A519 /* DIContainer */,
@@ -308,6 +320,7 @@
 		3176E00E75DDCE619B01EB9E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1E541E9D2769EFC20078A519 /* OSLog.framework */,
 				6B60B64C24CDB733AB125400 /* Pods_VideoConverter.framework */,
 				3CC7118073DE394BBB4A3C3E /* Pods_VideoConverter_VideoConverterUITests.framework */,
 				E9D4D1962B10434AF7076302 /* Pods_VideoConverterTests.framework */,
@@ -572,6 +585,7 @@
 			files = (
 				1E9B0C292745150600150ABD /* VideoListViewController.swift in Sources */,
 				1EC8593027207424005A1F3B /* AudioInfo.swift in Sources */,
+				1E541E9C2769E7170078A519 /* Log.swift in Sources */,
 				1EB2C79D272EF2FE004B1338 /* AVAsset+WriteAudioAndThumbnail.swift in Sources */,
 				1EC8590127204044005A1F3B /* WillConvertViewController.swift in Sources */,
 				1EA1EEDD2721B85800C22C2C /* AudioConverter.swift in Sources */,
@@ -790,6 +804,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = HongzCloud.VideoConverter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = LOG;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

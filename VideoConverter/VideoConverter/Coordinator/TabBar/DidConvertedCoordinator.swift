@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Toast_Swift
 
 protocol DidConvertedCoordinatorDependencies {
     func makeDidConvertedViewController() -> DidConvertedViewController
@@ -59,13 +60,29 @@ final class DidConvertedCoordinator: Coordinator {
              arrayReturnedItems: [Any]?,
              error: Error?) in
             
+            var style = ToastStyle()
+            style.messageColor = .greenAndMint!
+            
             if completed {
-                self.navigationController.view.makeToast("공유 성공")
+                self.navigationController.view.makeToast("공유 성공",
+                                                         duration: 2,
+                                                         point: CGPoint(x: self.navigationController.view.center.x, y: self.navigationController.view.center.y * 3/2),
+                                                         title: nil,
+                                                         image: nil,
+                                                         style: style,
+                                                         completion: nil)
             } else {
-                if error != nil {
-                    self.navigationController.view.makeToast("공유 실패")
+                if let shareError = error {
+                    self.navigationController.view.makeToast("공유 실패",
+                                                             duration: 2,
+                                                             point: CGPoint(x: self.navigationController.view.center.x, y: self.navigationController.view.center.y * 3/2),
+                                                             title: nil,
+                                                             image: nil,
+                                                             style: style,
+                                                             completion: nil)
+                    Log.info("공유실패:", shareError.localizedDescription)
                 }
             }
-            if let shareError = error { print(shareError)} }
+        }
     }
 }

@@ -83,7 +83,7 @@ final class WillConvertCoordinator: Coordinator {
                                                          style: style,
                                                          completion: nil)
             } else {
-                if error != nil {
+                if let shareError = error {
                     self.navigationController.view.makeToast("공유 실패",
                                                              duration: 2,
                                                              point: CGPoint(x: self.navigationController.view.center.x, y: self.navigationController.view.center.y * 3/2),
@@ -91,9 +91,10 @@ final class WillConvertCoordinator: Coordinator {
                                                              image: nil,
                                                              style: style,
                                                              completion: nil)
+                    Log.info("공유실패:", shareError.localizedDescription)
                 }
             }
-            //if let shareError = error { os_log(shareError)} }
+        }
     }
 }
 
