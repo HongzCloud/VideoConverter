@@ -32,8 +32,8 @@ extension AppDIContainer: MainTabBarCoordinatorDependencies {
 
 extension AppDIContainer: WillConvertCoordinatorDependencies {
     
-    func makePlayerViewControll(url: URL) -> PlayerViewController {
-        return PlayerViewController.create(with: url)
+    func makePlayerViewController(assetManager: AssetManager, tappedIndex: Int) -> PlayerViewController {
+        return PlayerViewController.create(with: assetManager, tappedInex: tappedIndex)
     }
     
     
@@ -52,6 +52,11 @@ extension AppDIContainer: WillConvertCoordinatorDependencies {
 }
 
 extension AppDIContainer: DidConvertedCoordinatorDependencies {
+    
+    func makePlayerViewControll(url: URL) -> PlayerViewController {
+        print("gg")
+        return PlayerViewController()
+    }
     
     func makeDidConvertedViewController() -> DidConvertedViewController {
         let assetManager = AssetManager(directoryPath: .didConverted)

@@ -71,6 +71,7 @@ class PlayerControlView: UIView {
     private let endTimeLabel: UILabel = {
         let label = UILabel()
         label.text = "00:00"
+        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -183,5 +184,9 @@ class PlayerControlView: UIView {
         if let endTime = endTime {
             self.endTimeLabel.text = endTime
         }
+    }
+    
+    func configurePlayButton(image: UIImage) {
+        self.playButton.setImage(image, for: .normal)
     }
 }

@@ -33,7 +33,6 @@ class DidConvertedViewController: UIViewController {
         vc.assetManager = assetManager
         return vc
     }
-
     
     func coordinate(to coordinator: DidConvertedCoordinator) {
         self.coordinator = coordinator
@@ -224,7 +223,7 @@ extension DidConvertedViewController: MediaViewDelegate {
         let asset = self.assetManager.assets[selectedIndex] as! AVURLAsset
         
         if asset.isPlayable {
-            coordinator?.presentPlayerViewController(url: asset.url)
+            coordinator?.presentPlayerViewController(assetManager: assetManager, tappedIndex: selectedIndex)
         } else {
             var style = ToastStyle()
             style.messageColor = .greenAndMint!

@@ -13,7 +13,7 @@ protocol WillConvertCoordinatorDependencies {
     func makeWillConvertViewController() -> WillConvertViewController
     func makeVideoListViewController() -> VideoListViewController
     func makeShareViewController(activityItems: [Any], applicationActivities: [UIActivity]?) -> UIActivityViewController
-    func makePlayerViewControll(url: URL) -> PlayerViewController
+    func makePlayerViewController(assetManager: AssetManager, tappedIndex: Int) -> PlayerViewController
 }
 
 final class WillConvertCoordinator: Coordinator {
@@ -45,10 +45,10 @@ final class WillConvertCoordinator: Coordinator {
         self.navigationController.present(videoListVC, animated: true, completion: nil)
     }
     
-    func presentPlayerViewController(url: URL) {
-        let svc = dependencies.makePlayerViewControll(url: url)
+    func presentPlayerViewController(assetManager: AssetManager, tappedIndex: Int) {
+        let svc = dependencies.makePlayerViewController(assetManager: assetManager, tappedIndex: tappedIndex)
         
-        svc.setPlayer(url: url)
+        svc.setPlayer(assetManager: assetManager, tappedIndex: tappedIndex)
         svc.modalPresentationStyle = .fullScreen
         self.navigationController.present(svc, animated: true)
     }

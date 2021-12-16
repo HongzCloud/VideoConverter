@@ -11,7 +11,7 @@ import Toast_Swift
 protocol DidConvertedCoordinatorDependencies {
     func makeDidConvertedViewController() -> DidConvertedViewController
     func makeShareViewController(activityItems: [Any], applicationActivities: [UIActivity]?) -> UIActivityViewController
-    func makePlayerViewControll(url: URL) -> PlayerViewController
+    func makePlayerViewController(assetManager: AssetManager, tappedIndex: Int) -> PlayerViewController
 }
 
 final class DidConvertedCoordinator: Coordinator {
@@ -34,10 +34,10 @@ final class DidConvertedCoordinator: Coordinator {
         self.navigationController.pushViewController(vc, animated: true)
     }
     
-    func presentPlayerViewController(url: URL) {
-        let svc = dependencies.makePlayerViewControll(url: url)
+    func presentPlayerViewController(assetManager: AssetManager, tappedIndex: Int) {
+        let svc = dependencies.makePlayerViewController(assetManager: assetManager, tappedIndex: tappedIndex)
         
-        svc.setPlayer(url: url)
+        svc.setPlayer(assetManager: assetManager, tappedIndex: tappedIndex)
         svc.modalPresentationStyle = .fullScreen
         self.navigationController.present(svc, animated: true)
     }
