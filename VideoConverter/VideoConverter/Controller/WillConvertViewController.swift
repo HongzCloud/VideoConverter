@@ -126,9 +126,9 @@ class WillConvertViewController: UIViewController {
 
         alert.addAction(cancel)
         alert.addAction(ok)
-        alert.addTextField { [self] textField in
+        alert.addTextField { [weak self] textField in
             textField.text = oldName
-            textField.addTarget(self, action: #selector(alertTextFieldDidChange(_:)), for: .editingChanged)
+            textField.addTarget(self, action: #selector(self?.alertTextFieldDidChange(_:)), for: .editingChanged)
         }
         
         self.present(alert, animated: true, completion: nil)
@@ -217,14 +217,14 @@ extension WillConvertViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let action = UIContextualAction(style: .normal, title: nil) { [self]
+        let action = UIContextualAction(style: .normal, title: nil) { [weak self]
             (action, view, completion) in
             
             //삭제하기
-            self.assetManager.removeAsset(at: indexPath.row, completion: {
+            self?.assetManager.removeAsset(at: indexPath.row, completion: {
                 result in
                 if result {
-                    self.makeAndApplySnapShot(isAnimatable: true)
+                    self?.makeAndApplySnapShot(isAnimatable: true)
                     completion(true)
                 } else {
                     let alert = UIAlertController(title: "파일 삭제",
@@ -234,23 +234,23 @@ extension WillConvertViewController: UITableViewDelegate {
                     let ok = UIAlertAction(title: "OK", style: .default)
                     
                     alert.addAction(ok)
-                    self.present(alert, animated: true, completion: nil)
+                    self?.present(alert, animated: true, completion: nil)
                 }
             })
         }
         
-        let fileNameEditAction = UIContextualAction(style: .normal, title: nil) { [self]
+        let fileNameEditAction = UIContextualAction(style: .normal, title: nil) { [weak self]
             (action, view, completion) in
             
             //수정하기
-            let asset = self.assetManager.assets[indexPath.row] as! AVURLAsset
+            let asset = self?.assetManager.assets[indexPath.row] as! AVURLAsset
             let oldName = asset.url.deletingPathExtension().lastPathComponent
-            editFileNameAlert(oldName: oldName, completion: { newName in
-                self.assetManager.editAsset(at: indexPath.row, name: newName, completion: {
+            self?.editFileNameAlert(oldName: oldName, completion: { newName in
+                self?.assetManager.editAsset(at: indexPath.row, name: newName, completion: {
                     result in
                     
                     if result {
-                        self.makeAndApplySnapShot(isAnimatable: true)
+                        self?.makeAndApplySnapShot(isAnimatable: true)
                         completion(true)
                     } else {
                         let alert = UIAlertController(title: "파일명 수정",
@@ -259,7 +259,7 @@ extension WillConvertViewController: UITableViewDelegate {
                         let ok = UIAlertAction(title: "OK", style: .default)
                         
                         alert.addAction(ok)
-                        self.present(alert, animated: true, completion: nil)
+                        self?.present(alert, animated: true, completion: nil)
                     }
                 })
             })
@@ -321,8 +321,8 @@ extension WillConvertViewController: MediaViewDelegate {
     
     func didTappedMediaShareButton(selectedIndex: Int) {
         let asset = self.assetManager.assets[selectedIndex] as! AVURLAsset
-        DispatchQueue.main.async { [self] in
-            coordinator?.presentShareViewController(url: asset.url)
+        DispatchQueue.main.async { [weak self] in
+            self?.coordinator?.presentShareViewController(url: asset.url)
         }
     }
 }

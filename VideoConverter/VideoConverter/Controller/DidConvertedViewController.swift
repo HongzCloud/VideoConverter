@@ -87,8 +87,8 @@ class DidConvertedViewController: UIViewController {
                                   message: "파일명을 입력하세요.",
                                   preferredStyle: .alert)
 
-        let ok = UIAlertAction(title: "OK", style: .default) { [self] (ok) in
-            let text = alert!.textFields?.first?.text
+        let ok = UIAlertAction(title: "OK", style: .default) { [weak self] (ok) in
+            let text = self?.alert!.textFields?.first?.text
             if let text = text {
                 completion(text)
             }
@@ -96,14 +96,14 @@ class DidConvertedViewController: UIViewController {
 
         let cancel = UIAlertAction(title: "cancel", style: .cancel)
         
-        alert!.addAction(cancel)
-        alert!.addAction(ok)
-        alert!.addTextField { [self] textField in
+        self.alert!.addAction(cancel)
+        self.alert!.addAction(ok)
+        self.alert!.addTextField { [weak self] textField in
             textField.text = oldName
-            textField.addTarget(self, action: #selector(alertTextFieldDidChange(_:)), for: .editingChanged)
+            textField.addTarget(self, action: #selector(self?.alertTextFieldDidChange(_:)), for: .editingChanged)
         }
         
-        self.present(alert!, animated: true, completion: nil)
+        self.present(self.alert!, animated: true, completion: nil)
     }
     
     @objc func alertTextFieldDidChange(_ sender: UITextField) {
@@ -180,17 +180,17 @@ extension DidConvertedViewController: UITableViewDelegate {
             })
         }
         
-        let fileNameEditAction = UIContextualAction(style: .normal, title: nil) { [self] (action, view, completion) in
+        let fileNameEditAction = UIContextualAction(style: .normal, title: nil) { [weak self] (action, view, completion) in
             
             //수정하기
-            let asset = self.assetManager.assets[indexPath.row] as! AVURLAsset
+            let asset = self?.assetManager.assets[indexPath.row] as! AVURLAsset
             let oldName = asset.url.deletingPathExtension().lastPathComponent
-            editFileNameAlert(oldName: oldName, completion: { newName in
-                self.assetManager.editAsset(at: indexPath.row, name: newName, completion: {
+            self?.editFileNameAlert(oldName: oldName, completion: { newName in
+                self?.assetManager.editAsset(at: indexPath.row, name: newName, completion: {
                     result in
                     
                     if result {
-                        self.makeAndApplySnapShot(isAnimatable: true)
+                        self?.makeAndApplySnapShot(isAnimatable: true)
                         completion(true)
                     } else {
                         let alert = UIAlertController(title: "파일명 수정",
@@ -199,7 +199,7 @@ extension DidConvertedViewController: UITableViewDelegate {
                         let ok = UIAlertAction(title: "OK", style: .default)
                         
                         alert.addAction(ok)
-                        self.present(alert, animated: true, completion: nil)
+                        self?.present(alert, animated: true, completion: nil)
                     }
                 })
             })

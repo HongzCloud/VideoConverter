@@ -29,8 +29,8 @@ class VideoListViewController: UIViewController {
         super.viewDidLoad()
         setHeader()
         setVideoListCollectionView()
-        loadVideos { [self] in
-            self.videoListColletcionView.reloadData()
+        loadVideos { [weak self] in
+            self?.videoListColletcionView.reloadData()
         }
     }
     

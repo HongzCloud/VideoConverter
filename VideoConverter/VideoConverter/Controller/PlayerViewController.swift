@@ -19,6 +19,7 @@ class PlayerViewController: UIViewController {
     private var assetManager: AssetManager!
     private var playingIndex: Int!
     private var orientation: UIInterfaceOrientation!
+    private var isSelectedRepeatPlayButton = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,10 +71,10 @@ class PlayerViewController: UIViewController {
         self.remoteCommandInfoCenterSetting()
         self.addObserverForBackground()
         self.addObserverForForground()
+        self.addObserverForPlayEndTime(isRepeatPlay: self.isSelectedRepeatPlayButton)
     }
     
     private func remoteCommandCenterSetting() {
-        let assetCount = assetManager.assets.count
         // remote control event 받기 시작
         UIApplication.shared.beginReceivingRemoteControlEvents()
         
@@ -82,42 +83,47 @@ class PlayerViewController: UIViewController {
         center.previousTrackCommand.removeTarget(nil)
         center.playCommand.removeTarget(nil)
         center.pauseCommand.removeTarget(nil)
+        center.changePlaybackPositionCommand.removeTarget(nil)
         
         // 제어 센터 재생 버튼
-        center.playCommand.addTarget { [self] (commandEvent) -> MPRemoteCommandHandlerStatus in
-            player.play()
-            MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: CMTimeGetSeconds(player.currentItem!.currentTime()))
-            MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = 1
+        center.playCommand.addTarget { [weak self] (commandEvent) -> MPRemoteCommandHandlerStatus in
+            
+            self?.player.play()
+            self?.nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: CMTimeGetSeconds(self?.player.currentItem?.currentTime() ?? CMTime.zero))
+            self?.nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1
+            MPNowPlayingInfoCenter.default().nowPlayingInfo = self?.nowPlayingInfo
             return .success
         }
         
         // 제어 센터 일시정지 버튼
-        center.pauseCommand.addTarget { [self] (commandEvent) -> MPRemoteCommandHandlerStatus in
-            player.pause()
-            MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: CMTimeGetSeconds(player.currentItem!.currentTime()))
-            MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = 0
+        center.pauseCommand.addTarget { [weak self] (commandEvent) -> MPRemoteCommandHandlerStatus in
+            self?.player.pause()
+            self?.nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: CMTimeGetSeconds(self?.player.currentItem!.currentTime() ?? CMTime.zero))
+            self?.nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = 0
+            MPNowPlayingInfoCenter.default().nowPlayingInfo = self?.nowPlayingInfo
             return .success
         }
 
         // 제어 센터 다음트랙 버튼
-        center.nextTrackCommand.addTarget { [self] (commandEvent) -> MPRemoteCommandHandlerStatus in
-            playingIndex = playingIndex < (assetCount - 1) ? (playingIndex + 1) : 0
-            
-            let nextItem = AVPlayerItem(asset: assetManager.assets[playingIndex])
-            self.player.replaceCurrentItem(with: nextItem)
-            remoteCommandInfoCenterSetting()
-            
+        center.nextTrackCommand.addTarget { [weak self] (commandEvent) -> MPRemoteCommandHandlerStatus in
+            self?.playNextTrack()
+            self?.remoteCommandInfoCenterSetting()
             return .success
         }
         
         // 제어 센터 이전트랙 버튼
-        center.previousTrackCommand.addTarget { [self] (commandEvent) -> MPRemoteCommandHandlerStatus in
-            playingIndex = playingIndex >= 1 ? (playingIndex - 1) : (assetCount - 1)
-            
-            let nextItem = AVPlayerItem(asset: assetManager.assets[playingIndex])
-            player.replaceCurrentItem(with: nextItem)
-            remoteCommandInfoCenterSetting()
-            
+        center.previousTrackCommand.addTarget { [weak self] (commandEvent) -> MPRemoteCommandHandlerStatus in
+            self?.playPreviousTrack()
+            self?.remoteCommandInfoCenterSetting()
+            return .success
+        }
+        
+        //slider 재생 위치 변경
+        center.changePlaybackPositionCommand.addTarget { (commandEvent) -> MPRemoteCommandHandlerStatus in
+            if let positionTime = (commandEvent as? MPChangePlaybackPositionCommandEvent)?.positionTime {
+                let seekTime = CMTime(value: Int64(positionTime), timescale: 1)
+                self.player.seek(to: seekTime)
+            }
             return .success
         }
 
@@ -125,22 +131,82 @@ class PlayerViewController: UIViewController {
         center.pauseCommand.isEnabled = true
         center.nextTrackCommand.isEnabled = true
         center.previousTrackCommand.isEnabled = true
+        center.changePlaybackPositionCommand.isEnabled = true
     }
     
-    private func remoteCommandInfoCenterSetting() {
+    private func addObserverForPlayEndTime(isRepeatPlay: Bool) {
+        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
+        
+        if isRepeatPlay {
+            NotificationCenter.default.addObserver(self, selector: #selector(rePlay), name: .AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
+            
+        } else {
+            NotificationCenter.default.addObserver(self, selector: #selector(playNextTrack), name: .AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
+        }
+    }
+    
+    @objc func rePlay() {
+    
         let center = MPNowPlayingInfoCenter.default()
-        var nowPlayingInfo = center.nowPlayingInfo ?? [String: Any]()
+    
+        nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = self.player.currentItem?.asset.duration.seconds
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = 0
+        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: CMTimeGetSeconds(self.player.currentItem?.currentTime() ?? CMTime.zero))
         
+        center.nowPlayingInfo = nowPlayingInfo
+        
+        let nextItem = AVPlayerItem(asset: (self.assetManager.assets[playingIndex]))
+        self.player.replaceCurrentItem(with: nextItem)
+        self.player.play()
+        self.remoteCommandInfoCenterSetting()
+       
+        self.addObserverForPlayEndTime(isRepeatPlay: self.isSelectedRepeatPlayButton)
+    }
+    
+    @objc func playNextTrack() {
+        
+        let assetCount = self.assetManager.assets.count
+
+        self.playingIndex = playingIndex < (assetCount - 1) ? (playingIndex + 1) : 0
+
+        let nextItem = AVPlayerItem(asset: (self.assetManager.assets[playingIndex]))
+        self.player.replaceCurrentItem(with: nextItem)
+        self.player.play()
+        self.playerControlView.configurePlayButton(image: UIImage(systemName: "pause.fill")!)
+        self.remoteCommandInfoCenterSetting()
+        self.addObserverForPlayEndTime(isRepeatPlay: self.isSelectedRepeatPlayButton)
+    }
+    
+    @objc func playPreviousTrack() {
+        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
+        
+        let assetCount = self.assetManager.assets.count
+
+        playingIndex = playingIndex >= 1 ? (playingIndex - 1) : (assetCount - 1)
+        
+        let nextItem = AVPlayerItem(asset: assetManager.assets[playingIndex])
+        player.replaceCurrentItem(with: nextItem)
+        remoteCommandInfoCenterSetting()
+        self.playerControlView.configurePlayButton(image: UIImage(systemName: "play.fill")!)
+
+        self.addObserverForPlayEndTime(isRepeatPlay: self.isSelectedRepeatPlayButton)
+    }
+    
+    
+    var nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [String: Any]()
+    
+    private func remoteCommandInfoCenterSetting() {
+
+        let center = MPNowPlayingInfoCenter.default()
+       
         let asset = self.player.currentItem?.asset as! AVURLAsset
-        
+
         nowPlayingInfo[MPMediaItemPropertyTitle] = asset.url.lastPathComponent
 
-        // 미디어 총 길이
         nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = self.player.currentItem?.asset.duration.seconds
-        // 제어 센터의 progressBar 초당 움직일
         nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1
-        // 미디어 현재 재생시간
-        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: CMTimeGetSeconds(self.player.currentItem!.currentTime()))
+        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: CMTimeGetSeconds(self.player.currentItem?.currentTime() ?? CMTime.zero))
+        
         center.nowPlayingInfo = nowPlayingInfo
     }
     
@@ -161,14 +227,18 @@ class PlayerViewController: UIViewController {
     }
         
     @objc func updateRemoteCommandCenter() {
-        if player.timeControlStatus == .playing {
+        
+        let isVideo = !self.assetManager.assets[playingIndex].tracks(withMediaType: .video).isEmpty
+        
+        if player.timeControlStatus == .playing && !isVideo {
             self.playerControlView.configurePlayButton(image: UIImage(systemName: "pause.fill")!)
-            MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = 1
+            nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = self.player.rate
         } else {
             self.playerControlView.configurePlayButton(image: UIImage(systemName: "play.fill")!)
-            MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = 0
+            nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = 0
         }
-        MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: CMTimeGetSeconds(player.currentItem!.currentTime()))
+        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: CMTimeGetSeconds(player.currentItem!.currentTime()))
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
 
     private func setHeaderView() {
@@ -264,12 +334,22 @@ extension PlayerViewController: PlayerControlViewDelegate {
         } else {
             self.player.play()
             self.playerControlView.configurePlayButton(image: UIImage(systemName: "pause.fill")!)
-            MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = 1
+            MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = self.player.rate
         }
     }
 
     func didTappedBackwardButton() {
         let currentTime = CMTimeGetSeconds(player.currentTime())
+        
+        if currentTime < 2.0 {
+            let assetCount = self.assetManager.assets.count
+            playingIndex = playingIndex >= 1 ? (playingIndex - 1) : (assetCount - 1)
+            
+            let nextItem = AVPlayerItem(asset: assetManager.assets[playingIndex])
+            player.replaceCurrentItem(with: nextItem)
+            self.addObserverForPlayEndTime(isRepeatPlay: isSelectedRepeatPlayButton)
+        }
+        
         var newTime = currentTime - 10.0
         
         if newTime < 0 {
@@ -282,6 +362,14 @@ extension PlayerViewController: PlayerControlViewDelegate {
     
     func didTappedForwardButton() {
         let currentTime = CMTimeGetSeconds(player.currentTime())
+        
+        if let currentItem = player.currentItem {
+            if currentTime > currentItem.duration.seconds - 2.0 {
+                self.playNextTrack()
+                return
+            }
+        }
+    
         var newTime = currentTime + 10.0
         let duration = self.player.currentItem!.asset.duration
         
@@ -290,12 +378,27 @@ extension PlayerViewController: PlayerControlViewDelegate {
         }
         
         let time = CMTimeMake(value: Int64(newTime * 1000), timescale: 1000)
+        
         player.seek(to: time)
     }
 
     func sliderValueChanged(_ slider: UISlider) {
         let time = CMTimeMake(value: Int64(slider.value * 1000) , timescale: 1000)
         player.seek(to: time)
+    }
+    
+    func didTappedRepeatPlayButton(_ button: UIButton) {
+        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
+        isSelectedRepeatPlayButton = !isSelectedRepeatPlayButton
+
+        self.addObserverForPlayEndTime(isRepeatPlay: isSelectedRepeatPlayButton)
+        
+        if isSelectedRepeatPlayButton {
+            button.tintColor = .greenAndMint
+        }
+        else {
+            button.tintColor = .white
+        }
     }
 }
 

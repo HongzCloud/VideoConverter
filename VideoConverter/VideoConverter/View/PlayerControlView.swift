@@ -12,6 +12,7 @@ protocol PlayerControlViewDelegate: AnyObject {
     func didTappedBackwardButton()
     func didTappedForwardButton()
     func sliderValueChanged(_ slider: UISlider)
+    func didTappedRepeatPlayButton(_ button: UIButton)
 }
 
 class PlayerControlView: UIView {
@@ -76,6 +77,16 @@ class PlayerControlView: UIView {
         return label
     }()
     
+    private let repeatPlayButton: UIButton = {
+        let button = UIButton()
+        button.tintColor = .white
+        button.setImage(UIImage(systemName: "repeat")!, for: .normal)
+        let symbolSize = UIImage.SymbolConfiguration.init(pointSize: 25)
+        button.addTarget(self, action: #selector(didTappedRepeatPlayButton(_:)), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUIObject()
@@ -93,6 +104,7 @@ class PlayerControlView: UIView {
         setForwardButton()
         setCurrentTimeLabel()
         setEndTimeLabel()
+        setRepeatPlayButton()
     }
     
     private func setPlayButtonConstraints() {
@@ -113,7 +125,7 @@ class PlayerControlView: UIView {
             self.durationSlider.bottomAnchor.constraint(equalTo: self.playButton.topAnchor),
             self.durationSlider.centerXAnchor.constraint(equalTo: self.centerXAnchor),
   
-            self.durationSlider.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8)
+            self.durationSlider.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.7)
         ])
     }
     
@@ -157,8 +169,18 @@ class PlayerControlView: UIView {
         ])
     }
     
+    private func setRepeatPlayButton() {
+        self.addSubview(repeatPlayButton)
+        
+        NSLayoutConstraint.activate([
+            self.repeatPlayButton.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            self.repeatPlayButton.centerYAnchor.constraint(equalTo: self.durationSlider.centerYAnchor),
+            self.repeatPlayButton.trailingAnchor.constraint(equalTo: self.durationSlider.leadingAnchor),
+            self.repeatPlayButton.heightAnchor.constraint(equalTo: self.durationSlider.heightAnchor)
+        ])
+    }
     @objc func didTappedPlayButton(_ sender: UIButton!) {
-        self.delegate?.didTappedPlayButton(playButton)
+        self.delegate?.didTappedPlayButton(self.playButton)
     }
     
     @objc func didTappedBackwardButton(_ sender: UIButton!) {
@@ -170,7 +192,11 @@ class PlayerControlView: UIView {
     }
     
     @objc func sliderValueChanged(_ sender: UISlider!) {
-        self.delegate?.sliderValueChanged(durationSlider)
+        self.delegate?.sliderValueChanged(self.durationSlider)
+    }
+    
+    @objc func didTappedRepeatPlayButton(_ sender: UIButton) {
+        self.delegate?.didTappedRepeatPlayButton(self.repeatPlayButton)
     }
     
     func configureSlider(maxValue: Float, minValue: Float, value: Float) {

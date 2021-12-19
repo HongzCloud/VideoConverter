@@ -27,22 +27,22 @@ final class AudioConverter {
         let convertAudioQueue = DispatchQueue(label: convertAudioQueueLabel)
         
         //load asset data
-        asset.loadValuesAsynchronously(forKeys: ["tracks"], completionHandler: { [self] in
+        asset.loadValuesAsynchronously(forKeys: ["tracks"], completionHandler: { [weak self] in
             var success = true
             var localError:NSError?
-            success = (asset.statusOfValue(forKey: "tracks", error: &localError) == AVKeyValueStatus.loaded)
+            success = (self?.asset.statusOfValue(forKey: "tracks", error: &localError) == AVKeyValueStatus.loaded)
             
 
             if (success) {
-                success = setupAssetReaderAndWriter(output: output,
+                success = self?.setupAssetReaderAndWriter(output: output,
                                                     outputSettings: outputSettins,
                                                     fileType: outputType,
-                                                    dispatchQueue: convertAudioQueue)
+                                                    dispatchQueue: convertAudioQueue) ?? false
             } else {
                 Log.error("Setting Asset Reader and Writer Error:", localError ?? "unknown Error")
             }
             if (success) {
-                success = self.startAssetReaderAndWriter(dispatchQueue: convertAudioQueue, completion: completion)
+                success = self?.startAssetReaderAndWriter(dispatchQueue: convertAudioQueue, completion: completion) ?? false
                 return
             } else {
                 completion(false)
