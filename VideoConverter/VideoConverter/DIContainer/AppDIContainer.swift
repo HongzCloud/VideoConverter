@@ -54,7 +54,6 @@ extension AppDIContainer: WillConvertCoordinatorDependencies {
 extension AppDIContainer: DidConvertedCoordinatorDependencies {
     
     func makePlayerViewControll(url: URL) -> PlayerViewController {
-        print("gg")
         return PlayerViewController()
     }
     

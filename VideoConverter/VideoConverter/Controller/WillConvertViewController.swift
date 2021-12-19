@@ -112,41 +112,43 @@ class WillConvertViewController: UIViewController {
     }
     
     private func editFileNameAlert(oldName: String, completion: @escaping (_ newName: String) -> Void) {
-        let alert = UIAlertController(title: "파일명 수정", message: "파일명을 입력하세요.(확장자 제외)", preferredStyle: .alert)
+        alert = UIAlertController(title: "파일명 수정",
+                                  message: "파일명을 입력하세요\n(영어,한글,숫자,-,_) 1~20글자",
+                                  preferredStyle: .alert)
 
-        let ok = UIAlertAction(title: "OK", style: .default) { (ok) in
-            let text = alert.textFields?.first?.text
+        let ok = UIAlertAction(title: "OK", style: .default) { [weak self] (ok) in
+            let text = self?.alert!.textFields?.first?.text
             if let text = text {
                 completion(text)
             }
         }
 
-        let cancel = UIAlertAction(title: "cancel", style: .cancel) { (cancel) in
-        }
-
-        alert.addAction(cancel)
-        alert.addAction(ok)
-        alert.addTextField { [weak self] textField in
+        let cancel = UIAlertAction(title: "cancel", style: .cancel)
+        
+        self.alert!.addAction(cancel)
+        self.alert!.addAction(ok)
+        self.alert!.addTextField { [weak self] textField in
             textField.text = oldName
             textField.addTarget(self, action: #selector(self?.alertTextFieldDidChange(_:)), for: .editingChanged)
         }
         
-        self.present(alert, animated: true, completion: nil)
+        self.present(self.alert!, animated: true, completion: nil)
     }
     
     @objc func alertTextFieldDidChange(_ sender: UITextField) {
         self.alert?.actions[1].isEnabled = isValidFileName(sender.text!)
     }
     
-   private func isValidFileName(_ name: String) -> Bool {
-       //영어 소문자,대문자,한글,숫자 1~20자리
-       let pattern = "^[A-Za-z0-9가-힣_]{1,20}$"
-       let regex = try? NSRegularExpression(pattern: pattern)
-       if let _ = regex?.firstMatch(in: name, options: [], range: NSRange(location: 0, length: name.count)) {
-           return true
-       }
-       return false
-   }
+    private func isValidFileName(_ name: String) -> Bool {
+        //영어 소문자,대문자,한글,숫자 1~20자리
+        let pattern = "^[A-Za-z0-9가-힣_-]{1,20}$"
+        let regex = try? NSRegularExpression(pattern: pattern)
+        if let _ = regex?.firstMatch(in: name, options: [], range: NSRange(location: 0, length: name.count)) {
+            return true
+        }
+        
+        return false
+    }
     
     private func makeAndApplySnapShot(isAnimatable: Bool) {
         var snapshot = NSDiffableDataSourceSnapshot<Section, AVAsset>()
@@ -167,8 +169,7 @@ class WillConvertViewController: UIViewController {
                 DispatchQueue.main.async {
                     cell.configure(image: thumnailImage, name: avUrlAsset.url.lastPathComponent, duration: avUrlAsset.duration.durationText)
                 }
-            }
-            )
+            })
             cell.setPlayButtonDelegate(self)
             cell.setMediaViewIndex(indexPath.row)
             
@@ -239,13 +240,13 @@ extension WillConvertViewController: UITableViewDelegate {
             })
         }
         
-        let fileNameEditAction = UIContextualAction(style: .normal, title: nil) { [weak self]
-            (action, view, completion) in
-            
+        let fileNameEditAction = UIContextualAction(style: .normal, title: nil) { [weak self] (action, view, completion) in
+
             //수정하기
             let asset = self?.assetManager.assets[indexPath.row] as! AVURLAsset
-            let oldName = asset.url.deletingPathExtension().lastPathComponent
-            self?.editFileNameAlert(oldName: oldName, completion: { newName in
+            let urlString = asset.url.deletingPathExtension().lastPathComponent
+
+            self?.editFileNameAlert(oldName: urlString.precomposedStringWithCanonicalMapping, completion: { newName in
                 self?.assetManager.editAsset(at: indexPath.row, name: newName, completion: {
                     result in
                     
