@@ -165,11 +165,14 @@ class PlayerViewController: UIViewController {
     
     @objc func playNextTrack() {
         
-        let assetCount = self.assetManager.assets.count
+        let assets = self.assetManager.assets
+        
+        for _ in 0..<assets.count {
+            self.playingIndex = playingIndex < (assets.count - 1) ? (playingIndex + 1) : 0
+            if assets[playingIndex].isPlayable { break }
+        }
 
-        self.playingIndex = playingIndex < (assetCount - 1) ? (playingIndex + 1) : 0
-
-        let nextItem = AVPlayerItem(asset: (self.assetManager.assets[playingIndex]))
+        let nextItem = AVPlayerItem(asset: (assets[playingIndex]))
         self.player.replaceCurrentItem(with: nextItem)
         self.player.play()
         self.playerControlView.configurePlayButton(image: UIImage(systemName: "pause.fill")!)
@@ -180,11 +183,15 @@ class PlayerViewController: UIViewController {
     @objc func playPreviousTrack() {
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
         
-        let assetCount = self.assetManager.assets.count
+        let assets = self.assetManager.assets
 
-        playingIndex = playingIndex >= 1 ? (playingIndex - 1) : (assetCount - 1)
+        for _ in 0..<assets.count {
+            playingIndex = playingIndex >= 1 ? (playingIndex - 1) : (assets.count - 1)
+            
+            if assets[playingIndex].isPlayable { break }
+        }
         
-        let nextItem = AVPlayerItem(asset: assetManager.assets[playingIndex])
+        let nextItem = AVPlayerItem(asset: assets[playingIndex])
         player.replaceCurrentItem(with: nextItem)
         remoteCommandInfoCenterSetting()
         self.playerControlView.configurePlayButton(image: UIImage(systemName: "play.fill")!)
