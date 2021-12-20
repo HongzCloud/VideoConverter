@@ -10,6 +10,7 @@ import AVFoundation
 import lame
 
 final class AudioConverter {
+    
     private var asset: AVAsset
     private var assetReader: AVAssetReader!
     private var assetWriter: AVAssetWriter!
@@ -73,6 +74,7 @@ final class AudioConverter {
         }
         
         pcmFile = fopen(avUrlAsset.url.path, "rb")
+        
         encoderQueue.async {
             
             let lame = lame_init()
@@ -157,7 +159,9 @@ final class AudioConverter {
     
     //압축 오디오파일: bitrate만 설정, 무압축 오디오파일: bitDepth만 설정
     func outputSetting(format: FileFormat, sampleRate: SampleRate, bitRate: BitRate?, bitDepth: BitPerChannel?) -> [String : Any] {
+        
         var channelLayout = AudioChannelLayout()
+        
         memset(&channelLayout, 0, MemoryLayout<AudioChannelLayout>.size);
         channelLayout.mChannelLayoutTag = kAudioChannelLayoutTag_Stereo;
         
@@ -180,6 +184,7 @@ final class AudioConverter {
     }
     
     private func setupAssetReaderAndWriter(output: URL, outputSettings: [String : Any], fileType: AVFileType, dispatchQueue: DispatchQueue) -> Bool {
+        
         let audioTracks = asset.tracks(withMediaType: AVMediaType.audio)
         
         if (audioTracks.count > 0) {
@@ -208,7 +213,9 @@ final class AudioConverter {
     }
     
     private func startAssetReaderAndWriter(dispatchQueue: DispatchQueue, completion: ((Bool) -> Void)?) -> Bool {
+        
         Log.debug("Writing Asset...")
+        
         assetWriter.startWriting()
         assetReader.startReading()
         assetWriter.startSession(atSourceTime: CMTime.zero)

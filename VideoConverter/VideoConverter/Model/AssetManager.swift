@@ -19,7 +19,7 @@ final class AssetManager {
     }
     
     private class func loadAssets(_ directory: Directory) -> [AVAsset] {
-        guard let urls = FileHelper().urls(for: directory) else { return [] }
+        guard let urls = FileHelper.shared.urls(for: directory) else { return [] }
         var assetList = [AVAsset]()
         
         for url in urls {

@@ -139,7 +139,7 @@ extension VideoListViewController: CustomHeaderViewDelegate {
         options.isNetworkAccessAllowed = true
         PHImageManager.default().requestExportSession(forVideo: self.videos[indexPath.row], options: options, exportPreset: AVAssetExportPresetPassthrough) { (exportSession, info) in
             guard let session = exportSession, let asset = session.asset as? AVURLAsset else { return }
-            session.outputURL = FileHelper().createFileURL(asset.url.lastPathComponent, in: .willConvert)
+            session.outputURL = FileHelper.shared.createFileURL(asset.url.lastPathComponent, in: .willConvert)
             session.outputFileType = AVFileType.mp4
                 
             self.coordinator?.startVideoSaving()

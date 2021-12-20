@@ -336,7 +336,7 @@ extension WillConvertViewController: ConvertViewDelegate {
         let newFormat = pickerViewData[pathExtensionIndex]
         let inputName = asset.url.deletingPathExtension().lastPathComponent
         let outputStr = inputName + "." + newFormat.text
-        let output = FileHelper().createFileURL(outputStr, in: .didConverted)
+        let output = FileHelper.shared.createFileURL(outputStr, in: .didConverted)
         
         convertView.startConvertAnimation()
         

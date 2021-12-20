@@ -15,7 +15,7 @@ extension AVAsset {
         switch format {
         case .mp3:
             //lame encoder needs wav file
-            let tempOutput = FileHelper().createFileURL("temp.wav", in: .temporary)
+            let tempOutput = FileHelper.shared.createFileURL("temp.wav", in: .temporary)
             let tempSetting = assetConverter.outputSetting(format: .wav,
                                                            sampleRate: .m44k,
                                                            bitRate: nil,
