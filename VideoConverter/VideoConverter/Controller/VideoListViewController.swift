@@ -29,8 +29,19 @@ class VideoListViewController: UIViewController {
         super.viewDidLoad()
         setHeader()
         setVideoListCollectionView()
-        loadVideos { [weak self] in
-            self?.videoListColletcionView.reloadData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        let photoAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
+        switch photoAuthorizationStatus {
+        case .denied:
+            showPhotoPermissionAlert()
+        default:
+            self.loadVideos {
+                self.videoListColletcionView.reloadData()
+            }
         }
     }
     
@@ -60,6 +71,11 @@ class VideoListViewController: UIViewController {
     private func setVideoListCollectionView() {
         self.sectionInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         
+        //pull to refresh
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action:  #selector(refresh(_:)), for: .valueChanged)
+        self.videoListColletcionView.refreshControl = refreshControl
+        
         self.videoListColletcionView.dataSource = self
         self.videoListColletcionView.delegate = self
         self.videoListColletcionView.register(VideoListCollectionViewCell.self, forCellWithReuseIdentifier: "VideoListCollectionViewCell")
@@ -74,16 +90,49 @@ class VideoListViewController: UIViewController {
         ])
     }
     
+    @objc func refresh(_ control: UIRefreshControl) {
+        self.videoListColletcionView.alpha = 0.5
+        self.loadVideos {
+            self.videoListColletcionView.reloadData()
+            control.endRefreshing()
+            UIView.animate(withDuration: 1, animations: {
+                self.videoListColletcionView.alpha = 1
+            }, completion: nil)
+        }
+    }
+    
     private func loadVideos(completion: () -> Void) {
         let fetchOption = PHFetchOptions()
         fetchOption.includeAssetSourceTypes = [.typeUserLibrary]
         let allVideos = PHAsset.fetchAssets(with: .video, options: fetchOption)
+        
+        self.videos.removeAll()
         
         allVideos.enumerateObjects({ phAsset, pointer,_  in
             self.videos.append(phAsset)
         })
         
         completion()
+    }
+    
+    private func showPhotoPermissionAlert() {
+        
+        let alert = UIAlertController(title: "사진첩 권한 요청", message: "사진첩 권한 허용이 필요합니다.", preferredStyle: .alert)
+        
+        let editPermission = UIAlertAction(title: "이동", style: .default) { action in
+            if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(appSettings,
+                                          options: [:],
+                                          completionHandler: nil)
+            }
+        }
+        
+        let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        
+        alert.addAction(editPermission)
+        alert.addAction(cancel)
+        
+        self.present(alert, animated: true, completion: nil)
     }
 }
 

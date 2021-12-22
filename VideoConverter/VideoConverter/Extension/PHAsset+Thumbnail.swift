@@ -15,7 +15,9 @@ extension PHAsset {
             var thumbnail = UIImage()
             option.isSynchronous = true
             manager.requestImage(for: self, targetSize: CGSize(width: 300, height: 300), contentMode: .aspectFit, options: option, resultHandler: {(result, info)->Void in
-                thumbnail = result!
+                if let result = result {
+                    thumbnail = result
+                }
             })
             return thumbnail
         }

@@ -10,53 +10,48 @@ import AVFoundation
 import lame
 
 final class AudioConverter {
-    
-    private var asset: AVAsset
+
     private var assetReader: AVAssetReader!
     private var assetWriter: AVAssetWriter!
     private var assetReaderAudioOutput: AVAssetReaderTrackOutput!
     private var assetWriterAudioInput: AVAssetWriterInput!
     private var assetAudioTrack:AVAssetTrack? = nil
-    
-    init(asset: AVAsset) {
-        self.asset = asset
-    }
-    
+    private let encoderQueue = DispatchQueue(label: "com.audio.encoder.queue")
+
     //video -> wav, caf, m4a
-    func convert(output: URL, outputType: AVFileType,  outputSettins: [String : Any], completion: @escaping (Bool) -> Void) {
-        let convertAudioQueueLabel = "convertAudioQueue"
-        let convertAudioQueue = DispatchQueue(label: convertAudioQueueLabel)
+    func convert(asset: AVAsset, output: URL, outputType: AVFileType,  outputSettins: [String : Any], completion: @escaping (Bool) -> Void) {
         
         //load asset data
-        asset.loadValuesAsynchronously(forKeys: ["tracks"], completionHandler: { [weak self] in
+        asset.loadValuesAsynchronously(forKeys: ["tracks"], completionHandler: { [self] in
             var success = true
             var localError:NSError?
-            success = (self?.asset.statusOfValue(forKey: "tracks", error: &localError) == AVKeyValueStatus.loaded)
+            success = (asset.statusOfValue(forKey: "tracks", error: &localError) == AVKeyValueStatus.loaded)
             
 
             if (success) {
-                success = self?.setupAssetReaderAndWriter(output: output,
+                success = self.setupAssetReaderAndWriter(
+                                                    asset: asset,
+                                                    output: output,
                                                     outputSettings: outputSettins,
                                                     fileType: outputType,
-                                                    dispatchQueue: convertAudioQueue) ?? false
+                                                    dispatchQueue: encoderQueue)
             } else {
-                Log.error("Setting Asset Reader and Writer Error:", localError ?? "unknown Error")
+                Log.error("Setting Asset Reader and Writer:", localError ?? "unknown Error")
             }
             if (success) {
-                success = self?.startAssetReaderAndWriter(dispatchQueue: convertAudioQueue, completion: completion) ?? false
+                success = self.startAssetReaderAndWriter(dispatchQueue: encoderQueue, completion: completion)
                 return
             } else {
                 completion(false)
-                Log.error("Starting start Asset Reader and Writer Error:", localError ?? "unknown Error")
+                Log.error("Starting Asset Reader and Writer:", localError ?? "unknown Error")
             }
             
         })
     }
-    
-    private let encoderQueue = DispatchQueue(label: "com.audio.encoder.queue")
 
     //must be inputFile: .wav, sampleRate: 44100, bitDepth: 16
     func convertMP3(
+        asset: AVAsset,
         output: URL,
         sample: SampleRate,
         bitRate: BitRate,
@@ -183,7 +178,12 @@ final class AudioConverter {
         return outputSettings
     }
     
-    private func setupAssetReaderAndWriter(output: URL, outputSettings: [String : Any], fileType: AVFileType, dispatchQueue: DispatchQueue) -> Bool {
+    private func setupAssetReaderAndWriter(
+        asset:AVAsset,
+        output: URL,
+        outputSettings: [String : Any],
+        fileType: AVFileType,
+        dispatchQueue: DispatchQueue) -> Bool {
         
         let audioTracks = asset.tracks(withMediaType: AVMediaType.audio)
         

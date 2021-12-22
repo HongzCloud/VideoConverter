@@ -25,6 +25,12 @@ class DidConvertedViewController: UIViewController {
         configureDataSource()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        self.assetManager.reloadAssets()
+        self.makeAndApplySnapShot(isAnimatable: false)
+    }
+    
     static func create(with assetManager: AssetManager) -> DidConvertedViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "DidConvertedViewController") as? DidConvertedViewController else {

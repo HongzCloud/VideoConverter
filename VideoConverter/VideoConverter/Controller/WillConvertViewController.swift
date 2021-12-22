@@ -100,7 +100,6 @@ class WillConvertViewController: UIViewController {
         NSLayoutConstraint.activate(constraints)
     }
     
-    
     @objc func refresh(_ control: UIRefreshControl) {
         self.willConvertTableView.alpha = 0.5
         self.assetManager.reloadAssets()

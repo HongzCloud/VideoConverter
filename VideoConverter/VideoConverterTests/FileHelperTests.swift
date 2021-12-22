@@ -14,10 +14,10 @@ class FileHelperTests: XCTestCase {
         XCTAssertTrue(fileHelper.createInputOutputDirectory())
     }
     
-    func testCreateOutputFileURL() throws {
+    func testCcreateFileURL() throws {
         let fileHelper = FileHelper()
-        let url = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-        XCTAssertEqual(fileHelper.createOutputFileURL("testCreateOutputFileURL.wav"), URL(fileURLWithPath: fileHelper.outputDirectoryURL.path + "/testCreateOutputFileURL.wav"))
+
+        XCTAssertEqual(fileHelper.createFileURL("testCreateOutputFileURL.wav", in: .didConverted), URL(fileURLWithPath: Directory.didConverted.rawValue.path + "/testCreateOutputFileURL.wav"))
     }
 
 }

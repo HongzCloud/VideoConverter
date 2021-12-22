@@ -7,11 +7,14 @@
 
 import UIKit
 import Photos
+import Lottie
 
 extension AVAsset {
+
     func writeAudio(output: URL, format: FileFormat, sampleRate: SampleRate, bitRate: BitRate?, bitDepth: BitPerChannel?, completion: @escaping (Bool) -> Void) {
  
-        let assetConverter = AudioConverter(asset: self)
+        let assetConverter = AudioConverter()
+        
         switch format {
         case .mp3:
             //lame encoder needs wav file
@@ -22,18 +25,23 @@ extension AVAsset {
                                                            bitDepth: .m16)
             let outputType = assetConverter.fileFormatToFileType(fileFormat: .mp3)
             
-            assetConverter.convert(output: tempOutput,
-                                   outputType: outputType,
-                                   outputSettins: tempSetting,
-                                   completion: { result in
+            assetConverter.convert(
+                asset: self,
+                output: tempOutput,
+                outputType: outputType,
+                outputSettins: tempSetting,
+                completion: { result in
+                    
                 //wav -> mp3
-                let asset = AVAsset(url: tempOutput)
-                AudioConverter(asset: asset).convertMP3(output: output,
-                                                        sample: sampleRate,
-                                                        bitRate: bitRate!,
-                                                        onProgress: nil,
-                                                        onComplete: completion)
-            })
+                let tempAsset = AVAsset(url: tempOutput)
+                    
+                    _ = assetConverter.convertMP3(
+                        asset: tempAsset,
+                        output: output,
+                        sample: sampleRate,
+                        bitRate: bitRate!,
+                        onProgress: nil,
+                        onComplete: completion)})
         default:
             //wav, caf, m4a
             let settings = assetConverter.outputSetting(format: format,
@@ -41,7 +49,8 @@ extension AVAsset {
                                          bitRate: bitRate,
                                          bitDepth: bitDepth)
             let outputType = assetConverter.fileFormatToFileType(fileFormat: format)
-            assetConverter.convert(output: output, outputType: outputType, outputSettins: settings, completion: completion)
+            
+            assetConverter.convert(asset: self, output: output, outputType: outputType, outputSettins: settings, completion: completion)
         }
         Log.debug("Output file URL:", output)
     }
