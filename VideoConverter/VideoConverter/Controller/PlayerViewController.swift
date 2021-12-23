@@ -29,6 +29,10 @@ class PlayerViewController: UIViewController {
         addTimeObserver()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        AppDelegate.AppUtility.lockOrientation([.portrait,.landscapeLeft])
+    }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
         NotificationCenter.default.removeObserver(self)
@@ -412,18 +416,16 @@ extension PlayerViewController: PlayerControlViewDelegate {
 extension PlayerViewController: CustomHeaderViewDelegate {
     
     func didTappedSceneRotateButton() {
-        if orientation == UIInterfaceOrientation.landscapeRight {
-            orientation = UIInterfaceOrientation.portrait
+        
+        if UIDevice.current.orientation == .portrait {
+            AppDelegate.AppUtility.lockOrientation([.portrait, .landscapeLeft], andRotateTo: .landscapeLeft)
         } else {
-            orientation = UIInterfaceOrientation.landscapeRight
+            AppDelegate.AppUtility.lockOrientation([.portrait, .landscapeLeft], andRotateTo: .portrait)
         }
-        UIDevice.current.setValue(orientation.rawValue, forKey: "orientation")
-        UINavigationController.attemptRotationToDeviceOrientation()
     }
     
     func didTappedExitButton() {
-        orientation = UIInterfaceOrientation.portrait
-        UIDevice.current.setValue(orientation.rawValue, forKey: "orientation")
+        AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
         self.dismiss(animated: true, completion: nil)
     }
 }

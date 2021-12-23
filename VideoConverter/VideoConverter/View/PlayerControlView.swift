@@ -80,7 +80,7 @@ class PlayerControlView: UIView {
     private let repeatPlayButton: UIButton = {
         let button = UIButton()
         button.tintColor = .white
-        button.setImage(UIImage(systemName: "repeat")!, for: .normal)
+        button.setImage(UIImage(systemName: "repeat.1")!, for: .normal)
         let symbolSize = UIImage.SymbolConfiguration.init(pointSize: 25)
         button.addTarget(self, action: #selector(didTappedRepeatPlayButton(_:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false

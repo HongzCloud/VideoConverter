@@ -143,6 +143,21 @@ class VideoListViewController: UIViewController, PHPhotoLibraryChangeObserver {
     
     func photoLibraryDidChange(_ changeInstance: PHChange) {
         self.loadVideos()
+        
+        if self.videos.isEmpty {
+            DispatchQueue.main.async {
+                var style = ToastStyle()
+                style.messageColor = .greenAndMint!
+                
+                self.view.makeToast("비디오만 가져올 수 있습니다.",
+                                    duration: 2,
+                                    point: CGPoint(x: self.view.center.x, y: self.view.center.y * 2/5),
+                                    title: nil,
+                                    image: nil,
+                                    style: style,
+                                    completion: nil)
+            }
+        }
     }
     
     private func loadVideos() {
