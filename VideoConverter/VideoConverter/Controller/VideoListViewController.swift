@@ -8,7 +8,6 @@
 import Toast_Swift
 import UIKit
 import PhotosUI
-import Lottie
 
 protocol VideoSavingDelegate: AnyObject {
     func startVideoSaving()

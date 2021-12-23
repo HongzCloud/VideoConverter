@@ -185,25 +185,6 @@ class WillConvertViewController: UIViewController {
     }
 }
 
-extension WillConvertViewController: UITableViewDataSource {
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.assetManager.assets.count
-    }
-    
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "WillConvertTableViewCell") as? WillConvertTableViewCell else { return UITableViewCell() }
-        let file = self.assetManager.assets[indexPath.row] as! AVURLAsset
-        
-        DispatchQueue.main.async {
-            cell.configure(image: nil, name: file.url.lastPathComponent, duration: file.duration.durationText)
-        }
-        cell.setPlayButtonDelegate(self)
-        cell.setMediaViewIndex(indexPath.row)
-        
-        return cell
-    }
-}
-
 extension WillConvertViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath)->CGFloat {
         return tableView.frame.height / 10
