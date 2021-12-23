@@ -52,6 +52,7 @@
 		1EC8591427204047005A1F3B /* VideoConverterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC8591327204047005A1F3B /* VideoConverterTests.swift */; };
 		1EC8591F27204047005A1F3B /* VideoConverterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC8591E27204047005A1F3B /* VideoConverterUITests.swift */; };
 		1EC8593027207424005A1F3B /* AudioInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC8592F27207424005A1F3B /* AudioInfo.swift */; };
+		1ED67FAE2773AA9D0097ED88 /* SelectMorePhotosButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED67FAD2773AA9C0097ED88 /* SelectMorePhotosButton.swift */; };
 		74E60A7E4C77E22EAC38D4E1 /* Pods_VideoConverterTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9D4D1962B10434AF7076302 /* Pods_VideoConverterTests.framework */; };
 		A58F17A3690AD2F084367573 /* Pods_VideoConverter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B60B64C24CDB733AB125400 /* Pods_VideoConverter.framework */; };
 		D7D2B3F4309063276E68936E /* Pods_VideoConverter_VideoConverterUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CC7118073DE394BBB4A3C3E /* Pods_VideoConverter_VideoConverterUITests.framework */; };
@@ -125,6 +126,7 @@
 		1EC8591E27204047005A1F3B /* VideoConverterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoConverterUITests.swift; sourceTree = "<group>"; };
 		1EC8592027204047005A1F3B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1EC8592F27207424005A1F3B /* AudioInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioInfo.swift; sourceTree = "<group>"; };
+		1ED67FAD2773AA9C0097ED88 /* SelectMorePhotosButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectMorePhotosButton.swift; sourceTree = "<group>"; };
 		3CC7118073DE394BBB4A3C3E /* Pods_VideoConverter_VideoConverterUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VideoConverter_VideoConverterUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		40F2C999DD65474937798078 /* Pods-VideoConverter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VideoConverter.release.xcconfig"; path = "Target Support Files/Pods-VideoConverter/Pods-VideoConverter.release.xcconfig"; sourceTree = "<group>"; };
 		52B4BADE68F097FF9E4C42C1 /* Pods-VideoConverter-VideoConverterUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VideoConverter-VideoConverterUITests.debug.xcconfig"; path = "Target Support Files/Pods-VideoConverter-VideoConverterUITests/Pods-VideoConverter-VideoConverterUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 				1E9B0C2A274757B700150ABD /* VideoListCollectionViewCell.swift */,
 				1E17D3F6274A295B00027A82 /* PlayerView.swift */,
 				1E17D3F8274A98FD00027A82 /* PlayerControlView.swift */,
+				1ED67FAD2773AA9C0097ED88 /* SelectMorePhotosButton.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -595,6 +598,7 @@
 				1E17D3F12748EF8000027A82 /* PHAsset+Thumbnail.swift in Sources */,
 				1E541E70276080EC0078A519 /* AppDIContainer.swift in Sources */,
 				1E022EA827422522006B51DF /* DidConvertedViewController.swift in Sources */,
+				1ED67FAE2773AA9D0097ED88 /* SelectMorePhotosButton.swift in Sources */,
 				1EC858FD27204044005A1F3B /* AppDelegate.swift in Sources */,
 				1E022EA32741838B006B51DF /* CMTime+TimeToString.swift in Sources */,
 				1E17D3F9274A98FD00027A82 /* PlayerControlView.swift in Sources */,

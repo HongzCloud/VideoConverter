@@ -7,21 +7,22 @@
 
 import Toast_Swift
 import UIKit
-import Photos
-
+import PhotosUI
+import Lottie
 
 protocol VideoSavingDelegate: AnyObject {
     func startVideoSaving()
     func completeVideoSaving(asset: AVAsset)
 }
 
-class VideoListViewController: UIViewController {
+class VideoListViewController: UIViewController, PHPhotoLibraryChangeObserver {
 
     @IBOutlet weak var videoListColletcionView: UICollectionView!
     private var header: HeaderView!
     private var sectionInsets: UIEdgeInsets!
     private var videos = [PHAsset]()
     private var selectedCellIndex: IndexPath?
+    private var selectMorePhotos: SelectMorePhotosButton!
     
     weak var coordinator: VideoSavingDelegate?
     
@@ -29,19 +30,14 @@ class VideoListViewController: UIViewController {
         super.viewDidLoad()
         setHeader()
         setVideoListCollectionView()
+        setSelectMorePhotosButton()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        let photoAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
-        switch photoAuthorizationStatus {
-        case .denied:
-            showPhotoPermissionAlert()
-        default:
-            self.loadVideos {
-                self.videoListColletcionView.reloadData()
-            }
+        requestPHPhotoLibraryAuthorization {
+            self.loadVideos()
         }
     }
     
@@ -58,6 +54,7 @@ class VideoListViewController: UIViewController {
         self.header.delegate = self
         self.header.configure(title: "비디오 목록",exitButtonIsHidden: false, saveButtonIsHidden: false)
         self.header.translatesAutoresizingMaskIntoConstraints = false
+        
         self.view.addSubview(header)
         let safeArea = self.view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
@@ -70,12 +67,7 @@ class VideoListViewController: UIViewController {
     
     private func setVideoListCollectionView() {
         self.sectionInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-        
-        //pull to refresh
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action:  #selector(refresh(_:)), for: .valueChanged)
-        self.videoListColletcionView.refreshControl = refreshControl
-        
+
         self.videoListColletcionView.dataSource = self
         self.videoListColletcionView.delegate = self
         self.videoListColletcionView.register(VideoListCollectionViewCell.self, forCellWithReuseIdentifier: "VideoListCollectionViewCell")
@@ -90,18 +82,71 @@ class VideoListViewController: UIViewController {
         ])
     }
     
-    @objc func refresh(_ control: UIRefreshControl) {
-        self.videoListColletcionView.alpha = 0.5
-        self.loadVideos {
-            self.videoListColletcionView.reloadData()
-            control.endRefreshing()
-            UIView.animate(withDuration: 1, animations: {
-                self.videoListColletcionView.alpha = 1
-            }, completion: nil)
+    private func setSelectMorePhotosButton() {
+        self.selectMorePhotos = SelectMorePhotosButton()
+        self.selectMorePhotos.translatesAutoresizingMaskIntoConstraints = false
+        self.selectMorePhotos.addTarget(self, action: #selector(didTappedSelectMorePhotosButton), for: .touchUpInside)
+        
+        self.view.addSubview(selectMorePhotos)
+        let safeArea = self.view.safeAreaLayoutGuide
+        NSLayoutConstraint.activate([
+            self.selectMorePhotos.widthAnchor.constraint(equalTo: safeArea.widthAnchor, multiplier: 1/6),
+            self.selectMorePhotos.heightAnchor.constraint(equalTo: self.selectMorePhotos.widthAnchor),
+            self.selectMorePhotos.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -20)
+        ])
+        
+        let constraint = NSLayoutConstraint(item: selectMorePhotos as Any,
+                                            attribute: .centerY,
+                                            relatedBy: .equal,
+                                            toItem: view,
+                                            attribute: .bottom,
+                                            multiplier: 2/3,
+                                            constant: 0)
+        constraint.isActive = true
+    }
+    
+    @objc private func didTappedSelectMorePhotosButton() {
+        
+        PHPhotoLibrary.requestAuthorization(for: .readWrite) {
+            (status) in
+            switch status {
+            case .limited:
+                DispatchQueue.main.async {
+                    PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: self)
+                }
+            case .denied:
+                DispatchQueue.main.async {
+                    self.showPhotoPermissionAlert()
+                }
+            default: break
+            }
         }
     }
     
-    private func loadVideos(completion: () -> Void) {
+    private func requestPHPhotoLibraryAuthorization(completion: @escaping () -> Void) {
+    
+        PHPhotoLibrary.requestAuthorization(for: .readWrite) {
+            (status) in
+            switch status {
+            case .limited:
+                PHPhotoLibrary.shared().register(self)
+                completion()
+            case .authorized:
+                DispatchQueue.main.async {
+                    self.selectMorePhotos.isHidden = true
+                }
+                completion()
+            default:
+                self.showPhotoPermissionAlert()
+            }
+        }
+    }
+    
+    func photoLibraryDidChange(_ changeInstance: PHChange) {
+        self.loadVideos()
+    }
+    
+    private func loadVideos() {
         let fetchOption = PHFetchOptions()
         fetchOption.includeAssetSourceTypes = [.typeUserLibrary]
         let allVideos = PHAsset.fetchAssets(with: .video, options: fetchOption)
@@ -112,7 +157,9 @@ class VideoListViewController: UIViewController {
             self.videos.append(phAsset)
         })
         
-        completion()
+        DispatchQueue.main.async {
+            self.videoListColletcionView.reloadData()
+        }
     }
     
     private func showPhotoPermissionAlert() {
@@ -175,6 +222,14 @@ extension VideoListViewController: UICollectionViewDelegate, UICollectionViewDel
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.selectedCellIndex = indexPath
+    }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        self.selectMorePhotos.alpha = 0.8
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.selectMorePhotos.alpha = 0.3
     }
 }
 

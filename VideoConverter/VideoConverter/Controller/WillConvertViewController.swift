@@ -193,9 +193,13 @@ extension WillConvertViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "WillConvertTableViewCell") as? WillConvertTableViewCell else { return UITableViewCell() }
         let file = self.assetManager.assets[indexPath.row] as! AVURLAsset
-        cell.configure(image: nil, name: file.url.lastPathComponent, duration: file.duration.durationText)
+        
+        DispatchQueue.main.async {
+            cell.configure(image: nil, name: file.url.lastPathComponent, duration: file.duration.durationText)
+        }
         cell.setPlayButtonDelegate(self)
         cell.setMediaViewIndex(indexPath.row)
+        
         return cell
     }
 }
@@ -208,8 +212,11 @@ extension WillConvertViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let file = self.assetManager.assets[indexPath.row] as! AVURLAsset
         self.selectedCellIndex = indexPath
-        convertView.isHidden = false
-        convertView.configure(currentFormat: file.url.pathExtension, index: indexPath.row)
+        
+        DispatchQueue.main.async {
+            self.convertView.isHidden = false
+            self.convertView.configure(currentFormat: file.url.pathExtension, index: indexPath.row)
+        }
         
         if !self.headerView.isHidden {
             willConvertTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: self.convertView.frame.height, right: 0)
