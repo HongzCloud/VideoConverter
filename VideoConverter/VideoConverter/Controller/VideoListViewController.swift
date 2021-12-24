@@ -51,7 +51,7 @@ class VideoListViewController: UIViewController, PHPhotoLibraryChangeObserver {
     private func setHeader() {
         self.header = HeaderView()
         self.header.delegate = self
-        self.header.configure(title: "비디오 목록",exitButtonIsHidden: false, saveButtonIsHidden: false)
+        self.header.configure(title: "비디오 보관함",exitButtonIsHidden: false, saveButtonIsHidden: false)
         self.header.translatesAutoresizingMaskIntoConstraints = false
         
         self.view.addSubview(header)

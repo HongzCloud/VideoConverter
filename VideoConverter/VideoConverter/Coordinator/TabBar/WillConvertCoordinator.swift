@@ -55,7 +55,7 @@ final class WillConvertCoordinator: Coordinator {
     
     func presentShareViewController(url: URL) {
         self.navigationController.view.makeToastActivity(.center)
- 
+
         var shareObject = [Any]()
         shareObject.append(url)
         
@@ -75,7 +75,7 @@ final class WillConvertCoordinator: Coordinator {
             style.messageColor = .greenAndMint!
             
             if completed {
-                self.navigationController.view.makeToast("공유 성공",
+                self.navigationController.view.makeToast("성공",
                                                          duration: 2,
                                                          point: CGPoint(x: self.navigationController.view.center.x, y: self.navigationController.view.center.y * 3/2),
                                                          title: nil,
@@ -84,14 +84,14 @@ final class WillConvertCoordinator: Coordinator {
                                                          completion: nil)
             } else {
                 if let shareError = error {
-                    self.navigationController.view.makeToast("공유 실패",
+                    self.navigationController.view.makeToast("실패",
                                                              duration: 2,
                                                              point: CGPoint(x: self.navigationController.view.center.x, y: self.navigationController.view.center.y * 3/2),
                                                              title: nil,
                                                              image: nil,
                                                              style: style,
                                                              completion: nil)
-                    Log.info("공유실패:", shareError.localizedDescription)
+                    Log.info("공유 실패:", shareError.localizedDescription)
                 }
             }
         }
