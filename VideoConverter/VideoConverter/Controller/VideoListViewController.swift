@@ -51,7 +51,7 @@ class VideoListViewController: UIViewController, PHPhotoLibraryChangeObserver {
     private func setHeader() {
         self.header = HeaderView()
         self.header.delegate = self
-        self.header.configure(title: "비디오 보관함",exitButtonIsHidden: false, saveButtonIsHidden: false)
+        self.header.configure(title: "비디오 보관함".localized(), exitButtonIsHidden: false, saveButtonIsHidden: false)
         self.header.translatesAutoresizingMaskIntoConstraints = false
         
         self.view.addSubview(header)
@@ -149,7 +149,7 @@ class VideoListViewController: UIViewController, PHPhotoLibraryChangeObserver {
                 var style = ToastStyle()
                 style.messageColor = .greenAndMint!
                 
-                self.view.makeToast("비디오만 가져올 수 있습니다.",
+                self.view.makeToast("비디오만 가져올 수 있습니다.".localized(),
                                     duration: 2,
                                     point: CGPoint(x: self.view.center.x, y: self.view.center.y * 2/5),
                                     title: nil,
@@ -178,22 +178,25 @@ class VideoListViewController: UIViewController, PHPhotoLibraryChangeObserver {
     
     private func showPhotoPermissionAlert() {
         
-        let alert = UIAlertController(title: "사진첩 권한 요청", message: "사진첩 권한 허용이 필요합니다.", preferredStyle: .alert)
-        
-        let editPermission = UIAlertAction(title: "이동", style: .default) { action in
-            if let appSettings = URL(string: UIApplication.openSettingsURLString) {
-                UIApplication.shared.open(appSettings,
-                                          options: [:],
-                                          completionHandler: nil)
+        DispatchQueue.main.async {
+            
+            let alert = UIAlertController(title: "사진첩 권한 요청".localized(), message: "사용자의 사진첩에 있는 동영상을 변환하기 위해 사진첩 권한 허용이 필요합니다.".localized(), preferredStyle: .alert)
+            
+            let editPermission = UIAlertAction(title: "이동".localized(), style: .default) { action in
+                if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(appSettings,
+                                              options: [:],
+                                              completionHandler: nil)
+                }
             }
+            
+            let cancel = UIAlertAction(title: "취소".localized(), style: .cancel, handler: nil)
+            
+            alert.addAction(editPermission)
+            alert.addAction(cancel)
+            
+            self.present(alert, animated: true, completion: nil)
         }
-        
-        let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        
-        alert.addAction(editPermission)
-        alert.addAction(cancel)
-        
-        self.present(alert, animated: true, completion: nil)
     }
 }
 

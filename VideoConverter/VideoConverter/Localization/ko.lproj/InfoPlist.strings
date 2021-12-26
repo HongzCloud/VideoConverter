@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  VideoConverter
+
+  Created by 오킹 on 2021/12/26.
+  
+*/
+CFBundleDisplayName = "비디오 변환";
+NSPhotoLibraryUsageDescription = "액세스를 허용하면 사용자의 사진에 있는 동영상을 다른 포맷으로 변환할 수 있습니다. 또한 동영상을 재생 또는 공유할 수도 있습니다.";

@@ -1,0 +1,42 @@
+/* 
+  Localizable.strings
+  VideoConverter
+
+  Created by 오킹 on 2021/12/26.
+  
+*/
+
+//Header
+"비디오 목록" = "Video List";
+"오디오 목록" = "Audio List";
+"비디오 보관함" = "Video Storage";
+
+//Edit file name
+"파일명 수정" = "Editing File Name";
+"파일명을 입력하세요.\n(영어, 한글, 숫자, -, _) 1~20글자" = "Write a new file name.\n(English, Korean, Number, -, _) 1~20 letters";
+"파일명 변경 실패" = "Failed to edit the file's name.";
+
+//Get the Video
+"비디오 가져오는 중" = "Getting the video...";
+"비디오만 가져올 수 있습니다." = "you can get only video.";
+
+//Share
+"성공" = "Success";
+"실패" = "Fail";
+
+//Convert
+"변환 완료" = "Conversion complete";
+"변환이 불가능한 파일입니다." = "It is a file that can't be converted.";
+
+//Play
+"재생할 수 없는 파일입니다." = "It's a file that can't be played.";
+
+//Photo Libaray permission
+"사진첩 권한 요청" = "Request permission for photo album.";
+"사용자의 사진첩에 있는 동영상을 변환하기 위해 사진첩 권한 허용이 필요합니다." = "you should permit access for photo album to convert the video.";
+"이동" = "Move";
+"취소" = "Cancel";
+
+//Remove File
+"파일 삭제" = "Remove file";
+"파일을 삭제할 수 없습니다." = "Failed to delete the file.";

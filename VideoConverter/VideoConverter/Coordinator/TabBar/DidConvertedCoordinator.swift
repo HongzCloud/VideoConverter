@@ -64,7 +64,7 @@ final class DidConvertedCoordinator: Coordinator {
             style.messageColor = .greenAndMint!
             
             if completed {
-                self.navigationController.view.makeToast("성공",
+                self.navigationController.view.makeToast("성공".localized(),
                                                          duration: 2,
                                                          point: CGPoint(x: self.navigationController.view.center.x, y: self.navigationController.view.center.y * 3/2),
                                                          title: nil,
@@ -73,7 +73,7 @@ final class DidConvertedCoordinator: Coordinator {
                                                          completion: nil)
             } else {
                 if let shareError = error {
-                    self.navigationController.view.makeToast("실패",
+                    self.navigationController.view.makeToast("실패".localized(),
                                                              duration: 2,
                                                              point: CGPoint(x: self.navigationController.view.center.x, y: self.navigationController.view.center.y * 3/2),
                                                              title: nil,

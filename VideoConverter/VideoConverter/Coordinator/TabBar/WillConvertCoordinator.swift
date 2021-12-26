@@ -75,7 +75,7 @@ final class WillConvertCoordinator: Coordinator {
             style.messageColor = .greenAndMint!
             
             if completed {
-                self.navigationController.view.makeToast("성공",
+                self.navigationController.view.makeToast("성공".localized(),
                                                          duration: 2,
                                                          point: CGPoint(x: self.navigationController.view.center.x, y: self.navigationController.view.center.y * 3/2),
                                                          title: nil,
@@ -84,7 +84,7 @@ final class WillConvertCoordinator: Coordinator {
                                                          completion: nil)
             } else {
                 if let shareError = error {
-                    self.navigationController.view.makeToast("실패",
+                    self.navigationController.view.makeToast("실패".localized(),
                                                              duration: 2,
                                                              point: CGPoint(x: self.navigationController.view.center.x, y: self.navigationController.view.center.y * 3/2),
                                                              title: nil,
@@ -104,7 +104,7 @@ extension WillConvertCoordinator: VideoSavingDelegate {
         var style = ToastStyle()
         style.messageColor = .greenAndMint!
         
-        let toast = try? self.navigationController.view.toastViewForMessage("비디오 가져오는 중", title: nil, image: nil, style: style)
+        let toast = try? self.navigationController.view.toastViewForMessage("비디오 가져오는 중".localized(), title: nil, image: nil, style: style)
         
         if let toast = toast {
             self.navigationController.view.showToast(toast, point: CGPoint(x: self.navigationController.view.center.x, y: self.navigationController.view.center.y/3))

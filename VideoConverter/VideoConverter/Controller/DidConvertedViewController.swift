@@ -46,7 +46,7 @@ class DidConvertedViewController: UIViewController {
 
     private func setHeaderView() {
         self.headerView = HeaderView()
-        self.headerView.configure(title: "오디오 목록")
+        self.headerView.configure(title: "오디오 목록".localized())
         self.headerView.translatesAutoresizingMaskIntoConstraints = false
         
         self.view.addSubview(headerView)
@@ -89,8 +89,8 @@ class DidConvertedViewController: UIViewController {
     }
     
     private func editFileNameAlert(oldName: String, completion: @escaping (_ newName: String) -> Void) {
-        alert = UIAlertController(title: "파일명 수정",
-                                  message: "파일명을 입력하세요\n(영어,한글,숫자,-,_) 1~20글자",
+        alert = UIAlertController(title: "파일명 수정".localized(),
+                                  message: "파일명을 입력하세요.\n(영어, 한글, 숫자, -, _) 1~20글자".localized(),
                                   preferredStyle: .alert)
         
         let ok = UIAlertAction(title: "OK", style: .default) { [weak self] (ok) in
@@ -175,8 +175,8 @@ extension DidConvertedViewController: UITableViewDelegate {
                     self.makeAndApplySnapShot(isAnimatable: true)
                     completion(true)
                 } else {
-                    let alert = UIAlertController(title: "파일 삭제",
-                                                  message: "파일을 삭제할 수 없습니다.",
+                    let alert = UIAlertController(title: "파일 삭제".localized(),
+                                                  message: "파일을 삭제할 수 없습니다.".localized(),
                                                   preferredStyle: .alert)
                     let ok = UIAlertAction(title: "OK", style: .default)
                     
@@ -200,8 +200,8 @@ extension DidConvertedViewController: UITableViewDelegate {
                         self?.makeAndApplySnapShot(isAnimatable: true)
                         completion(true)
                     } else {
-                        let alert = UIAlertController(title: "파일명 수정",
-                                                      message: "파일명 변경 실패",
+                        let alert = UIAlertController(title: "파일명 수정".localized(),
+                                                      message: "파일명 변경 실패".localized(),
                                                       preferredStyle: .alert)
                         let ok = UIAlertAction(title: "OK", style: .default)
                         
@@ -235,7 +235,7 @@ extension DidConvertedViewController: MediaViewDelegate {
             var style = ToastStyle()
             style.messageColor = .greenAndMint!
             
-            self.view.makeToast("재생할 수 없는 파일입니다",
+            self.view.makeToast("재생할 수 없는 파일입니다".localized(),
                                 duration: 2,
                                 point: CGPoint(x: self.view.center.x, y: self.view.center.y * 3/2),
                                 title: nil,
