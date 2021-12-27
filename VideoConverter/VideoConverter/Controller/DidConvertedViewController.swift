@@ -23,6 +23,7 @@ class DidConvertedViewController: UIViewController {
         setHeaderView()
         setTableView()
         configureDataSource()
+        addConvertObserver()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -86,6 +87,15 @@ class DidConvertedViewController: UIViewController {
         UIView.animate(withDuration: 1, animations: {
             self.didConvertedTableView.alpha = 1
         }, completion: nil)
+    }
+    
+    private func addConvertObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadTableViewData(_:)), name: NSNotification.Name(rawValue: "aVideoConverted"), object: nil)
+    }
+    
+    @objc func reloadTableViewData(_ notification: Notification) {
+        self.assetManager.reloadAssets()
+        self.makeAndApplySnapShot(isAnimatable: false)
     }
     
     private func editFileNameAlert(oldName: String, completion: @escaping (_ newName: String) -> Void) {

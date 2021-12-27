@@ -379,8 +379,10 @@ extension WillConvertViewController: ConvertViewDelegate {
                                         style: style,
                                         completion: nil)
                 }
+                
                 self.isConverting = false
                 convertView.endConvertAnimation()
+                NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: "aVideoConverted"), object: self))
             }
         })
     }
