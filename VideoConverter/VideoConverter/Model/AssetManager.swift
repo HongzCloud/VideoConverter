@@ -23,7 +23,11 @@ final class AssetManager {
         var assetList = [AVAsset]()
         
         for url in urls {
-            assetList.append(AVAsset(url: url))
+            let asset = AVAsset(url: url)
+            
+            if asset.isPlayable {
+                assetList.append(AVAsset(url: url))
+            }
         }
         
         assetList.sort { one, other in

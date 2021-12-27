@@ -16,7 +16,7 @@ extension CMTime {
         let h: Int = sInt / 3600
         
         if h > 0 {
-            return String(format: "%02:%02d:%02d", h, m, s)
+            return String(format: "%02d:%02d:%02d", h, m, s)
         } else {
             return String(format: "%02d:%02d", m, s)
         }

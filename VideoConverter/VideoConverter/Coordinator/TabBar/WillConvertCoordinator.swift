@@ -107,7 +107,7 @@ extension WillConvertCoordinator: VideoSavingDelegate {
         let toast = try? self.navigationController.view.toastViewForMessage("비디오 가져오는 중".localized(), title: nil, image: nil, style: style)
         
         if let toast = toast {
-            self.navigationController.view.showToast(toast, point: CGPoint(x: self.navigationController.view.center.x, y: self.navigationController.view.center.y/3))
+            self.navigationController.view.showToast(toast, duration: .infinity, point: CGPoint(x: self.navigationController.view.center.x, y: self.navigationController.view.center.y/3), completion: nil)
         }
     }
     
