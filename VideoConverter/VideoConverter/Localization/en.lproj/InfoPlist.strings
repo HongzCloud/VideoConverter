@@ -6,4 +6,6 @@
   
 */
 CFBundleDisplayName = "VideoConverter";
-NSPhotoLibraryUsageDescription = "By allowing access, you can convert the video in the user's picture into a different format. You can also play and share videos.";
+NSPhotoLibraryUsageDescription = "This lets you convert videos in your library and play or share videos.";
+
+
