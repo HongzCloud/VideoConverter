@@ -10,7 +10,7 @@ import AVFoundation
 
 final class AssetManager {
     
-    private(set) var assets: [AVAsset]
+    private(set) var assets: [AVAsset] 
     private var directoryPath: Directory
     
     init(directoryPath: Directory) {
@@ -25,7 +25,7 @@ final class AssetManager {
         for url in urls {
             let asset = AVAsset(url: url)
             
-            if asset.isPlayable {
+            if asset.isPlayable && asset.duration > .zero {
                 assetList.append(AVAsset(url: url))
             }
         }
