@@ -33,6 +33,7 @@ class PlayerViewController: UIViewController {
         super.viewWillAppear(true)
         AppDelegate.AppUtility.lockOrientation([.portrait,.landscapeLeft])
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
         NotificationCenter.default.removeObserver(self)
@@ -73,8 +74,6 @@ class PlayerViewController: UIViewController {
         
         self.remoteCommandCenterSetting()
         self.remoteCommandInfoCenterSetting()
-        self.addObserverForBackground()
-        self.addObserverForForground()
         self.addObserverForPlayEndTime(isRepeatPlay: self.isSelectedRepeatPlayButton)
     }
     
@@ -93,15 +92,20 @@ class PlayerViewController: UIViewController {
         center.playCommand.addTarget { [weak self] (commandEvent) -> MPRemoteCommandHandlerStatus in
             
             self?.player.play()
+            self?.playerControlView.configurePlayButton(image: UIImage(systemName: "pause.fill")!)
+            
             self?.nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: CMTimeGetSeconds(self?.player.currentItem?.currentTime() ?? CMTime.zero))
             self?.nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1
             MPNowPlayingInfoCenter.default().nowPlayingInfo = self?.nowPlayingInfo
+     
             return .success
         }
         
         // 제어 센터 일시정지 버튼
         center.pauseCommand.addTarget { [weak self] (commandEvent) -> MPRemoteCommandHandlerStatus in
             self?.player.pause()
+            self?.playerControlView.configurePlayButton(image: UIImage(systemName: "play.fill")!)
+            
             self?.nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: CMTimeGetSeconds(self?.player.currentItem!.currentTime() ?? CMTime.zero))
             self?.nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = 0
             MPNowPlayingInfoCenter.default().nowPlayingInfo = self?.nowPlayingInfo
@@ -219,37 +223,6 @@ class PlayerViewController: UIViewController {
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: CMTimeGetSeconds(self.player.currentItem?.currentTime() ?? CMTime.zero))
         
         center.nowPlayingInfo = nowPlayingInfo
-    }
-    
-    private func addObserverForBackground() {
-        if #available(iOS 13.0, *) {
-            NotificationCenter.default.addObserver(self, selector: #selector(updateRemoteCommandCenter), name: UIScene.willDeactivateNotification, object: nil)
-        } else {
-            NotificationCenter.default.addObserver(self, selector: #selector(updateRemoteCommandCenter), name: UIApplication.willResignActiveNotification, object: nil)
-        }
-    }
-    
-    private func addObserverForForground() {
-        if #available(iOS 13.0, *) {
-            NotificationCenter.default.addObserver(self, selector: #selector(updateRemoteCommandCenter), name: UIScene.willEnterForegroundNotification, object: nil)
-        } else {
-            NotificationCenter.default.addObserver(self, selector: #selector(updateRemoteCommandCenter), name: UIApplication.willEnterForegroundNotification, object: nil)
-        }
-    }
-        
-    @objc func updateRemoteCommandCenter() {
-        
-        let isVideo = !self.assetManager.assets[playingIndex].tracks(withMediaType: .video).isEmpty
-        
-        if player.timeControlStatus == .playing && !isVideo {
-            self.playerControlView.configurePlayButton(image: UIImage(systemName: "pause.fill")!)
-            nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = self.player.rate
-        } else {
-            self.playerControlView.configurePlayButton(image: UIImage(systemName: "play.fill")!)
-            nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = 0
-        }
-        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: CMTimeGetSeconds(player.currentItem!.currentTime()))
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
 
     private func setHeaderView() {

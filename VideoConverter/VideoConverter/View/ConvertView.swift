@@ -109,7 +109,9 @@ class ConvertView: UIView {
     }
     
     func startConvertAnimation() {
-        self.convertButton.animationView.play(completion: nil)
+        self.convertButton.animationView.play(fromProgress: .leastNormalMagnitude, toProgress: .greatestFiniteMagnitude, loopMode: .loop, completion: { _ in
+            self.activateConvertButton()
+        })
     }
     
     func endConvertAnimation() {
@@ -120,10 +122,19 @@ class ConvertView: UIView {
     @objc
     func didTappedConvertButton(_ sender: UIButton!) {
         self.delegate?.didTappedConvertButton(self)
+        self.deactivateConvertButton()
     }
     
     func configure(currentFormat: String, index: Int) {
         self.currentExtensionNameLabel.text = currentFormat
         self.index = index
+    }
+    
+    func activateConvertButton() {
+        self.convertButton.isEnabled = true
+    }
+    
+    func deactivateConvertButton() {
+        self.convertButton.isEnabled = false
     }
 }

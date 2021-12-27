@@ -21,6 +21,7 @@ class WillConvertViewController: UIViewController {
     private var videoSaveToast: UIView!
     private var alert: UIAlertController?
     private var dataSource: DiffableDataSource!
+    private var isConverting: Bool = false
 
     private var coordinator: WillConvertCoordinator?
     
@@ -31,8 +32,14 @@ class WillConvertViewController: UIViewController {
         setConvertView()
         setTableView()
         configureDataSource()
+        addObserverForForground()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        self.changeStateOfConvertButton()
+    }
+
     static func create(with assetManager: AssetManager) -> WillConvertViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "WillConvertViewController") as? WillConvertViewController else {
@@ -108,6 +115,24 @@ class WillConvertViewController: UIViewController {
         UIView.animate(withDuration: 1, animations: {
             self.willConvertTableView.alpha = 1
         }, completion: nil)
+    }
+    
+    private func addObserverForForground() {
+        if #available(iOS 13.0, *) {
+            NotificationCenter.default.addObserver(self, selector: #selector(changeStateOfConvertButton), name: UIScene.willEnterForegroundNotification, object: nil)
+        } else {
+            NotificationCenter.default.addObserver(self, selector: #selector(changeStateOfConvertButton), name: UIApplication.willEnterForegroundNotification, object: nil)
+        }
+    }
+    
+    @objc func changeStateOfConvertButton() {
+        if isConverting {
+            self.convertView.deactivateConvertButton()
+            self.convertView.startConvertAnimation()
+        } else {
+            self.convertView.activateConvertButton()
+            self.convertView.endConvertAnimation()
+        }
     }
     
     private func editFileNameAlert(oldName: String, completion: @escaping (_ newName: String) -> Void) {
@@ -317,6 +342,8 @@ extension WillConvertViewController: MediaViewDelegate {
 
 extension WillConvertViewController: ConvertViewDelegate {
     func didTappedConvertButton(_ convertView: ConvertView) {
+        self.isConverting = true
+        
         let asset = self.assetManager.assets[convertView.index] as! AVURLAsset
         
         let pathExtensionIndex = self.convertView.didConvertedExtensionNamePickerView.selectedRow(inComponent: 0)
@@ -334,9 +361,9 @@ extension WillConvertViewController: ConvertViewDelegate {
                 let point = CGPoint(x: self.view.center.x, y: self.view.center.y * 3/2)
                 
                 if result {
-                    convertView.endConvertAnimation()
+                    let  topVC = UIApplication.getTopMostViewController()
                     
-                    self.view.makeToast("변환 완료".localized(),
+                    topVC?.view.makeToast("변환 완료".localized(),
                                         duration: 2,
                                         point: point,
                                         title: nil,
@@ -352,6 +379,8 @@ extension WillConvertViewController: ConvertViewDelegate {
                                         style: style,
                                         completion: nil)
                 }
+                self.isConverting = false
+                convertView.endConvertAnimation()
             }
         })
     }
