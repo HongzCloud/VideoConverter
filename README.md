@@ -39,6 +39,7 @@ unspecified: ex)xcode 13에서 swift 5을 지원하지 않는 경우 unspecified
 |lame|1.0.0|GPL|https://lame.sourceforge.io/license.txt|
 |Lottie|3.2.3|MIT|https://github.com/airbnb/lottie/blob/master/LICENSE|
 |Toast-Swift|5.0.1|MIT|https://github.com/scalessec/Toast-Swift|
+
 lame code 변경사항 없음.
 
 <br>
