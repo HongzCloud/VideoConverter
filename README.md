@@ -34,7 +34,7 @@ unspecified: ex)xcode 13에서 swift 5을 지원하지 않는 경우 unspecified
 <br>
 
 ## APIs
-|API|버전|라이센스|웹페이지|
+|API|버전|라이센스|API웹페이지|
 |---|---|---|---|
 |lame|1.0.0|GPL|https://lame.sourceforge.io/license.txt|
 |Lottie|3.2.3|MIT|https://github.com/airbnb/lottie/blob/master/LICENSE|
@@ -45,9 +45,12 @@ lame code 변경사항 없음.
 <br>
 
 ## 라이센스
-비디오 변환은 GPL과 MIT에 따라 배포됩니다.  
-GPL(english) : http://www.gnu.org/licenses/gpl-3.0.html  
-GPL(번역) : https://www.oss.kr/oss_guide/show/08c69f3d-d8d6-4351-bc03-8821d6d200d3  
-MIT : https://opensource.org/licenses/MIT
+'비디오 변환'은 GPL과 MIT에 따라 배포됩니다.   
 
+|라이센스|웹페이지|
+|---|---|
+|GPL|English: http://www.gnu.org/licenses/gpl-3.0.html<br>번역: https://www.oss.kr/oss_guide/show/08c69f3d-d8d6-4351-bc03-8821d6d200d3|
+|MIT|https://opensource.org/licenses/MIT|
+
+ 
 
