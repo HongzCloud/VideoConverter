@@ -91,7 +91,7 @@ class WillConvertViewController: UIViewController {
         self.willConvertTableView.delegate = self
         self.willConvertTableView.register(WillConvertTableViewCell.self, forCellReuseIdentifier: "WillConvertTableViewCell")
         
-        //pull to refresh
+        // Pull to refresh
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action:  #selector(refresh(_:)), for: .valueChanged)
         self.willConvertTableView.refreshControl = refreshControl
@@ -124,7 +124,7 @@ class WillConvertViewController: UIViewController {
             NotificationCenter.default.addObserver(self, selector: #selector(changeStateOfConvertButton), name: UIApplication.willEnterForegroundNotification, object: nil)
         }
     }
-    
+
     @objc func changeStateOfConvertButton() {
         if isConverting {
             self.convertView.deactivateConvertButton()

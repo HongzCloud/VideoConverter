@@ -10,7 +10,7 @@ import AVFoundation
 
 final class AssetManager {
     
-    private(set) var assets: [AVAsset] 
+    private(set) var assets: [AVAsset]
     private var directoryPath: Directory
     
     init(directoryPath: Directory) {
