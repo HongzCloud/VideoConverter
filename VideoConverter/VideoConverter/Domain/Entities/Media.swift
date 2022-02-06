@@ -9,13 +9,5 @@ import Foundation
 import AVFoundation
 
 struct Media {
-    private let urlAsset: AVURLAsset
-    private var shouldPlay: Bool
-    private let metadata: NowPlayableStaticMetadata
-
-    init(metadata: NowPlayableStaticMetadata) {
-        self.urlAsset = AVURLAsset(url: metadata.assetURL)
-        self.shouldPlay = true
-        self.metadata = metadata
-    }
+    let metadata: NowPlayableStaticMetadata
 }

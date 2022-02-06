@@ -12,7 +12,6 @@ import Toast_Swift
 
 class WillConvertViewController: UIViewController {
 
-    private var assetManager: AssetManager!
     @IBOutlet weak var willConvertTableView: UITableView!
     private var convertView: ConvertView!
     private var headerView: HeaderView!
@@ -24,6 +23,7 @@ class WillConvertViewController: UIViewController {
     private var isConverting: Bool = false
 
     private var coordinator: WillConvertCoordinator?
+    private var viewModel: WillConvertViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,12 +40,12 @@ class WillConvertViewController: UIViewController {
         self.changeStateOfConvertButton()
     }
 
-    static func create(with assetManager: AssetManager) -> WillConvertViewController {
+    static func create(with viewModel: WillConvertViewModel) -> WillConvertViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "WillConvertViewController") as? WillConvertViewController else {
             return WillConvertViewController()
         }
-        vc.assetManager = assetManager
+        vc.viewModel = viewModel
         return vc
     }
 
@@ -109,7 +109,7 @@ class WillConvertViewController: UIViewController {
     
     @objc func refresh(_ control: UIRefreshControl) {
         self.willConvertTableView.alpha = 0.5
-        self.assetManager.reloadAssets()
+        self.viewModel.loadWillConvertMediaList()
         self.makeAndApplySnapShot(isAnimatable: false)
         control.endRefreshing()
         UIView.animate(withDuration: 1, animations: {
@@ -164,7 +164,8 @@ class WillConvertViewController: UIViewController {
     }
     
     private func isValidFileName(_ name: String) -> Bool {
-        //영어 소문자,대문자,한글,숫자 1~20자리
+        
+        // 영어 소문자,대문자,한글,숫자 1~20자리
         let pattern = "^[A-Za-z0-9가-힣_-]{1,20}$"
         let regex = try? NSRegularExpression(pattern: pattern)
         if let _ = regex?.firstMatch(in: name, options: [], range: NSRange(location: 0, length: name.count)) {
@@ -175,23 +176,24 @@ class WillConvertViewController: UIViewController {
     }
     
     private func makeAndApplySnapShot(isAnimatable: Bool) {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, AVAsset>()
+        var snapshot = NSDiffableDataSourceSnapshot<Section, WillConvertListItemViewModel>()
         
         snapshot.appendSections([.main])
-        snapshot.appendItems(assetManager.assets)
+        snapshot.appendItems(viewModel.items)
+
         self.dataSource.apply(snapshot, animatingDifferences: isAnimatable, completion: nil)
     }
     
     private func configureDataSource() {
-        dataSource = DiffableDataSource(tableView: willConvertTableView, cellProvider: { tableView, indexPath, asset in
+        dataSource = DiffableDataSource(tableView: willConvertTableView, cellProvider: { tableView, indexPath, media in
             
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "WillConvertTableViewCell") as? WillConvertTableViewCell else { return UITableViewCell() }
             
-            let avUrlAsset = asset as! AVURLAsset
+            let asset = AVAsset(url: media.url)
             
             asset.generateThumbnail(completion: { thumnailImage in
                 DispatchQueue.main.async {
-                    cell.configure(image: thumnailImage, name: avUrlAsset.url.lastPathComponent, duration: avUrlAsset.duration.durationText)
+                    cell.configure(image: thumnailImage, name: media.url.lastPathComponent, duration: asset.duration.durationText)
                 }
             })
             cell.setPlayButtonDelegate(self)
@@ -205,7 +207,8 @@ class WillConvertViewController: UIViewController {
     }
     
     func addVideo(_ asset: AVAsset) {
-        self.assetManager.appendAsset(asset)
+        let asset = asset as! AVURLAsset
+        self.viewModel.appendMedia(url: asset.url)
         self.makeAndApplySnapShot(isAnimatable: true)
     }
 }
@@ -216,12 +219,12 @@ extension WillConvertViewController: UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let file = self.assetManager.assets[indexPath.row] as! AVURLAsset
+        let item = self.viewModel.items[indexPath.row]
         self.selectedCellIndex = indexPath
         
         DispatchQueue.main.async {
             self.convertView.isHidden = false
-            self.convertView.configure(currentFormat: file.url.pathExtension, index: indexPath.row)
+            self.convertView.configure(currentFormat: item.url.pathExtension, index: indexPath.row)
         }
         
         if !self.headerView.isHidden {
@@ -233,8 +236,9 @@ extension WillConvertViewController: UITableViewDelegate {
         let action = UIContextualAction(style: .normal, title: nil) { [weak self]
             (action, view, completion) in
             
-            //삭제하기
-            self?.assetManager.removeAsset(at: indexPath.row, completion: {
+            // 삭제하기
+            
+            self?.viewModel.removeMedia(at: indexPath.row, completion: {
                 result in
                 if result {
                     self?.makeAndApplySnapShot(isAnimatable: true)
@@ -254,12 +258,12 @@ extension WillConvertViewController: UITableViewDelegate {
         
         let fileNameEditAction = UIContextualAction(style: .normal, title: nil) { [weak self] (action, view, completion) in
 
-            //수정하기
-            let asset = self?.assetManager.assets[indexPath.row] as! AVURLAsset
-            let urlString = asset.url.deletingPathExtension().lastPathComponent
+            // 수정하기
+            
+            guard let oldName = self?.viewModel.items[indexPath.row].title else { return }
 
-            self?.editFileNameAlert(oldName: urlString.precomposedStringWithCanonicalMapping, completion: { newName in
-                self?.assetManager.editAsset(at: indexPath.row, name: newName, completion: {
+            self?.editFileNameAlert(oldName: oldName.precomposedStringWithCanonicalMapping, completion: { newName in
+                self?.viewModel.editMedia(at: indexPath.row, name: newName, completion: {
                     result in
                     
                     if result {
@@ -314,10 +318,10 @@ extension WillConvertViewController: MediaViewDelegate {
     
     func didTappedPlayButton(selectedIndex: Int) {
 
-        let asset = self.assetManager.assets[selectedIndex] as! AVURLAsset
+        let asset = AVURLAsset(url: self.viewModel.items[selectedIndex].url)
 
         if asset.isPlayable {
-            coordinator?.presentPlayerViewController(assetManager: assetManager, tappedIndex: selectedIndex)
+            //coordinator?.presentPlayerViewController(assetManager: assetManager, tappedIndex: selectedIndex)
         } else {
             var style = ToastStyle()
             style.messageColor = .greenAndMint!
@@ -333,9 +337,10 @@ extension WillConvertViewController: MediaViewDelegate {
     }
     
     func didTappedMediaShareButton(selectedIndex: Int) {
-        let asset = self.assetManager.assets[selectedIndex] as! AVURLAsset
+        let url = self.viewModel.items[selectedIndex].url
+        
         DispatchQueue.main.async { [weak self] in
-            self?.coordinator?.presentShareViewController(url: asset.url)
+            self?.coordinator?.presentShareViewController(url: url)
         }
     }
 }
@@ -344,7 +349,7 @@ extension WillConvertViewController: ConvertViewDelegate {
     func didTappedConvertButton(_ convertView: ConvertView) {
         self.isConverting = true
         
-        let asset = self.assetManager.assets[convertView.index] as! AVURLAsset
+        let asset = AVURLAsset(url: self.viewModel.items[convertView.index].url)
         
         let pathExtensionIndex = self.convertView.didConvertedExtensionNamePickerView.selectedRow(inComponent: 0)
         let newFormat = pickerViewData[pathExtensionIndex]

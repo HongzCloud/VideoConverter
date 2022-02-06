@@ -8,7 +8,7 @@
 import UIKit
 import AVFoundation
 
-final class DiffableDataSource: UITableViewDiffableDataSource<Section, AVAsset> {
+final class DiffableDataSource: UITableViewDiffableDataSource<Section, WillConvertListItemViewModel> {
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         true

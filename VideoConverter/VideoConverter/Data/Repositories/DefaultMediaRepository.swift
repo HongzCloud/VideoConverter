@@ -1,5 +1,5 @@
 //
-//  DefaultMediasRepository.swift
+//  DefaultMediaRepository.swift
 //  VideoConverter
 //
 //  Created by 오킹 on 2022/01/10.
@@ -8,21 +8,19 @@
 import Foundation
 import AVFoundation
 
-protocol MediasRepository {
+protocol MediaRepository {
     func fetchMediaList(directory: Directory,
         completion: @escaping (Result<[Media], Error>) -> Void)
 }
 
-final class DefaultMoviesRepository {
+final class DefaultMediaRepository { }
 
-}
-
-extension DefaultMoviesRepository: MediasRepository {
+extension DefaultMediaRepository: MediaRepository {
     
     func fetchMediaList(directory: Directory, completion: @escaping (Result<[Media], Error>) -> Void) {
         
         guard let urls = FileHelper.shared.urls(for: directory) else { return }
-        var medias = [Media]()
+        var mediaList = [Media]()
         
         for url in urls {
             let asset = AVAsset(url: url) as! AVURLAsset
@@ -36,9 +34,9 @@ extension DefaultMoviesRepository: MediasRepository {
                                       albumTitle: nil)
             
             let media = Media(metadata: metadata)
-            medias.append(media)
+            mediaList.append(media)
         }
         
-        completion(.success(medias))
+        completion(.success(mediaList))
     }
 }

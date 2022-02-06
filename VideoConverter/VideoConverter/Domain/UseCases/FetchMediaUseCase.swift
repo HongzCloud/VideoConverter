@@ -14,9 +14,9 @@ protocol FetchMediaUseCase {
 
 final class DefaultFetchMediaUseCase: FetchMediaUseCase {
 
-    private let mediaRepository: MediasRepository
+    private let mediaRepository: MediaRepository
 
-    init(mediaRepository: MediasRepository) {
+    init(mediaRepository: MediaRepository) {
         self.mediaRepository = mediaRepository
     }
 
