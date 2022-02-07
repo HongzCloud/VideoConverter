@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import AVFoundation
 
 // MARK: - 앱 진입시 흐름 DIContainer
 
@@ -38,8 +39,11 @@ extension AppDIContainer: MainTabBarCoordinatorDependencies {
 
 extension AppDIContainer: WillConvertCoordinatorDependencies {
     
-    func makePlayerViewController(assetManager: AssetManager, tappedIndex: Int) -> PlayerViewController {
-        return PlayerViewController.create(with: assetManager, tappedInex: tappedIndex)
+    func makePlayerViewController(playList: [URL], playingIndex: Int) -> PlayerViewController {
+        var viewModel = DefaultPlayerViewModel.shared
+        viewModel.setMedia(playList: playList, playingIndex: playingIndex)
+        
+        return PlayerViewController.create(with: viewModel)
     }
     
     func makeWillConvertViewController() -> WillConvertViewController {

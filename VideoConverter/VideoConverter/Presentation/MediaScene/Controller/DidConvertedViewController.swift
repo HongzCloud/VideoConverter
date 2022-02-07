@@ -242,7 +242,8 @@ extension DidConvertedViewController: MediaViewDelegate {
         let asset = AVAsset(url: self.viewModel.items[selectedIndex].url)
         
         if asset.isPlayable {
-            //coordinator?.presentPlayerViewController(assetManager: assetManager, tappedIndex: selectedIndex)
+            let urls = self.viewModel.items.map{ $0.url }
+            coordinator?.presentPlayerViewController(playList: urls, playingIndex: selectedIndex)
         } else {
             var style = ToastStyle()
             style.messageColor = .greenAndMint!

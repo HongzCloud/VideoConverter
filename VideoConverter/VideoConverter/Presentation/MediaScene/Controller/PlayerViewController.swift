@@ -15,10 +15,11 @@ class PlayerViewController: UIViewController {
     private var playerControlView: PlayerControlView!
     private var assetPlayer: AssetPlayer!
     private var headerView: HeaderView!
-    private var assetManager: AssetManager!
-    private var playingIndex: Int!
     private var orientation: UIInterfaceOrientation!
-    private var isSelectedRepeatPlayButton = false
+
+    private var viewModel: PlayerViewModel!
+    
+    // MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,8 +27,9 @@ class PlayerViewController: UIViewController {
         setHeaderView()
         setPlayerControlView()
         addTimeObserver()
+        addObserverForPlayEndTime(isRepeatPlay: playerControlView.isSelectedRepeatPlayButton)
     }
-    
+        
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         AppDelegate.AppUtility.lockOrientation([.portrait,.landscapeLeft])
@@ -39,12 +41,14 @@ class PlayerViewController: UIViewController {
         assetPlayer.pause()
     }
 
-    static func create(with assetManager: AssetManager, tappedInex: Int) -> PlayerViewController {
+    // MARK: - Init
+    
+    static func create(with viewModel: PlayerViewModel) -> PlayerViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "PlayerViewController") as? PlayerViewController else {
             return PlayerViewController()
         }
- 
+        vc.viewModel = viewModel
         return vc
     }
     
@@ -53,11 +57,7 @@ class PlayerViewController: UIViewController {
         self.headerView.delegate = self
         self.headerView.alpha = 0.2
         self.headerView.translatesAutoresizingMaskIntoConstraints = false
-        
-        if let title = assetPlayer.player.currentItem?.asset as? AVURLAsset {
-            self.headerView.configure(title: title.url.lastPathComponent, exitButtonIsHidden: false, sceneRotateButtonIsHidden: false)
-        }
-        
+        self.headerView.configure(title: viewModel.title, exitButtonIsHidden: false, sceneRotateButtonIsHidden: false)
         self.playerView.addSubview(headerView)
         
         let safeArea = self.view.safeAreaLayoutGuide
@@ -89,13 +89,11 @@ class PlayerViewController: UIViewController {
         ])
     }
     
-    func setPlayer(assetManager: AssetManager, tappedIndex: Int) {
-        self.assetManager = assetManager
-        self.playingIndex = tappedIndex
-        let asset = assetManager.assets[tappedIndex] as! AVURLAsset
+    func setPlayer() {
+        let avURLAsset = viewModel.asset as! AVURLAsset
         
         self.assetPlayer = AssetPlayer.shared
-        self.assetPlayer.initPlayer(url: asset.url, nowPlayableBehavior: self)
+        self.assetPlayer.initPlayer(url: avURLAsset.url, nowPlayableBehavior: self)
         
         self.assetPlayer.nextTrack(closure: { [weak self] in
             self?.playNextTrack()
@@ -122,16 +120,8 @@ class PlayerViewController: UIViewController {
         ])
     }
     
-    @objc func configPlayButtonImage() {
-        DispatchQueue.main.async {
-            if self.assetPlayer.playerState == .playing {
-                self.playerControlView.configurePlayButton(image: UIImage(systemName: "pause.fill")!)
-            } else {
-                self.playerControlView.configurePlayButton(image: UIImage(systemName: "play.fill")!)
-            }
-        }
-    }
-
+    // MARK: - Observer
+    
     private func addObserverForPlayEndTime(isRepeatPlay: Bool) {
         
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: self.assetPlayer.player.currentItem)
@@ -145,53 +135,39 @@ class PlayerViewController: UIViewController {
     }
     
     @objc func rePlay() {
-   
-        let nextItem = AVPlayerItem(asset: (self.assetManager.assets[playingIndex]))
-        self.assetPlayer.player.replaceCurrentItem(with: nextItem)
+        self.assetPlayer.player.seek(to: .zero)
         self.assetPlayer.play()
-     
-        self.addObserverForPlayEndTime(isRepeatPlay: self.isSelectedRepeatPlayButton)
+        self.addObserverForPlayEndTime(isRepeatPlay: playerControlView.isSelectedRepeatPlayButton)
+    }
+    
+    private func changeHeaderTitle(_ title: String) {
+        DispatchQueue.main.async {
+            self.headerView.configure(title: self.viewModel.title, exitButtonIsHidden: false, sceneRotateButtonIsHidden: false)
+        }
     }
     
     @objc func playNextTrack() {
         
-        let assets = self.assetManager.assets
-        
-        for _ in 0..<assets.count {
-            self.playingIndex = playingIndex < (assets.count - 1) ? (playingIndex + 1) : 0
-            if assets[playingIndex].isPlayable { break }
-        }
+        self.viewModel.changeToNextMedia()
 
-        let nextItem = AVPlayerItem(asset: (assets[playingIndex]))
+        let nextItem = AVPlayerItem(asset: viewModel.asset)
         self.assetPlayer.player.replaceCurrentItem(with: nextItem)
         self.assetPlayer.play()
 
-        self.addObserverForPlayEndTime(isRepeatPlay: self.isSelectedRepeatPlayButton)
+        changeHeaderTitle(viewModel.title)
+        self.addObserverForPlayEndTime(isRepeatPlay: playerControlView.isSelectedRepeatPlayButton)
     }
     
     @objc func playPreviousTrack() {
         
-        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: self.assetPlayer.player.currentItem)
+        self.viewModel.changeToPreviousMedia()
         
-        let assets = self.assetManager.assets
-
-        for _ in 0..<assets.count {
-            playingIndex = playingIndex >= 1 ? (playingIndex - 1) : (assets.count - 1)
-            
-            if assets[playingIndex].isPlayable { break }
-        }
-        
-        let nextItem = AVPlayerItem(asset: assets[playingIndex])
-        self.assetPlayer.player.replaceCurrentItem(with: nextItem)
+        let previousItem = AVPlayerItem(asset: viewModel.asset)
+        self.assetPlayer.player.replaceCurrentItem(with: previousItem)
         self.assetPlayer.play()
-
-        self.addObserverForPlayEndTime(isRepeatPlay: self.isSelectedRepeatPlayButton)
-    }
-
-    @objc func didTappedPlayerView(_ sender: UITapGestureRecognizer) {
         
-        self.playerControlView.isHidden = !playerControlView.isHidden
-        self.headerView.isHidden = !headerView.isHidden
+        changeHeaderTitle(viewModel.title)
+        self.addObserverForPlayEndTime(isRepeatPlay: playerControlView.isSelectedRepeatPlayButton)
     }
     
     private func addTimeObserver() {
@@ -210,10 +186,6 @@ class PlayerViewController: UIViewController {
             
             self?.playerControlView.configureTimeLabel(currentTime: currentItem.currentTime().seconds.durationText,
                                                        endTime: currentItem.duration.durationText)
-            
-            let asset = currentItem.asset as! AVURLAsset
-            
-            self?.headerView.configure(title: asset.url.lastPathComponent, exitButtonIsHidden: false, sceneRotateButtonIsHidden: false)
         })
     }
     
@@ -225,6 +197,22 @@ class PlayerViewController: UIViewController {
             
             self.playerControlView.configureTimeLabel(endTime: duration.durationText)
         }
+    }
+    
+    @objc func configPlayButtonImage() {
+        DispatchQueue.main.async {
+            if self.assetPlayer.playerState == .playing {
+                self.playerControlView.configurePlayButton(image: UIImage(systemName: "pause.fill")!)
+            } else {
+                self.playerControlView.configurePlayButton(image: UIImage(systemName: "play.fill")!)
+            }
+        }
+    }
+
+    @objc func didTappedPlayerView(_ sender: UITapGestureRecognizer) {
+        
+        self.playerControlView.isHidden = !playerControlView.isHidden
+        self.headerView.isHidden = !headerView.isHidden
     }
 }
 
@@ -253,11 +241,11 @@ extension PlayerViewController: PlayerControlViewDelegate {
     
     func didTappedRepeatPlayButton(_ button: UIButton) {
 
-        isSelectedRepeatPlayButton = !isSelectedRepeatPlayButton
+        playerControlView.isSelectedRepeatPlayButton = !playerControlView.isSelectedRepeatPlayButton
 
-        self.addObserverForPlayEndTime(isRepeatPlay: isSelectedRepeatPlayButton)
+        self.addObserverForPlayEndTime(isRepeatPlay: playerControlView.isSelectedRepeatPlayButton)
         
-        if isSelectedRepeatPlayButton {
+        if playerControlView.isSelectedRepeatPlayButton {
             button.tintColor = .greenAndMint
         }
         else {

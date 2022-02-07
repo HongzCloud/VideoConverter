@@ -19,9 +19,11 @@ class PlayerControlView: UIView {
 
     weak var delegate: PlayerControlViewDelegate?
     
+    var isSelectedRepeatPlayButton = false
+    
     private let playButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        button.setImage(UIImage(systemName: "pause.fill"), for: .normal)
         let symbolSize = UIImage.SymbolConfiguration.init(pointSize: 30)
         button.setPreferredSymbolConfiguration(symbolSize, forImageIn: .normal)
         button.tintColor = .white
