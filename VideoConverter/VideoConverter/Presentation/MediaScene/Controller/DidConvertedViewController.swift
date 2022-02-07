@@ -10,13 +10,13 @@ import Toast_Swift
 
 class DidConvertedViewController: UIViewController {
 
-    private var assetManager: AssetManager!
     @IBOutlet weak var didConvertedTableView: UITableView!
     private var headerView: HeaderView!
     private var alert: UIAlertController?
-    private var dataSource: DiffableDataSource!
+    private var dataSource: DidConvertedDiffableDataSource!
     
     private var coordinator: DidConvertedCoordinator?
+    private var viewModel: DidConvertViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,16 +28,16 @@ class DidConvertedViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        self.assetManager.reloadAssets()
+        self.viewModel.loadDidConvertedMediaList()
         self.makeAndApplySnapShot(isAnimatable: false)
     }
     
-    static func create(with assetManager: AssetManager) -> DidConvertedViewController {
+    static func create(with viewModel: DidConvertViewModel) -> DidConvertedViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "DidConvertedViewController") as? DidConvertedViewController else {
             return DidConvertedViewController()
         }
-        vc.assetManager = assetManager
+        vc.viewModel = viewModel
         return vc
     }
     
@@ -81,7 +81,7 @@ class DidConvertedViewController: UIViewController {
     
     @objc func refresh(_ control: UIRefreshControl) {
         self.didConvertedTableView.alpha = 0.5
-        self.assetManager.reloadAssets()
+        self.viewModel.loadDidConvertedMediaList()
         self.makeAndApplySnapShot(isAnimatable: false)
         control.endRefreshing()
         UIView.animate(withDuration: 1, animations: {
@@ -94,7 +94,7 @@ class DidConvertedViewController: UIViewController {
     }
     
     @objc func reloadTableViewData(_ notification: Notification) {
-        self.assetManager.reloadAssets()
+        self.viewModel.loadDidConvertedMediaList()
         self.makeAndApplySnapShot(isAnimatable: false)
     }
     
@@ -138,15 +138,15 @@ class DidConvertedViewController: UIViewController {
    }
 
     private func configureDataSource() {
-        dataSource = DiffableDataSource(tableView: didConvertedTableView, cellProvider: { tableView, indexPath, asset in
+        dataSource = DidConvertedDiffableDataSource(tableView: didConvertedTableView, cellProvider: { tableView, indexPath, media in
             
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "WillConvertTableViewCell") as? WillConvertTableViewCell else { return UITableViewCell() }
             
-            let avUrlAsset = asset as! AVURLAsset
+            let asset = AVAsset(url: media.url)
   
             asset.generateThumbnail(completion: { thumnailImage in
                 DispatchQueue.main.async {
-                    cell.configure(image: thumnailImage, name: avUrlAsset.url.lastPathComponent, duration: avUrlAsset.duration.durationText)
+                    cell.configure(image: thumnailImage, name: media.url.lastPathComponent, duration: asset.duration.durationText)
                 }
             })
             
@@ -161,10 +161,10 @@ class DidConvertedViewController: UIViewController {
     }
     
     private func makeAndApplySnapShot(isAnimatable: Bool) {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, AVAsset>()
+        var snapshot = NSDiffableDataSourceSnapshot<Section, DidConvertedListItemViewModel>()
         
         snapshot.appendSections([.main])
-        snapshot.appendItems(assetManager.assets)
+        snapshot.appendItems(viewModel.items)
         self.dataSource.apply(snapshot, animatingDifferences: isAnimatable, completion: nil)
     }
 }
@@ -178,8 +178,10 @@ extension DidConvertedViewController: UITableViewDelegate {
 
         let action = UIContextualAction(style: .normal, title: nil) {
             (action, view, completion) in
-            //삭제하기
-            self.assetManager.removeAsset(at: indexPath.row, completion: {
+            
+            // 삭제하기
+            
+            self.viewModel.removeMedia(at: indexPath.row, completion: {
                 result in
                 if result {
                     self.makeAndApplySnapShot(isAnimatable: true)
@@ -198,12 +200,12 @@ extension DidConvertedViewController: UITableViewDelegate {
         
         let fileNameEditAction = UIContextualAction(style: .normal, title: nil) { [weak self] (action, view, completion) in
 
-            //수정하기
-            let asset = self?.assetManager.assets[indexPath.row] as! AVURLAsset
-            let urlString = asset.url.deletingPathExtension().lastPathComponent
+            // 수정하기
+            
+            guard let oldName = self?.viewModel.items[indexPath.row].title else { return }
 
-            self?.editFileNameAlert(oldName: urlString.precomposedStringWithCanonicalMapping, completion: { newName in
-                self?.assetManager.editAsset(at: indexPath.row, name: newName, completion: {
+            self?.editFileNameAlert(oldName: oldName, completion: { newName in
+                self?.viewModel.editMedia(at: indexPath.row, name: newName, completion: {
                     result in
                     
                     if result {
@@ -237,10 +239,10 @@ extension DidConvertedViewController: MediaViewDelegate {
 
     func didTappedPlayButton(selectedIndex: Int) {
        
-        let asset = self.assetManager.assets[selectedIndex] as! AVURLAsset
+        let asset = AVAsset(url: self.viewModel.items[selectedIndex].url)
         
         if asset.isPlayable {
-            coordinator?.presentPlayerViewController(assetManager: assetManager, tappedIndex: selectedIndex)
+            //coordinator?.presentPlayerViewController(assetManager: assetManager, tappedIndex: selectedIndex)
         } else {
             var style = ToastStyle()
             style.messageColor = .greenAndMint!
@@ -256,7 +258,6 @@ extension DidConvertedViewController: MediaViewDelegate {
     }
     
     func didTappedMediaShareButton(selectedIndex: Int) {
-        let asset = self.assetManager.assets[selectedIndex] as! AVURLAsset
-        coordinator?.presentShareViewController(url: asset.url)
+        coordinator?.presentShareViewController(url: self.viewModel.items[selectedIndex].url)
     }
 }

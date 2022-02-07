@@ -66,8 +66,9 @@ extension AppDIContainer: WillConvertCoordinatorDependencies {
 extension AppDIContainer: DidConvertedCoordinatorDependencies {
 
     func makeDidConvertedViewController() -> DidConvertedViewController {
-        let assetManager = AssetManager(directoryPath: .didConverted)
-        return DidConvertedViewController.create(with: assetManager)
+        let usecase = makeFetchMediaUseCase()
+        let viewModel = DefaultDidConvertViewModel(fetchMediaUseCase: usecase)
+        return DidConvertedViewController.create(with: viewModel)
     }
 }
 

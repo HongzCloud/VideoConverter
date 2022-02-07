@@ -24,6 +24,7 @@
 		1E17D3F9274A98FD00027A82 /* PlayerControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E17D3F8274A98FD00027A82 /* PlayerControlView.swift */; };
 		1E271E1627AFA4CE0052DA8E /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E271E1527AFA4CE0052DA8E /* PlayerViewModel.swift */; };
 		1E271E1827B011B30052DA8E /* WillConvertViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E271E1727B011B30052DA8E /* WillConvertViewModel.swift */; };
+		1E271E1A27B0B6070052DA8E /* DidConvertedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E271E1927B0B6070052DA8E /* DidConvertedViewModel.swift */; };
 		1E37135B278B07BB00F131C5 /* AssetPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E37135A278B07BB00F131C5 /* AssetPlayer.swift */; };
 		1E37135D278B2D8000F131C5 /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E37135C278B2D8000F131C5 /* Media.swift */; };
 		1E371361278B41D500F131C5 /* FetchMediaUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E371360278B41D500F131C5 /* FetchMediaUseCase.swift */; };
@@ -110,6 +111,7 @@
 		1E17D3F8274A98FD00027A82 /* PlayerControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerControlView.swift; sourceTree = "<group>"; };
 		1E271E1527AFA4CE0052DA8E /* PlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewModel.swift; sourceTree = "<group>"; };
 		1E271E1727B011B30052DA8E /* WillConvertViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WillConvertViewModel.swift; sourceTree = "<group>"; };
+		1E271E1927B0B6070052DA8E /* DidConvertedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DidConvertedViewModel.swift; sourceTree = "<group>"; };
 		1E37135A278B07BB00F131C5 /* AssetPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetPlayer.swift; sourceTree = "<group>"; };
 		1E37135C278B2D8000F131C5 /* Media.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Media.swift; sourceTree = "<group>"; };
 		1E371360278B41D500F131C5 /* FetchMediaUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMediaUseCase.swift; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 				1E37135A278B07BB00F131C5 /* AssetPlayer.swift */,
 				1E271E1527AFA4CE0052DA8E /* PlayerViewModel.swift */,
 				1E271E1727B011B30052DA8E /* WillConvertViewModel.swift */,
+				1E271E1927B0B6070052DA8E /* DidConvertedViewModel.swift */,
 			);
 			path = PlayerViewModel;
 			sourceTree = "<group>";
@@ -755,6 +758,7 @@
 				1E022EAA27422DB3006B51DF /* ConvertView.swift in Sources */,
 				1E541E6E275FC0FD0078A519 /* AppFlowCoordinator.swift in Sources */,
 				1EC858FF27204044005A1F3B /* SceneDelegate.swift in Sources */,
+				1E271E1A27B0B6070052DA8E /* DidConvertedViewModel.swift in Sources */,
 				1E371375278C92D000F131C5 /* NowPlayableError.swift in Sources */,
 				1E9F2E7D275CDDEB006E4FB0 /* AssetManager.swift in Sources */,
 				1E541E8B276648600078A519 /* DiffableDataSource.swift in Sources */,

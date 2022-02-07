@@ -19,7 +19,7 @@ class WillConvertViewController: UIViewController {
     private var selectedCellIndex: IndexPath?
     private var videoSaveToast: UIView!
     private var alert: UIAlertController?
-    private var dataSource: DiffableDataSource!
+    private var dataSource: WillConvertDiffableDataSource!
     private var isConverting: Bool = false
 
     private var coordinator: WillConvertCoordinator?
@@ -185,7 +185,7 @@ class WillConvertViewController: UIViewController {
     }
     
     private func configureDataSource() {
-        dataSource = DiffableDataSource(tableView: willConvertTableView, cellProvider: { tableView, indexPath, media in
+        dataSource = WillConvertDiffableDataSource(tableView: willConvertTableView, cellProvider: { tableView, indexPath, media in
             
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "WillConvertTableViewCell") as? WillConvertTableViewCell else { return UITableViewCell() }
             
