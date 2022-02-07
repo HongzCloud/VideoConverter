@@ -249,7 +249,7 @@
 			path = Localization;
 			sourceTree = "<group>";
 		};
-		1E271E1427AFA4B80052DA8E /* PlayerViewModel */ = {
+		1E271E1427AFA4B80052DA8E /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
 				1E37135A278B07BB00F131C5 /* AssetPlayer.swift */,
@@ -257,7 +257,7 @@
 				1E271E1727B011B30052DA8E /* WillConvertViewModel.swift */,
 				1E271E1927B0B6070052DA8E /* DidConvertedViewModel.swift */,
 			);
-			path = PlayerViewModel;
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		1E37135E278B32E700F131C5 /* Entities */ = {
@@ -316,7 +316,7 @@
 		1E371368278BE70100F131C5 /* MediaScene */ = {
 			isa = PBXGroup;
 			children = (
-				1E271E1427AFA4B80052DA8E /* PlayerViewModel */,
+				1E271E1427AFA4B80052DA8E /* ViewModel */,
 				1E022E98273FD45D006B51DF /* View */,
 				1E541E7627633DF90078A519 /* Flows */,
 				1E022EA427422473006B51DF /* Controller */,
