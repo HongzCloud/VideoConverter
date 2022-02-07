@@ -7,13 +7,18 @@
 
 import Foundation
 import UIKit
+import AVFoundation
+
+// MARK: - 앱 진입시 흐름 DIContainer
 
 final class AppDIContainer: AppFlowCoordinatorDependencies {
-
+    
     func makeMainTabBarCoordinator(navigation: UINavigationController) -> MainTabBarCoordinator {
         return MainTabBarCoordinator(navigationController: navigation, dependencies: self)
     }
 }
+
+// MARK: - 메인 탭바 흐름 DIContainer
 
 extension AppDIContainer: MainTabBarCoordinatorDependencies {
     
@@ -30,16 +35,20 @@ extension AppDIContainer: MainTabBarCoordinatorDependencies {
     }
 }
 
+// MARK: - 변환 전 관련 DIContainer
+
 extension AppDIContainer: WillConvertCoordinatorDependencies {
     
-    func makePlayerViewController(assetManager: AssetManager, tappedIndex: Int) -> PlayerViewController {
-        return PlayerViewController.create(with: assetManager, tappedInex: tappedIndex)
+    func makePlayerViewController(playList: [URL], playingIndex: Int) -> PlayerViewController {
+        var viewModel = DefaultPlayerViewModel.shared
+        viewModel.setMedia(playList: playList, playingIndex: playingIndex)
+        
+        return PlayerViewController.create(with: viewModel)
     }
     
-    
     func makeWillConvertViewController() -> WillConvertViewController {
-        let assetManager = AssetManager(directoryPath: .willConvert)
-        return WillConvertViewController.create(with: assetManager)
+        let viewModel = makeWillConvertViewModel()
+        return WillConvertViewController.create(with: viewModel)
     }
     
     func makeVideoListViewController() -> VideoListViewController {
@@ -49,16 +58,39 @@ extension AppDIContainer: WillConvertCoordinatorDependencies {
     func makeShareViewController(activityItems: [Any], applicationActivities: [UIActivity]?) -> UIActivityViewController {
         return UIActivityViewController(activityItems: activityItems, applicationActivities: applicationActivities)
     }
+
+    func makeWillConvertViewModel() -> WillConvertViewModel {
+        let useCase = makeFetchMediaUseCase()
+        return DefaultWillConvertViewModel(fetchMediaUseCase: useCase)
+    }
 }
 
+// MARK: - 변환 후 관련 DIContainer
+
 extension AppDIContainer: DidConvertedCoordinatorDependencies {
-    
-    func makePlayerViewControll(url: URL) -> PlayerViewController {
-        return PlayerViewController()
-    }
-    
+
     func makeDidConvertedViewController() -> DidConvertedViewController {
-        let assetManager = AssetManager(directoryPath: .didConverted)
-        return DidConvertedViewController.create(with: assetManager)
+        let usecase = makeFetchMediaUseCase()
+        let viewModel = DefaultDidConvertViewModel(fetchMediaUseCase: usecase)
+        return DidConvertedViewController.create(with: viewModel)
+    }
+}
+
+// MARK: - Use Cases
+
+extension AppDIContainer {
+
+    func makeFetchMediaUseCase() -> FetchMediaUseCase {
+        let repository = DefaultMediaRepository()
+        return DefaultFetchMediaUseCase(mediaRepository: repository)
+    }
+}
+
+// MARK: - Repository
+
+extension AppDIContainer {
+
+    func makeMediaRepository() -> MediaRepository {
+        return DefaultMediaRepository()
     }
 }
