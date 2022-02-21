@@ -26,13 +26,18 @@ class ConvertView: UIView {
         return label
     }()
     
-    private let convertButton: AnimatedButton = {
-        let button = AnimatedButton(animation: .named("43229-reverse-arrows")!)
-        button.animationView.loopMode = .loop
-        button.addTarget(self, action: #selector(didTappedConvertButton(_:)), for: .touchUpInside)
+    private let convertButton: UIButton = {
+        let button = UIButton()
+        button.tintColor = .greenAndMint
+        button.setImage(UIImage(systemName: "arrow.right.circle.fill"), for: .normal)
+        let symbolSize = UIImage.SymbolConfiguration.init(pointSize: 50)
+        button.setPreferredSymbolConfiguration(symbolSize, forImageIn: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(didTappedConvertButton(_:)), for: .touchUpInside)
         return button
     }()
+    
+    private let convertAnimationView = AnimationView(name: "92631-lunarcrushsippner")
     
     private(set) var didConvertedExtensionNamePickerView: UIPickerView = {
         let pickerView = UIPickerView()
@@ -92,8 +97,6 @@ class ConvertView: UIView {
             self.didConvertedExtensionNamePickerView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             self.didConvertedExtensionNamePickerView.topAnchor.constraint(equalTo: self.topAnchor),
             self.didConvertedExtensionNamePickerView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-
-        
         ])
     }
     
@@ -109,14 +112,21 @@ class ConvertView: UIView {
     }
     
     func startConvertAnimation() {
-        self.convertButton.animationView.play(fromProgress: .leastNormalMagnitude, toProgress: .greatestFiniteMagnitude, loopMode: .loop, completion: { _ in
+        convertButton.addSubview(convertAnimationView)
+        convertAnimationView.frame = convertAnimationView.superview!.bounds
+        convertAnimationView.contentMode = .scaleAspectFit
+        convertAnimationView.play(fromProgress: .leastNormalMagnitude,
+                                  toProgress: .greatestFiniteMagnitude,
+                                  loopMode: .loop,
+                                  completion: { _ in
             self.activateConvertButton()
         })
+        convertAnimationView.loopMode = .loop
     }
     
     func endConvertAnimation() {
-        self.convertButton.animationView.pause()
-        self.convertButton.animationView.currentFrame = 0
+        convertAnimationView.pause()
+        convertAnimationView.removeFromSuperview()
     }
     
     @objc
