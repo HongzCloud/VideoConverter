@@ -185,6 +185,11 @@ class AssetPlayer {
         nowPlayableBehavior.handleNowPlayablePlaybackChange(playing: isPlaying, metadata: metadata)
     }
     
+    func changeMedia(url: URL) {
+        let item = AVAsset(url: url)
+//        /self.player.currentItem = item
+    }
+    
     private func handleCommand(command: NowPlayableCommand, event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
         
         switch command {

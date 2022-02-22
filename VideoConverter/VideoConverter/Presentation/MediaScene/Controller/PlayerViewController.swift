@@ -11,12 +11,16 @@ import MediaPlayer
 
 class PlayerViewController: UIViewController {
 
-    private var playerView: PlayerView!
     private var playerControlView: PlayerControlView!
     private var assetPlayer: AssetPlayer!
     private var headerView: HeaderView!
     private var orientation: UIInterfaceOrientation!
-
+    
+    @IBOutlet weak var playerView: PlayerView!
+    @IBOutlet weak var playListTableView: UITableView!
+    @IBOutlet weak var playingTitleLabel: UILabel!
+    @IBOutlet weak var playingImageView: UIImageView!
+    
     private var viewModel: PlayerViewModel!
     
     // MARK: - Life Cycle
@@ -26,8 +30,12 @@ class PlayerViewController: UIViewController {
         setPlayerView()
         setHeaderView()
         setPlayerControlView()
+        setPlayingInfo()
         addTimeObserver()
         addObserverForPlayEndTime(isRepeatPlay: playerControlView.isSelectedRepeatPlayButton)
+        playListTableView.dataSource = self
+        playListTableView.delegate = self
+        playListTableView.register(PlayerListTableViewCell.self, forCellReuseIdentifier: "PlayerListTableViewCell")
     }
         
     override func viewWillAppear(_ animated: Bool) {
@@ -57,7 +65,7 @@ class PlayerViewController: UIViewController {
         self.headerView.delegate = self
         self.headerView.alpha = 0.2
         self.headerView.translatesAutoresizingMaskIntoConstraints = false
-        self.headerView.configure(title: viewModel.title, exitButtonIsHidden: false, sceneRotateButtonIsHidden: false)
+        self.headerView.configure(title: viewModel.playingTitle, exitButtonIsHidden: false, sceneRotateButtonIsHidden: false)
         self.playerView.addSubview(headerView)
         
         let safeArea = self.view.safeAreaLayoutGuide
@@ -70,27 +78,16 @@ class PlayerViewController: UIViewController {
     }
     
     private func setPlayerView() {
-        self.playerView = PlayerView()
         self.playerView.player = self.assetPlayer.player
         let tapGesture = UITapGestureRecognizer(target: self,
                                                 action: #selector(didTappedPlayerView(_:)))
         self.playerView.addGestureRecognizer(tapGesture)
         self.playerView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(playerView)
-
-        let safeArea = self.view.safeAreaLayoutGuide
-        NSLayoutConstraint.activate([
-            self.playerView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-            self.playerView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
-            self.playerView.centerYAnchor.constraint(equalTo: safeArea.centerYAnchor),
-            self.playerView.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
-            self.playerView.topAnchor.constraint(equalTo: safeArea.topAnchor),
-            self.playerView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor)
-        ])
     }
     
     func setPlayer() {
-        let avURLAsset = viewModel.asset as! AVURLAsset
+        let avURLAsset = viewModel.playingAsset as! AVURLAsset
         
         self.assetPlayer = AssetPlayer.shared
         self.assetPlayer.initPlayer(url: avURLAsset.url, nowPlayableBehavior: self)
@@ -111,13 +108,24 @@ class PlayerViewController: UIViewController {
         self.playerControlView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(playerControlView)
         
-        let safeArea = self.view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
-            self.playerControlView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor, constant: -20),
-            self.playerControlView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-            self.playerControlView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
-            self.playerControlView.heightAnchor.constraint(equalTo: safeArea.heightAnchor, multiplier: 0.15)
+            self.playerControlView.bottomAnchor.constraint(equalTo: playerView.bottomAnchor, constant: -20),
+            self.playerControlView.leadingAnchor.constraint(equalTo: playerView.leadingAnchor),
+            self.playerControlView.trailingAnchor.constraint(equalTo: playerView.trailingAnchor),
+            self.playerControlView.heightAnchor.constraint(equalTo: playerView.heightAnchor, multiplier: 0.25)
         ])
+    }
+    
+    private func setPlayingInfo() {
+        self.playingTitleLabel.text = self.viewModel.playingTitle
+        viewModel.playingAsset.generateThumbnail { image in
+            DispatchQueue.main.async {
+                if let image = image {
+                    self.playingImageView.image = image
+                    self.playingImageView.contentMode = .scaleToFill
+                }
+            }
+        }
     }
     
     // MARK: - Observer
@@ -142,7 +150,8 @@ class PlayerViewController: UIViewController {
     
     private func changeHeaderTitle(_ title: String) {
         DispatchQueue.main.async {
-            self.headerView.configure(title: self.viewModel.title, exitButtonIsHidden: false, sceneRotateButtonIsHidden: false)
+            self.headerView.configure(title: self.viewModel.playingTitle, exitButtonIsHidden: false, sceneRotateButtonIsHidden: false)
+            self.setPlayingInfo()
         }
     }
     
@@ -150,11 +159,11 @@ class PlayerViewController: UIViewController {
         
         self.viewModel.changeToNextMedia()
 
-        let nextItem = AVPlayerItem(asset: viewModel.asset)
+        let nextItem = AVPlayerItem(asset: viewModel.playingAsset)
         self.assetPlayer.player.replaceCurrentItem(with: nextItem)
         self.assetPlayer.play()
 
-        changeHeaderTitle(viewModel.title)
+        changeHeaderTitle(viewModel.playingTitle)
         self.addObserverForPlayEndTime(isRepeatPlay: playerControlView.isSelectedRepeatPlayButton)
     }
     
@@ -162,11 +171,11 @@ class PlayerViewController: UIViewController {
         
         self.viewModel.changeToPreviousMedia()
         
-        let previousItem = AVPlayerItem(asset: viewModel.asset)
+        let previousItem = AVPlayerItem(asset: viewModel.playingAsset)
         self.assetPlayer.player.replaceCurrentItem(with: previousItem)
         self.assetPlayer.play()
         
-        changeHeaderTitle(viewModel.title)
+        changeHeaderTitle(viewModel.playingTitle)
         self.addObserverForPlayEndTime(isRepeatPlay: playerControlView.isSelectedRepeatPlayButton)
     }
     
@@ -279,5 +288,51 @@ extension PlayerViewController: NowPlayable {
     
     var defaultCommands: [NowPlayableCommand] {
         return [.play, .pause, .nextTrack, .previousTrack, .changePlaybackPosition]
+    }
+}
+
+extension PlayerViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.playList.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "PlayerListTableViewCell", for: indexPath) as? PlayerListTableViewCell else { return UITableViewCell() }
+        
+        viewModel.playList[indexPath.row].asset.generateThumbnail { image in
+            DispatchQueue.main.async {
+                cell.configure(image: image)
+            }
+        }
+        
+        let title = self.viewModel.playList[indexPath.row].title
+        let duration = self.viewModel.playList[indexPath.row].asset.duration.durationText
+        
+        cell.configure(name: title, duration: duration)
+        
+        let selectionColorView = UIView()
+        selectionColorView.backgroundColor = .lightGray
+        cell.selectedBackgroundView? = selectionColorView
+    
+        return cell
+    }
+}
+
+extension PlayerViewController: UITableViewDelegate {
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath)->CGFloat {
+        return tableView.frame.height / 5
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        viewModel.changeMedia(index: indexPath.row)
+        let nextItem = AVPlayerItem(asset: viewModel.playingAsset)
+        self.assetPlayer.player.replaceCurrentItem(with: nextItem)
+        self.assetPlayer.play()
+        self.setPlayingInfo()
+        self.headerView.configure(title: self.viewModel.playingTitle, exitButtonIsHidden: false, sceneRotateButtonIsHidden: false)
+        
+        addObserverForPlayEndTime(isRepeatPlay: playerControlView.isSelectedRepeatPlayButton)
     }
 }

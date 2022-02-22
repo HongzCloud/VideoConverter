@@ -11,32 +11,38 @@ import AVFoundation
 protocol PlayerViewModelInput {
     func changeToNextMedia()
     func changeToPreviousMedia()
+    func changeMedia(index: Int)
 }
 
 protocol PlayerViewModelOutput {
-    var title: String { get }
-    var asset: AVAsset { get }
+    var playingTitle: String { get }
+    var playingAsset: AVAsset { get }
+    var playingIndex: Int { get }
+    var playList: [PlayListItemViewModel] { get }
+
 }
 
 protocol PlayerViewModel: PlayerViewModelInput, PlayerViewModelOutput { }
 
 final class DefaultPlayerViewModel: PlayerViewModel {
  
-    var title: String
-    var asset: AVAsset
+    var playingTitle: String
+    var playingAsset: AVAsset
+    var playList: [PlayListItemViewModel]
+    var playingIndex: Int
     
     private var media: Media
-    private var playList: [Media]
-    private var playingIndex: Int
+    private var mediaList: [Media]
     
     static let shared = DefaultPlayerViewModel()
     
     init() {
         self.media = .init(metadata: .init(assetURL: URL(fileURLWithPath: ""), isLiveStream: false, title: "", artist: nil, artwork: nil, albumArtist: nil, albumTitle: nil))
-        self.title = ""
-        self.playList = []
+        self.playingTitle = ""
+        self.mediaList = []
         self.playingIndex = 0
-        self.asset = AVAsset(url: URL(fileURLWithPath: ""))
+        self.playingAsset = AVAsset(url: URL(fileURLWithPath: ""))
+        self.playList = []
     }
     
     func setMedia(playList: [URL], playingIndex: Int) {
@@ -46,12 +52,20 @@ final class DefaultPlayerViewModel: PlayerViewModel {
         let title = avURLAsset.url.lastPathComponent
         
         self.media = Media(metadata: .init(assetURL: avURLAsset.url, isLiveStream: false, title: title, artist: nil, artwork: nil, albumArtist: nil, albumTitle: nil))
-        self.title = title
+        self.playingTitle = title
         self.playingIndex = playingIndex
-        self.asset = asset
-        self.playList = playList.map{
+        self.playingAsset = asset
+        self.mediaList = playList.map{
             Media(metadata: .init(assetURL: $0, isLiveStream: false, title: $0.lastPathComponent, artist: nil, artwork: nil, albumArtist: nil, albumTitle: nil))
         }
+        self.playList = mediaList.map { PlayListItemViewModel(asset: AVAsset(url: $0.metadata.assetURL), title: $0.metadata.title) }
+    }
+    
+    func changeMedia(index: Int) {
+        self.media = mediaList[index]
+        self.playingTitle = media.metadata.title
+        self.playingAsset = AVAsset(url: media.metadata.assetURL)
+        self.playingIndex = index
     }
 }
 
@@ -59,24 +73,29 @@ extension DefaultPlayerViewModel {
     func changeToNextMedia() {
         self.playingIndex += 1
         
-        if playingIndex >= playList.count {
+        if playingIndex >= mediaList.count {
             self.playingIndex = 0
         } 
         
-        self.media = playList[playingIndex]
-        self.title = media.metadata.title
-        self.asset = AVAsset(url: media.metadata.assetURL)
+        self.media = mediaList[playingIndex]
+        self.playingTitle = media.metadata.title
+        self.playingAsset = AVAsset(url: media.metadata.assetURL)
     }
     
     func changeToPreviousMedia() {
         self.playingIndex -= 1
         
         if playingIndex < 0 {
-            self.playingIndex = (playList.count - 1)
+            self.playingIndex = (mediaList.count - 1)
         }
         
-        self.media = playList[playingIndex]
-        self.title = media.metadata.title
-        self.asset = AVAsset(url: media.metadata.assetURL)
+        self.media = mediaList[playingIndex]
+        self.playingTitle = media.metadata.title
+        self.playingAsset = AVAsset(url: media.metadata.assetURL)
     }
+}
+
+struct PlayListItemViewModel: Hashable {
+    var asset: AVAsset
+    var title: String
 }
