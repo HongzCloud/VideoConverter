@@ -93,6 +93,7 @@ extension DefaultWillConvertViewModel {
 }
 
 struct WillConvertListItemViewModel: Hashable {
+    private let id = UUID()
     var title: String
     var url: URL
 }
