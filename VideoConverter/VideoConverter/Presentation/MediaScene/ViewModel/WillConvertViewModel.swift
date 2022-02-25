@@ -51,7 +51,9 @@ extension DefaultWillConvertViewModel {
                 var tempItems = [WillConvertListItemViewModel]()
                 
                 mediaList.forEach { media in
-                    tempItems.append(WillConvertListItemViewModel(title: media.metadata.title, url: media.metadata.assetURL))
+                    if AVAsset(url: media.metadata.assetURL).duration != .zero {
+                        tempItems.append(WillConvertListItemViewModel(title: media.metadata.title, url: media.metadata.assetURL))
+                    }
                 }
                 items = tempItems
             case .failure(let error):
