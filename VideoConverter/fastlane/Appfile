@@ -1,0 +1,6 @@
+# app_identifier("[[HongzCloud.VideoConverter]]") # The bundle identifier of your app
+# apple_id("[[jihong21511@naver.com]]") # Your Apple email address
+
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile
