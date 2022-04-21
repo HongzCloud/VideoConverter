@@ -23,11 +23,11 @@ default_platform(:ios)
         build_number: latest_testflight_build_number + 1
     )
     build_app(
-      configuration: "Debug"
-    )
+	scheme: "VideoConverter"
+	)
     upload_to_testflight
     slack(
-      message: "Testflight 배포에 성공했습니다!",
+      message: "Testflight 배포 성공",
       slack_url: "https://hooks.slack.com/services/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"
     )
   end
@@ -38,7 +38,7 @@ platform :ios do
     slack(
       message: "에러 발생 : #{exception}",
       success: false,
-      slack_url: "https://hooks.slack.com/services/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",
-    )
+      slack_url: "https://hooks.slack.com/services/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"
+)
   end
 end
