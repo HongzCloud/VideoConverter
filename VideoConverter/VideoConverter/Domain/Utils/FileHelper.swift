@@ -9,9 +9,9 @@ import Foundation
 
 final class FileHelper {
     
-    private let outputDirectoryURL = Directory.didConverted.rawValue
-    private let inputDirectoryURL = Directory.willConvert.rawValue
-    private var tempURL = Directory.temporary.rawValue
+    let outputDirectoryURL = Directory.didConverted.rawValue
+    let inputDirectoryURL = Directory.willConvert.rawValue
+    var tempURL = Directory.temporary.rawValue
     
     static let shared: FileHelper = FileHelper()
     
