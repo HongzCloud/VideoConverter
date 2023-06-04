@@ -1322,7 +1322,7 @@
 				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = 7L5368DD56;
 				INFOPLIST_FILE = "Dev-VideoConverter.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = hello;
+				INFOPLIST_KEY_CFBundleDisplayName = "비디오컨버터";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1349,7 +1349,7 @@
 				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = 7L5368DD56;
 				INFOPLIST_FILE = "Dev-VideoConverter.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = hello;
+				INFOPLIST_KEY_CFBundleDisplayName = "비디오컨버터";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
