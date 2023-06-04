@@ -7,7 +7,15 @@ target 'VideoConverter' do
   pod 'lame'
   pod 'Toast-Swift', '~> 5.0.1'
   pod 'lottie-ios'
+  pod 'FirebaseAnalytics'
   # Pods for VideoConverter
+
+  target 'Dev-VideoConverter' do
+    pod 'lame'
+    pod 'Toast-Swift', '~> 5.0.1'
+    pod 'lottie-ios'
+    pod 'FirebaseAnalytics'
+  end
 
   target 'VideoConverterTests' do
     inherit! :search_paths
@@ -16,6 +24,16 @@ target 'VideoConverter' do
 
   target 'VideoConverterUITests' do
     # Pods for testing
+  end
+
+  post_install do |installer|
+      installer.generated_projects.each do |project|
+            project.targets.each do |target|
+                target.build_configurations.each do |config|
+                    config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+                 end
+            end
+     end
   end
 
 end
