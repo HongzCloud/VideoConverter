@@ -41,8 +41,8 @@
 		1E541E7527632DDC0078A519 /* DidConvertedCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E541E7427632DDB0078A519 /* DidConvertedCoordinator.swift */; };
 		1E541E8B276648600078A519 /* DiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E541E8A276648600078A519 /* DiffableDataSource.swift */; };
 		1E541E9C2769E7170078A519 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E541E9B2769E7170078A519 /* Log.swift */; };
-		1E89401529802FDC0080A6CE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1E89401429802FDC0080A6CE /* GoogleService-Info.plist */; };
-		1E89401629802FDC0080A6CE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1E89401429802FDC0080A6CE /* GoogleService-Info.plist */; };
+		1E6A8B292A2C87E000D2EA48 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1E6A8B282A2C87DF00D2EA48 /* GoogleService-Info.plist */; };
+		1E6A8B2A2A2C87E000D2EA48 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1E6A8B282A2C87DF00D2EA48 /* GoogleService-Info.plist */; };
 		1E8F4BF827C560620005B4AB /* PlayerListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E8F4BF727C560620005B4AB /* PlayerListTableViewCell.swift */; };
 		1E9B0C252743982200150ABD /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9B0C242743982200150ABD /* HeaderView.swift */; };
 		1E9B0C292745150600150ABD /* VideoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9B0C282745150600150ABD /* VideoListViewController.swift */; };
@@ -184,7 +184,7 @@
 		1E541E8A276648600078A519 /* DiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffableDataSource.swift; sourceTree = "<group>"; };
 		1E541E9B2769E7170078A519 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		1E541E9D2769EFC20078A519 /* OSLog.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OSLog.framework; path = System/Library/Frameworks/OSLog.framework; sourceTree = SDKROOT; };
-		1E89401429802FDC0080A6CE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../공부용/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		1E6A8B282A2C87DF00D2EA48 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1E8F4BF727C560620005B4AB /* PlayerListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerListTableViewCell.swift; sourceTree = "<group>"; };
 		1E9B0C242743982200150ABD /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		1E9B0C282745150600150ABD /* VideoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListViewController.swift; sourceTree = "<group>"; };
@@ -494,7 +494,7 @@
 				1EC8590727204047005A1F3B /* LaunchScreen.storyboard */,
 				1EC8590A27204047005A1F3B /* Info.plist */,
 				1EDCF9AD2978522300737425 /* Dev-VideoConverter.plist */,
-				1E89401429802FDC0080A6CE /* GoogleService-Info.plist */,
+				1E6A8B282A2C87DF00D2EA48 /* GoogleService-Info.plist */,
 				1E271F0727C40D130052DA8E /* 92631-lunarcrushsippner.json */,
 				1E9F2E49274CE879006E4FB0 /* Settings.bundle */,
 			);
@@ -691,7 +691,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1EC8590927204047005A1F3B /* LaunchScreen.storyboard in Resources */,
-				1E89401529802FDC0080A6CE /* GoogleService-Info.plist in Resources */,
+				1E6A8B292A2C87E000D2EA48 /* GoogleService-Info.plist in Resources */,
 				1E0AC7BD2778361000AC82A8 /* InfoPlist.strings in Resources */,
 				1EC8590627204047005A1F3B /* Assets.xcassets in Resources */,
 				1E271F0827C40D130052DA8E /* 92631-lunarcrushsippner.json in Resources */,
@@ -722,7 +722,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1EDCF9A02978522300737425 /* LaunchScreen.storyboard in Resources */,
-				1E89401629802FDC0080A6CE /* GoogleService-Info.plist in Resources */,
+				1E6A8B2A2A2C87E000D2EA48 /* GoogleService-Info.plist in Resources */,
 				1EDCF9A12978522300737425 /* InfoPlist.strings in Resources */,
 				1EDCF9A22978522300737425 /* Assets.xcassets in Resources */,
 				1EDCF9A32978522300737425 /* 92631-lunarcrushsippner.json in Resources */,
