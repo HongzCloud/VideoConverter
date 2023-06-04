@@ -7,7 +7,15 @@ target 'VideoConverter' do
   pod 'lame'
   pod 'Toast-Swift', '~> 5.0.1'
   pod 'lottie-ios'
+  pod 'FirebaseAnalytics'
   # Pods for VideoConverter
+
+  target 'Dev-VideoConverter' do
+    pod 'lame'
+    pod 'Toast-Swift', '~> 5.0.1'
+    pod 'lottie-ios'
+    pod 'FirebaseAnalytics'
+  end
 
   target 'VideoConverterTests' do
     inherit! :search_paths

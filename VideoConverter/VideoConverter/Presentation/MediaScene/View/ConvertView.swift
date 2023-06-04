@@ -37,7 +37,7 @@ class ConvertView: UIView {
         return button
     }()
     
-    private let convertAnimationView = AnimationView(name: "92631-lunarcrushsippner")
+    private let convertAnimationView = LottieAnimationView(name: "92631-lunarcrushsippner")
     
     private(set) var didConvertedExtensionNamePickerView: UIPickerView = {
         let pickerView = UIPickerView()
