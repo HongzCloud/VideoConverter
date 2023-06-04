@@ -8,6 +8,7 @@ target 'VideoConverter' do
   pod 'Toast-Swift', '~> 5.0.1'
   pod 'lottie-ios'
   pod 'FirebaseAnalytics'
+
   # Pods for VideoConverter
 
   target 'Dev-VideoConverter' do
