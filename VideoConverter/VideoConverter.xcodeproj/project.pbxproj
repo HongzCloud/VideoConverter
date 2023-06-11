@@ -48,6 +48,7 @@
 		1E6A8B342A2CC0A200D2EA48 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E541E9B2769E7170078A519 /* Log.swift */; };
 		1E6A8B352A2CC0A300D2EA48 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E541E9B2769E7170078A519 /* Log.swift */; };
 		1E6A8B372A2CC54900D2EA48 /* sampleVideoMOV.MOV in Resources */ = {isa = PBXBuildFile; fileRef = 1E6A8B362A2CC54900D2EA48 /* sampleVideoMOV.MOV */; };
+		1E7B347D2A361454008AC0F0 /* UnitTestForXcodeCloudTestFail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E7B347C2A361454008AC0F0 /* UnitTestForXcodeCloudTestFail.swift */; };
 		1E8F4BF827C560620005B4AB /* PlayerListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E8F4BF727C560620005B4AB /* PlayerListTableViewCell.swift */; };
 		1E9B0C252743982200150ABD /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9B0C242743982200150ABD /* HeaderView.swift */; };
 		1E9B0C292745150600150ABD /* VideoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9B0C282745150600150ABD /* VideoListViewController.swift */; };
@@ -187,6 +188,7 @@
 		1E6A8B282A2C87DF00D2EA48 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1E6A8B2B2A2C8C0900D2EA48 /* 92631-lunarcrushsippner.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "92631-lunarcrushsippner.json"; sourceTree = "<group>"; };
 		1E6A8B362A2CC54900D2EA48 /* sampleVideoMOV.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = sampleVideoMOV.MOV; sourceTree = "<group>"; };
+		1E7B347C2A361454008AC0F0 /* UnitTestForXcodeCloudTestFail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitTestForXcodeCloudTestFail.swift; sourceTree = "<group>"; };
 		1E8F4BF727C560620005B4AB /* PlayerListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerListTableViewCell.swift; sourceTree = "<group>"; };
 		1E9B0C242743982200150ABD /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		1E9B0C282745150600150ABD /* VideoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListViewController.swift; sourceTree = "<group>"; };
@@ -506,6 +508,7 @@
 				1EC8591327204047005A1F3B /* VideoConverterTests.swift */,
 				1EA1EEE22723145000C22C2C /* FileHelperTests.swift */,
 				1EB2C7A927312B5F004B1338 /* AVAsset+WriteAudioTests.swift */,
+				1E7B347C2A361454008AC0F0 /* UnitTestForXcodeCloudTestFail.swift */,
 				1E6A8B362A2CC54900D2EA48 /* sampleVideoMOV.MOV */,
 				1EC8591527204047005A1F3B /* Info.plist */,
 			);
@@ -932,6 +935,7 @@
 				1E6A8B342A2CC0A200D2EA48 /* Log.swift in Sources */,
 				1EA1EEE927243C5300C22C2C /* AudioConverter.swift in Sources */,
 				1EB2C7AA27312B5F004B1338 /* AVAsset+WriteAudioTests.swift in Sources */,
+				1E7B347D2A361454008AC0F0 /* UnitTestForXcodeCloudTestFail.swift in Sources */,
 				1E6A8B302A2CBE8A00D2EA48 /* AudioInfo.swift in Sources */,
 				1E6A8B322A2CBECC00D2EA48 /* AVAsset+WriteAudioAndThumbnail.swift in Sources */,
 				1EA1EEE32723145000C22C2C /* FileHelperTests.swift in Sources */,
